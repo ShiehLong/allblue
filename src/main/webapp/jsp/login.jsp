@@ -21,30 +21,28 @@
     <div class="login-box-body">
         <p class="login-box-msg">扬&nbsp;&nbsp;帆&nbsp;&nbsp;起&nbsp;&nbsp;航</p>
 
-        <form action="../index.jsp" method="post">
-            <div class="form-group has-feedback">
-                <input type="email" class="form-control" name="email" placeholder="邮箱">
-                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-            </div>
-            <div class="form-group has-feedback">
-                <input type="password" class="form-control" name="password" placeholder="密码">
-                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-            </div>
-            <div class="row">
-                <div class="col-xs-8">
-                    <div class="checkbox icheck">
-                        <label>
-                            <input type="checkbox"> &nbsp;&nbsp;记住邮箱
-                        </label>
-                    </div>
+        <div class="form-group has-feedback">
+            <input type="text" class="form-control" id="username" placeholder="用户名">
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+            <input type="password" class="form-control" id="password" placeholder="密码">
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="checkbox icheck">
+                    <label>
+                        <input type="checkbox"> &nbsp;&nbsp;记住用户名
+                    </label>
                 </div>
-                <!-- /.col -->
-                <div class="col-xs-4">
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">登录</button>
-                </div>
-                <!-- /.col -->
             </div>
-        </form>
+            <!-- /.col -->
+            <div class="col-xs-4">
+                <button type="submit" id="login" class="btn btn-primary btn-block btn-flat">登录</button>
+            </div>
+            <!-- /.col -->
+        </div>
 
         <a href="#">忘记密码</a><br>
         <a href="register.jsp" class="text-center">注册会员</a>
@@ -66,6 +64,31 @@
             checkboxClass: 'icheckbox_square-blue',
             radioClass: 'iradio_square-blue',
             increaseArea: '20%' /* optional */
+        });
+        $('button').click(function () {
+            if ($("#username").val() == "") {
+                alert("用户名不能为空！");
+                return false;
+            }
+            if ($("#password").val() == "") {
+                alert("密码不能为空！");
+                return false;
+            }
+            var url = "/user/login";
+            $.post(url,
+                {
+                    username: $("#username").val(),
+                    password: $("#password").val(),
+                },
+                function (data) {
+                    if (data["result"] == "success") {
+                        console.log(data["msg"]);
+                        window.location.href = "home.jsp";
+                    } else {
+                        console.log(data["msg"]);
+                    }
+                });
+
         });
     });
 </script>

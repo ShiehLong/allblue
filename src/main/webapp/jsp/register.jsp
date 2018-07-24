@@ -71,7 +71,7 @@
             radioClass: 'iradio_square-blue',
             increaseArea: '20%' /* optional */
         });
-        $("button").click(function () {
+        $('button').click(function () {
             if ($("#username").val() == "") {
                 alert("用户名不能为空！");
                 return false;
@@ -99,12 +99,12 @@
                     email: $("#email").val(),
                     password: $("#password").val(),
                 },
-                function (data, status) {
-                    if (status == "success") {
+                function (data) {
+                    if (data["result"] == "success") {
+                        console.log(data["msg"]);
                         window.location.href = "login.jsp";
                     } else {
-                        console.log('data: ' + data);
-                        alert("注册失败！")
+                        console.log(data["msg"]);
                     }
                 });
         });

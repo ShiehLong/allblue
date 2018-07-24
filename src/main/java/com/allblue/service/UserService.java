@@ -14,12 +14,13 @@ public interface UserService {
     * @Author Xone
     * @Date 11:40 2018/7/20
     **/
-    void userRegister(BlueUser userInfo);
+    int add(BlueUser userInfo);
 
     /**
     * @Description:
     * @Author Xone
     * @Date 11:43 2018/7/20
     **/
-    String userLogin(BlueUser userInfo);
+    int getId(BlueUser userInfo);
 }
+
