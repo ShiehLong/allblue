@@ -58,6 +58,8 @@
 <script src="../js/bootstrap.min.js"></script>
 <!-- iCheck -->
 <script src="../js/icheck.min.js"></script>
+<!--sha1加密-->
+<script type="text/ecmascript" src="../js/sha1.js"></script>
 <script>
     $(function () {
         $('input').iCheck({
@@ -66,26 +68,29 @@
             increaseArea: '20%' /* optional */
         });
         $('button').click(function () {
-            if ($("#username").val() == "") {
+            var username = $("#username").val();
+            var password = $("#password").val();
+
+            if (username === "") {
                 alert("用户名不能为空！");
                 return false;
             }
-            if ($("#password").val() == "") {
+            if (password === "") {
                 alert("密码不能为空！");
                 return false;
             }
             var url = "/user/login";
             $.post(url,
                 {
-                    username: $("#username").val(),
-                    password: $("#password").val(),
+                    username: username,
+                    password: hex_sha1(password)
                 },
                 function (data) {
-                    if (data["result"] == "success") {
+                    if (data["result"] === "success") {
                         console.log(data["msg"]);
                         window.location.href = "home.jsp";
                     } else {
-                        console.log(data["msg"]);
+                        alert(data["msg"]);
                     }
                 });
 
