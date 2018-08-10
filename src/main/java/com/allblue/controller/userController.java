@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,7 +48,7 @@ public class userController {
         }
         //判断用户名是否已存在
         BlueUser isExistBlueUser = userService.getUserInfo(username);
-        if (!StringUtils.isEmpty(isExistBlueUser)) {
+        if (null != isExistBlueUser) {
             re.put("result", "fail");
             re.put("msg", "用户名已存在，换一个试试~");
             return JSON.toJSONString(re);
