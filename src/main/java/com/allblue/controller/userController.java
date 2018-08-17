@@ -1,6 +1,7 @@
 package com.allblue.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.allblue.model.BlueUser;
 import com.allblue.service.UserService;
 import org.slf4j.Logger;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @Description:
@@ -37,7 +36,7 @@ public class userController {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         //返回数据
-        Map<String, String> re = new HashMap<String, String>();
+        JSONObject re = new JSONObject();
         //入参判断
         if (username == null || "".equals(username) ||
                 email == null || "".equals(email) ||
@@ -82,15 +81,14 @@ public class userController {
         blueUser.setPassword(password);
         int id = userService.getUserId(blueUser);
 
-        Map<String, String> map = new HashMap<String, String>();
+        JSONObject re = new JSONObject();
         if (id != 0) {
-            map.put("result", "success");
-            map.put("msg", "登录成功");
+            re.put("result", "success");
+            re.put("msg", "登录成功");
         } else {
-            map.put("result", "fail");
-            map.put("msg", "用户名或密码错误~");
+            re.put("result", "fail");
+            re.put("msg", "用户名或密码错误~");
         }
-        String jsonString = JSON.toJSONString(map);
-        return jsonString;
+        return JSON.toJSONString(re);
     }
 }

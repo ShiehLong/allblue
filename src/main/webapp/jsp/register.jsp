@@ -107,10 +107,10 @@
                     password: hex_sha1(password),
                 },
                 function (data) {
-                    if (data["result"] === "success") {
-                        console.log(data["msg"]);
+                    if (data["result"] === "success" || data["result"] === "unauthorized") {
+                        alert(data["msg"]);
                         window.location.href = "login.jsp";
-                    } else {
+                    } else if (data["result"] === "fail") {
                         alert(data["msg"]);
                     }
                 });

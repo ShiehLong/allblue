@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         BlueUser userInfo = new BlueUser();
         userInfo.setUsername(username);
         userInfo = blueUserMapper.selectUserInfo(userInfo);
-        logger.info("用户信息【" + userInfo.getUsername() + "】");
+        logger.info("用户信息【" + userInfo + "】");
         return userInfo;
     }
 }
