@@ -41,6 +41,8 @@
             <mvc:exclude-mapping path="/jsp/*"/>
             <mvc:exclude-mapping path="/css/*"/>
             <mvc:exclude-mapping path="/img/*"/>
+            <mvc:exclude-mapping path="/js/*"/>
+            <mvc:exclude-mapping path="/favicon.ico"/>
             <!-- 登陆权限拦截器 -->
             <bean class="com.allblue.controller.LoginInterceptor"/>
         </mvc:interceptor>

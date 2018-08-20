@@ -10,8 +10,9 @@
 <link rel="stylesheet" href="../css/ionicons.min.css">
 <!-- Theme style -->
 <link rel="stylesheet" href="../css/AdminLTE.min.css">
-<!-- iCheck -->
+<!-- skin -->
 <link rel="stylesheet" href="../css/blue.css">
+<link rel="stylesheet" href="../css/_all-skins.min.css">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -21,4 +22,5 @@
 <![endif]-->
 
 <!-- Google Font -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">

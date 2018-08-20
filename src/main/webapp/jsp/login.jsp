@@ -31,9 +31,9 @@
         </div>
         <div class="row">
             <div class="col-xs-8">
-                <div class="checkbox icheck">
+                <div class="checkbox">
                     <label>
-                        <input type="checkbox"> &nbsp;&nbsp;记住用户名
+                        <input type="checkbox"> &nbsp;记住用户名
                     </label>
                 </div>
             </div>
@@ -56,17 +56,10 @@
 <script src="../js/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="../js/bootstrap.min.js"></script>
-<!-- iCheck -->
-<script src="../js/icheck.min.js"></script>
 <!--sha1加密-->
 <script type="text/ecmascript" src="../js/sha1.js"></script>
 <script>
     $(function () {
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue',
-            increaseArea: '20%' /* optional */
-        });
         $('button').click(function () {
             var username = $("#username").val();
             var password = $("#password").val();
