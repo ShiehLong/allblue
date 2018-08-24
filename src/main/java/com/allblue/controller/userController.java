@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 /**
  * @Description:
@@ -72,7 +76,7 @@ public class userController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
     @ResponseBody
-    public String userLogin(HttpServletRequest request) {
+    public String userLogin(HttpServletRequest request, HttpServletResponse response) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         logger.info("username:" + username + "   password:" + password);
@@ -83,12 +87,45 @@ public class userController {
 
         JSONObject re = new JSONObject();
         if (id != 0) {
+            HttpSession session = request.getSession();
+            session.setAttribute("blueUser", blueUser);
+
             re.put("result", "success");
             re.put("msg", "登录成功");
+
+            Cookie usernameCookie = new Cookie("username", username);
+            usernameCookie.setMaxAge(500);
+            usernameCookie.setPath("/");
+            response.addCookie(usernameCookie);
+
+            Cookie[] cookies = request.getCookies();
+            logger.info("外部的SessionId:" + session.getId());
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("JSESSIONID")) {
+                    logger.info("Cookie里边的：" + session.getId());
+                    cookie.setValue(session.getId());
+                    cookie.setPath("/");
+                    cookie.setMaxAge(500);
+                    response.addCookie(cookie);
+                }
+            }
+
         } else {
             re.put("result", "fail");
             re.put("msg", "用户名或密码错误~");
         }
         return JSON.toJSONString(re);
+    }
+
+    @RequestMapping("/logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //删除cookie
+        Cookie usernameCookie = new Cookie("username", "");
+        usernameCookie.setMaxAge(0);
+        usernameCookie.setPath("/");
+        response.addCookie(usernameCookie);
+        request.getSession().removeAttribute("blueUser");
+        logger.info("清除数据，退出登录！！！");
+        response.sendRedirect("login.jsp");
     }
 }

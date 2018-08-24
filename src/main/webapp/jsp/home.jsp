@@ -1,8 +1,15 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+         pageEncoding="utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+    String path = request.getContextPath();
+    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+            + path + "/";
+%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AdminLTE 2 | Dashboard</title>
+    <title>All Blue</title>
     <%@ include file="common/head.jsp" %>
     <!-- jvectormap -->
     <link rel="stylesheet" href="../css/jquery-jvectormap.css">
@@ -31,17 +38,17 @@
                     <li class="dropdown messages-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-envelope-o"></i>
-                            <span class="label label-success">4</span>
+                            <span class="label label-success">2</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">You have 4 messages</li>
+                            <li class="header">You have 2 messages</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
                                     <li><!-- start message -->
                                         <a href="#">
                                             <div class="pull-left">
-                                                <img src="dist/img/user2-160x160.jpg" class="img-circle"
+                                                <img src="../img/user2-160x160.jpg" class="img-circle"
                                                      alt="User Image">
                                             </div>
                                             <h4>
@@ -55,51 +62,12 @@
                                     <li>
                                         <a href="#">
                                             <div class="pull-left">
-                                                <img src="dist/img/user3-128x128.jpg" class="img-circle"
+                                                <img src="../img/user2-160x160.jpg" class="img-circle"
                                                      alt="User Image">
                                             </div>
                                             <h4>
                                                 AdminLTE Design Team
                                                 <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                                            </h4>
-                                            <p>Why not buy a new awesome theme?</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <div class="pull-left">
-                                                <img src="dist/img/user4-128x128.jpg" class="img-circle"
-                                                     alt="User Image">
-                                            </div>
-                                            <h4>
-                                                Developers
-                                                <small><i class="fa fa-clock-o"></i> Today</small>
-                                            </h4>
-                                            <p>Why not buy a new awesome theme?</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <div class="pull-left">
-                                                <img src="dist/img/user3-128x128.jpg" class="img-circle"
-                                                     alt="User Image">
-                                            </div>
-                                            <h4>
-                                                Sales Department
-                                                <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                                            </h4>
-                                            <p>Why not buy a new awesome theme?</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <div class="pull-left">
-                                                <img src="dist/img/user4-128x128.jpg" class="img-circle"
-                                                     alt="User Image">
-                                            </div>
-                                            <h4>
-                                                Reviewers
-                                                <small><i class="fa fa-clock-o"></i> 2 days</small>
                                             </h4>
                                             <p>Why not buy a new awesome theme?</p>
                                         </a>
@@ -156,7 +124,7 @@
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="../img/user2-160x160.jpg" class="user-image" alt="User Image">
-                            <span class="hidden-xs">Alexander Pierce</span>
+                            <span class="hidden-xs">${blueUser.username}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
@@ -187,9 +155,11 @@
                                 <div class="pull-left">
                                     <a href="#" class="btn btn-default btn-flat">Profile</a>
                                 </div>
-                                <div class="pull-right">
-                                    <a href="#" class="btn btn-default btn-flat">Sign out</a>
-                                </div>
+                                <form action="/user/logout" method="get">
+                                    <div class="pull-right">
+                                        <button class="btn btn-default btn-flat">Sign out</button>
+                                    </div>
+                                </form>
                             </li>
                         </ul>
                     </li>
@@ -224,7 +194,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li class="active"><a href="home.jsp"><i class="fa fa-circle-o"></i> HomePage</a></li>
-                        <li><a href="../index.jsp"><i class="fa fa-circle-o"></i> LoginPage</a></li>
+                        <li><a href="login.jsp"><i class="fa fa-circle-o"></i> LoginPage</a></li>
                     </ul>
                 </li>
 
@@ -385,7 +355,8 @@
                             <div class="pull-right box-tools">
                                 <!-- button with a dropdown -->
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                                    <button type="button" class="btn btn-success btn-sm dropdown-toggle"
+                                            data-toggle="dropdown">
                                         <i class="fa fa-bars"></i></button>
                                     <ul class="dropdown-menu pull-right" role="menu">
                                         <li><a href="#">Add new event</a></li>
@@ -394,9 +365,11 @@
                                         <li><a href="#">View calendar</a></li>
                                     </ul>
                                 </div>
-                                <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+                                <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i
+                                        class="fa fa-minus"></i>
                                 </button>
-                                <button type="button" class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i>
+                                <button type="button" class="btn btn-success btn-sm" data-widget="remove"><i
+                                        class="fa fa-times"></i>
                                 </button>
                             </div>
                             <!-- /. tools -->

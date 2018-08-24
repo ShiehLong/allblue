@@ -100,7 +100,7 @@
                     password: hex_sha1(password),
                 },
                 function (data) {
-                    if (data["result"] === "success" || data["result"] === "unauthorized") {
+                    if (data["result"] === "success") {
                         alert(data["msg"]);
                         window.location.href = "login.jsp";
                     } else if (data["result"] === "fail") {
