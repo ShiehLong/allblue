@@ -81,7 +81,7 @@
                 function (data) {
                     if (data["result"] === "success") {
                         console.log(data["msg"]);
-                        window.location.href = "home.jsp";
+                        window.location.href = "/user/home";
                     } else {
                         alert(data["msg"]);
                     }

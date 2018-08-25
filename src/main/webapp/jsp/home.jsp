@@ -153,13 +153,11 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                    <a href="/user/${blueUser.id}/detail" class="btn btn-default btn-flat">详情</a>
                                 </div>
-                                <form action="/user/logout" method="get">
-                                    <div class="pull-right">
-                                        <button class="btn btn-default btn-flat">Sign out</button>
-                                    </div>
-                                </form>
+                                <div class="pull-right">
+                                    <a href="/user/logout" class="btn btn-default btn-flat"> 退出</a>
+                                </div>
                             </li>
                         </ul>
                     </li>
@@ -177,7 +175,7 @@
                     <img src="../img/user2-160x160.jpg" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>Alexander Pierce</p>
+                    <p>${blueUser.username}</p>
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
             </div>
@@ -193,8 +191,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class="active"><a href="home.jsp"><i class="fa fa-circle-o"></i> HomePage</a></li>
-                        <li><a href="login.jsp"><i class="fa fa-circle-o"></i> LoginPage</a></li>
+                        <li class="active"><a href="/user/home"><i class="fa fa-circle-o"></i> 首页</a></li>
+                        <li><a href="/user/login"><i class="fa fa-circle-o"></i> LoginPage</a></li>
                     </ul>
                 </li>
 
@@ -211,9 +209,7 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="profile.jsp"><i class="fa fa-circle-o"></i> Profile</a></li>
-                        <li><a href="login.jsp"><i class="fa fa-circle-o"></i> Login</a></li>
-                        <li><a href="register.jsp"><i class="fa fa-circle-o"></i> Register</a></li>
+                        <li><a href="/user/list"><i class="fa fa-circle-o"></i> 用户列表</a></li>
                     </ul>
                 </li>
             </ul>

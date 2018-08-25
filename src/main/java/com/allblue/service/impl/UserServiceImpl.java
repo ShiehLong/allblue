@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 /**
  * @Description:
  * @Author Xone
@@ -45,5 +47,19 @@ public class UserServiceImpl implements UserService {
         userInfo = blueUserMapper.selectUserInfo(userInfo);
         logger.info("用户信息【" + userInfo + "】");
         return userInfo;
+    }
+
+    @Override
+    public BlueUser getUserInfo(int id) {
+        BlueUser userInfo = new BlueUser();
+        userInfo.setId(id);
+        userInfo = blueUserMapper.selectUserInfo(userInfo);
+        logger.info("用户信息【" + userInfo + "】");
+        return userInfo;
+    }
+
+    @Override
+    public List<BlueUser> getUserList() {
+        return blueUserMapper.selectUserList();
     }
 }

@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,7 +18,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.util.List;
 
 /**
  * @Description:
@@ -74,6 +76,11 @@ public class userController {
         }
     }
 
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String loginPage() {
+        return "login";
+    }
+
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
     @ResponseBody
     public String userLogin(HttpServletRequest request, HttpServletResponse response) {
@@ -88,6 +95,7 @@ public class userController {
         JSONObject re = new JSONObject();
         if (id != 0) {
             HttpSession session = request.getSession();
+            blueUser.setId(id);
             session.setAttribute("blueUser", blueUser);
 
             re.put("result", "success");
@@ -117,15 +125,56 @@ public class userController {
         return JSON.toJSONString(re);
     }
 
-    @RequestMapping("/logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //删除cookie
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+
+        request.getSession().invalidate();
         Cookie usernameCookie = new Cookie("username", "");
         usernameCookie.setMaxAge(0);
         usernameCookie.setPath("/");
         response.addCookie(usernameCookie);
-        request.getSession().removeAttribute("blueUser");
         logger.info("清除数据，退出登录！！！");
-        response.sendRedirect("login.jsp");
+        return "login";
+    }
+
+    @RequestMapping(value = "/home", method = RequestMethod.GET)
+    public String home() {
+        return "home";
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public String list(Model model) {
+        //获取用户信息列表
+        List<BlueUser> list = userService.getUserList();
+        model.addAttribute("list", list);
+        return "list";
+    }
+
+    @RequestMapping(value = "/{id}/detail", method = RequestMethod.GET)
+    public String detail(@PathVariable("id") int id, Model model) {
+        //获取用户信息
+        if (id == 0) {
+            return "redirect:/user/home";
+        }
+        BlueUser userInfo = userService.getUserInfo(id);
+        if (userInfo == null) {
+            return "redirect:/user/home";
+        }
+        model.addAttribute("userInfo", userInfo);
+        return "detail";
+    }
+
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
+    public String update(@PathVariable("id") int id, Model model) {
+        //获取用户信息
+        if (id == 0) {
+            return "redirect:/user/list";
+        }
+        BlueUser userInfo = userService.getUserInfo(id);
+        if (userInfo == null) {
+            return "redirect:/user/list";
+        }
+        model.addAttribute("userInfo", userInfo);
+        return "update";
     }
 }

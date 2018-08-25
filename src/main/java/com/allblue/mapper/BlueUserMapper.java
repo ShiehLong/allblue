@@ -17,6 +17,11 @@ public interface BlueUserMapper {
 
     int deleteByPrimaryKey(Integer id);
 
+    /**
+    * @Description:插入用户信息
+    * @Author Xone
+    * @Date 14:08 2018/8/25
+    **/
     int insert(BlueUser record);
 
     int insertSelective(BlueUser record);
@@ -39,4 +44,11 @@ public interface BlueUserMapper {
     int updateByPrimaryKeySelective(BlueUser record);
 
     int updateByPrimaryKey(BlueUser record);
+
+    /**
+    * @Description:查询所有用户信息
+    * @Author Xone
+    * @Date 14:08 2018/8/25
+    **/
+    List<BlueUser> selectUserList();
 }

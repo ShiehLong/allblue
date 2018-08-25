@@ -3,6 +3,8 @@ package com.allblue.service;
 import com.allblue.model.BlueUser;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @Description:
  * @Author Xone
@@ -29,5 +31,20 @@ public interface UserService {
      * @Date 17:02 2018/8/6
      **/
     BlueUser getUserInfo(String username);
+
+    /**
+     * @Description:根据用户ID查询会员信息
+     * @Author Xone
+     * @Date 15:56 2018/8/25
+     **/
+    BlueUser getUserInfo(int id);
+
+    /**
+     * @Description:获取用户列表
+     * @Author Xone
+     * @Date 13:59 2018/8/25
+     **/
+    List<BlueUser> getUserList();
+
 }
 

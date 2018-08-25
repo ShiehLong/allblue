@@ -102,7 +102,7 @@
                 function (data) {
                     if (data["result"] === "success") {
                         alert(data["msg"]);
-                        window.location.href = "login.jsp";
+                        window.location.href = "/jsp/login.jsp";
                     } else if (data["result"] === "fail") {
                         alert(data["msg"]);
                     }

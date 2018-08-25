@@ -39,11 +39,12 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         request.setCharacterEncoding("UTF-8");
-        logger.info("进入了preHandle方法！！！！");
+        logger.info("进入拦截器preHandle方法！！！！");
         //先从session拿取用户
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
-            response.sendRedirect("redirect:login");
+            logger.info("cookie信息为空！！！");
+            response.sendRedirect("login");
         }
         try {
             HttpSession session = request.getSession(false);
@@ -52,7 +53,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("JSESSIONID")) {
                     if (!cookie.getValue().equals(sessionId)) {
-                        response.sendRedirect("redirect:login");
+                        logger.info("cookie信息与session信息不一致！！！");
+                        response.sendRedirect("login");
                     }
                 }
             }
@@ -63,14 +65,21 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                     try {
                         String realPassword = userService.getUserInfo(cookieUsername).getPassword();
                         BlueUser user = (BlueUser) session.getAttribute("blueUser");
-                        if (user.getPassword().equals(realPassword)) {
-                            response.sendRedirect("redirect:home");
-                        } else {
-                            response.sendRedirect("redirect:login");
+                        if (user != null) {
+                            if (user.getPassword().equals(realPassword)) {
+                                logger.info("验证用户信息通过！！！");
+                                return true;
+//                            response.sendRedirect("redirect:home");
+                            } else {
+                                logger.info("验证用户信息未通过，密码不正确！！！");
+                                response.sendRedirect("login");
+                            }
                         }
                     } catch (NullPointerException e) {
-                        response.sendRedirect("redirect:login");
+                        logger.info("查询用户密码错误或者获取session信息错误！！！");
+                        response.sendRedirect("login");
                     }
+
                 }
             }
         } catch (Exception e) {
@@ -84,7 +93,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 //        res.put("msg", "请先登录~");
 //        PrintWriter out = response.getWriter();
 //        out.append(res.toString());
-        return true;
+        logger.info("拦截器校验未通过！回到登录页面!!!");
+        response.sendRedirect("login");
+        return false;
     }
 }
 
