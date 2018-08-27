@@ -19,6 +19,13 @@ public interface UserService {
     int add(BlueUser userInfo);
 
     /**
+    * @Description:更新会员信息
+    * @Author Xone
+    * @Date 21:13 2018/8/25
+    **/
+    int update(BlueUser userInfo);
+
+    /**
      * @Description:根据会员信息查询
      * @Author Xone
      * @Date 11:43 2018/7/20

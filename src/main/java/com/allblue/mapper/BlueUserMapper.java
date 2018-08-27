@@ -22,7 +22,7 @@ public interface BlueUserMapper {
     * @Author Xone
     * @Date 14:08 2018/8/25
     **/
-    int insert(BlueUser record);
+    int insert(BlueUser userInfo);
 
     int insertSelective(BlueUser record);
 
@@ -51,4 +51,12 @@ public interface BlueUserMapper {
     * @Date 14:08 2018/8/25
     **/
     List<BlueUser> selectUserList();
+
+    /**
+    * @Description:更新用户信息
+    * @Author Xone
+    * @Date 21:20 2018/8/25
+    **/
+    int updateById(BlueUser userInfo);
+
 }

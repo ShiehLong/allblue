@@ -13,12 +13,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @Description:
@@ -78,6 +82,7 @@ public class userController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage() {
+        logger.info("渲染登录页面！！！");
         return "login";
     }
 
@@ -165,16 +170,72 @@ public class userController {
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
-    public String update(@PathVariable("id") int id, Model model) {
+    public String updatePage(@PathVariable("id") int id, Model model) {
         //获取用户信息
         if (id == 0) {
             return "redirect:/user/list";
         }
         BlueUser userInfo = userService.getUserInfo(id);
+        logger.info("查询到用户信息如下：用户名-" + userInfo.getUsername() +
+                "/邮箱-" + userInfo.getEmail() + "/头像-" + userInfo.getPhoto());
         if (userInfo == null) {
             return "redirect:/user/list";
         }
         model.addAttribute("userInfo", userInfo);
         return "update";
+    }
+
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+    public String update(@PathVariable("id") int id, String email, String password, MultipartFile photo, HttpServletRequest request) {
+        //获取用户信息
+        if (id == 0) {
+            return "redirect:/user/list";
+        }
+        //入参判断
+        if ((email == null || "".equals(email)) &&
+                (password == null || "".equals(password)) &&
+                photo.getSize() <= 0) {
+            logger.info("请填写要修改的信息!!!");
+            return "redirect:/user/" + id + "/update";
+        }
+
+        BlueUser blueUser = new BlueUser();
+        blueUser.setId(id);
+        if (email != null && !"".equals(email)) {
+            blueUser.setEmail(email);
+        }
+        if (password != null && !"".equals(password)) {
+            blueUser.setPassword(password);
+        }
+        //获取图片原始名字
+        String originalName = photo.getOriginalFilename();
+        //上传图片
+        if (photo != null && originalName != null && originalName.length() > 0) {
+            //图片存储物理地址
+            String store = "D:\\photos\\";
+            //生成uuid作为文件名称
+            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            //图片新名称
+            String newPhotoName = uuid + originalName.substring(originalName.lastIndexOf("."));
+            //新图片生成
+            File file = new File(store + newPhotoName);
+            //将内存中的图片写入磁盘
+            try {
+                photo.transferTo(file);
+                logger.info("头像写入磁盘！！！");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            blueUser.setPhoto("/photos/" + newPhotoName);
+        }
+
+        //update数据库
+        int count = userService.update(blueUser);
+        if (count != 0) {
+            logger.info("更新用户信息成功！！！");
+        } else {
+            logger.info("修改失败,请重试！！！");
+        }
+        return "redirect:/user/" + id + "/update";
     }
 }

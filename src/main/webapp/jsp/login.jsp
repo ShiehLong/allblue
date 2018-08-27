@@ -53,11 +53,11 @@
 <!-- /.login-box -->
 
 <!-- jQuery 3 -->
-<script src="../js/jquery.min.js"></script>
+<script src="/js/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
-<script src="../js/bootstrap.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
 <!--sha1加密-->
-<script type="text/ecmascript" src="../js/sha1.js"></script>
+<script type="text/ecmascript" src="/js/sha1.js"></script>
 <script>
     $(function () {
         $('button').click(function () {

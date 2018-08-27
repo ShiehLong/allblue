@@ -6,6 +6,7 @@
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="photo" property="photo" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Example_Where_Clause">
@@ -79,7 +80,7 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        id, username, email, password
+        id, username, email, password, photo
     </sql>
 
     <select id="selectUserInfo" resultMap="BaseResultMap" parameterType="com.allblue.model.BlueUser">
@@ -100,13 +101,32 @@
     </select>
 
     <insert id="insert" parameterType="com.allblue.model.BlueUser" useGeneratedKeys="true" keyProperty="id">
-        insert into blue_user (username, email,password)
-        values (#{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR})
+        insert into blue_user (username, email, password, photo)
+        values (#{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{photo,jdbcType=VARCHAR})
     </insert>
 
     <select id="selectUserList" resultMap="BaseResultMap">
         select * from blue_user order by id ASC
     </select>
+
+    <update id="updateById" parameterType="com.allblue.model.BlueUser">
+        update blue_user
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="photo != null">
+                photo = #{photo,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 
     <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.allblue.model.BlueUserExample">
         select

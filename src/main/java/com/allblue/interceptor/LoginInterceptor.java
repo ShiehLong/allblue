@@ -1,11 +1,10 @@
-package com.allblue.controller;
+package com.allblue.interceptor;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.alibaba.fastjson.JSONObject;
 import com.allblue.model.BlueUser;
 import com.allblue.service.UserService;
 import org.slf4j.Logger;
@@ -13,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
-import java.io.PrintWriter;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
@@ -44,7 +41,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             logger.info("cookie信息为空！！！");
-            response.sendRedirect("login");
+            request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+            return false;
         }
         try {
             HttpSession session = request.getSession(false);
@@ -54,7 +52,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 if (cookie.getName().equals("JSESSIONID")) {
                     if (!cookie.getValue().equals(sessionId)) {
                         logger.info("cookie信息与session信息不一致！！！");
-                        response.sendRedirect("login");
+                        request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+                        return false;
                     }
                 }
             }
@@ -69,15 +68,16 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                             if (user.getPassword().equals(realPassword)) {
                                 logger.info("验证用户信息通过！！！");
                                 return true;
-//                            response.sendRedirect("redirect:home");
                             } else {
-                                logger.info("验证用户信息未通过，密码不正确！！！");
-                                response.sendRedirect("login");
+                                logger.info("用户信息已修改，请重新登录！！！");
+                                request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+                                return false;
                             }
                         }
                     } catch (NullPointerException e) {
                         logger.info("查询用户密码错误或者获取session信息错误！！！");
-                        response.sendRedirect("login");
+                        request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+                        return false;
                     }
 
                 }
@@ -86,15 +86,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             logger.error("拦截器异常：" + e);
         }
 
-//        response.setCharacterEncoding("UTF-8");
-//        response.setContentType("application/json; charset=utf-8");
-//        JSONObject res = new JSONObject();
-//        res.put("result", "unauthorized");
-//        res.put("msg", "请先登录~");
-//        PrintWriter out = response.getWriter();
-//        out.append(res.toString());
         logger.info("拦截器校验未通过！回到登录页面!!!");
-        response.sendRedirect("login");
+        request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
         return false;
     }
 }

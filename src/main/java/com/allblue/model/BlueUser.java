@@ -13,6 +13,8 @@ public class BlueUser {
 
     private String password;
 
+    private String photo;
+
     public Integer getId() {
         return id;
     }
@@ -43,5 +45,13 @@ public class BlueUser {
 
     public void setPassword(String password) {
         this.password = password == null ? null : password.trim();
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

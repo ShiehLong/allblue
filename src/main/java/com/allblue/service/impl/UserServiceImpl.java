@@ -33,6 +33,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int update(BlueUser userInfo) {
+        int count = blueUserMapper.updateById(userInfo);
+        logger.info("更新用户信息条数:" + count);
+        return count;
+    }
+
+    @Override
     public int getUserId(BlueUser userInfo) {
         userInfo = blueUserMapper.selectUserInfo(userInfo);
         int id = StringUtils.isEmpty(userInfo) ? 0 : userInfo.getId();
