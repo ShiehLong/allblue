@@ -92,15 +92,12 @@ public class userController {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         logger.info("username:" + username + "   password:" + password);
-        BlueUser blueUser = new BlueUser();
-        blueUser.setUsername(username);
-        blueUser.setPassword(password);
-        int id = userService.getUserId(blueUser);
+
+        BlueUser blueUser = userService.getUserInfo(username, password);
 
         JSONObject re = new JSONObject();
-        if (id != 0) {
+        if (blueUser != null && !"".equals(blueUser)) {
             HttpSession session = request.getSession();
-            blueUser.setId(id);
             session.setAttribute("blueUser", blueUser);
 
             re.put("result", "success");
@@ -144,6 +141,7 @@ public class userController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String home() {
+        logger.info("渲染home页面！！！");
         return "home";
     }
 
@@ -156,7 +154,7 @@ public class userController {
     }
 
     @RequestMapping(value = "/{id}/detail", method = RequestMethod.GET)
-    public String detail(@PathVariable("id") int id, Model model) {
+    public String detail(@PathVariable("id") int id, Model model,HttpSession session) {
         //获取用户信息
         if (id == 0) {
             return "redirect:/user/home";
@@ -165,6 +163,9 @@ public class userController {
         if (userInfo == null) {
             return "redirect:/user/home";
         }
+
+        //更新session
+        session.setAttribute("blueUser", userInfo);
         model.addAttribute("userInfo", userInfo);
         return "detail";
     }
@@ -236,6 +237,6 @@ public class userController {
         } else {
             logger.info("修改失败,请重试！！！");
         }
-        return "redirect:/user/" + id + "/update";
+        return "redirect:/user/" + id + "/detail";
     }
 }

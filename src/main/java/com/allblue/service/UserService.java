@@ -30,7 +30,7 @@ public interface UserService {
      * @Author Xone
      * @Date 11:43 2018/7/20
      **/
-    int getUserId(BlueUser userInfo);
+    BlueUser getUserInfo(String username,String password);
 
     /**
      * @Description:根据用户名查询会员信息

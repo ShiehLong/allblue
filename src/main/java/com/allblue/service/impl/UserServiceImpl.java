@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -40,11 +39,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getUserId(BlueUser userInfo) {
+    public BlueUser getUserInfo(String username, String password) {
+        BlueUser userInfo = new BlueUser();
+        userInfo.setUsername(username);
+        userInfo.setPassword(password);
         userInfo = blueUserMapper.selectUserInfo(userInfo);
-        int id = StringUtils.isEmpty(userInfo) ? 0 : userInfo.getId();
-        logger.info("用户登录ID：" + id);
-        return id;
+        logger.info("用户信息【" + userInfo + "】");
+        return userInfo;
     }
 
     @Override

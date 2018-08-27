@@ -17,21 +17,30 @@
 <body>
 <table width="700" align="center" border="1">
     <tr>
-        <td>用户标识:</td>
+        <th>头像:</th>
+        <td style="text-align: center"><img id="image" src="${userInfo.photo}" style="width: 128px;height: 128px;"></td>
+
+    </tr>
+    <tr>
+        <th>用户标识:</th>
         <td>${userInfo.id }</td>
     </tr>
     <tr>
-        <td>用户名:</td>
+        <th>用户名:</th>
         <td>${userInfo.username }</td>
     </tr>
     <tr>
-        <td>用户密码:</td>
+        <th>用户密码:</th>
         <td>${userInfo.password }</td>
     </tr>
     <tr>
-        <td>用户邮箱:</td>
+        <th>用户邮箱:</th>
         <td>${userInfo.email }</td>
     </tr>
 </table>
+<div style="text-align: center;">
+    <a href="/user/home">首页</a>
+    <a href="/user/${userInfo.id }/update">更新</a>
+</div>
 </body>
 </html>
