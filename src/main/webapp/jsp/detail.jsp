@@ -11,36 +11,53 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <%@ include file="common/head.jsp" %>
     <title>用户[${userInfo.username}]详细信息</title>
+    <style type="text/css">
+        td {
+            text-align: center;
+        }
+
+        img {
+            width: 128px;
+            height: 128px;
+        }
+    </style>
 </head>
 
 <body>
-<table width="700" align="center" border="1">
-    <tr>
-        <th>头像:</th>
-        <td style="text-align: center"><img id="image" src="${userInfo.photo}" style="width: 128px;height: 128px;"></td>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <tr>
+            <td>头像:</td>
+            <td><img id="image" src="${userInfo.photo}" class="img-circle"></td>
 
-    </tr>
-    <tr>
-        <th>用户标识:</th>
-        <td>${userInfo.id }</td>
-    </tr>
-    <tr>
-        <th>用户名:</th>
-        <td>${userInfo.username }</td>
-    </tr>
-    <tr>
-        <th>用户密码:</th>
-        <td>${userInfo.password }</td>
-    </tr>
-    <tr>
-        <th>用户邮箱:</th>
-        <td>${userInfo.email }</td>
-    </tr>
-</table>
-<div style="text-align: center;">
-    <a href="/user/home">首页</a>
-    <a href="/user/${userInfo.id }/update">更新</a>
+        </tr>
+        <tr>
+            <td>用户标识:</td>
+            <td>${userInfo.id }</td>
+        </tr>
+        <tr>
+            <td>用户名:</td>
+            <td>${userInfo.username }</td>
+        </tr>
+        <tr>
+            <td>用户密码:</td>
+            <td>${userInfo.password }</td>
+        </tr>
+        <tr>
+            <td>用户邮箱:</td>
+            <td>${userInfo.email }</td>
+        </tr>
+    </table>
+    <div style="text-align: center;">
+        <a href="/user/home" class="btn btn-primary" role="button">首页</a>
+        <a href="/user/${userInfo.id }/update" class="btn btn-primary" role="button">更新</a>
+    </div>
 </div>
+<!-- jQuery 3 -->
+<script src="/js/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -21,10 +21,10 @@
             <h3 class="box-title">修&nbsp;改&nbsp;${userInfo.username}&nbsp;信&nbsp;息</h3>
         </div>
         <div class="box-body">
-            <form action="/user/${userInfo.id}/update" method="post" enctype="multipart/form-data">
+            <form action="/user/${userInfo.id}/update" method="post" enctype="multipart/form-data" role="form">
                 <div class="form-group" style="text-align: center;">
                     <label>
-                        <img id="image" src="/img/user1-128x128.jpg" style="width: 128px;height: 128px;">
+                        <img id="image" src="/img/user1-128x128.jpg" class="img-circle" style="width: 128px;height: 128px;">
                         <input type="file" name="photo" id="photo" style="width: 128px;display: none">
                     </label>
                 </div>
@@ -42,7 +42,7 @@
                            placeholder="retryPassword">
                 </div>
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
                 </div>
             </form>
         </div>
