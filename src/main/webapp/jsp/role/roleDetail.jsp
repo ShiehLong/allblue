@@ -11,8 +11,8 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <%@ include file="common/head.jsp" %>
-    <title>用户[${userInfo.username}]详细信息</title>
+    <%@ include file="../common/head.jsp" %>
+    <title>角色[${roleInfo.name}]详细信息</title>
     <style type="text/css">
         td {
             text-align: center;
@@ -29,30 +29,38 @@
 <div class="table-responsive">
     <table class="table table-striped">
         <tr>
-            <td>头像:</td>
-            <td><img id="image" src="${userInfo.photo}" class="img-circle"></td>
+            <td>图片:</td>
+            <td><img id="image" src="${roleInfo.pic}" class="img-circle" style="width: 128px;height: 128px;"></td>
 
         </tr>
         <tr>
-            <td>用户标识:</td>
-            <td>${userInfo.id }</td>
+            <td>角色标识:</td>
+            <td>${roleInfo.id }</td>
         </tr>
         <tr>
-            <td>用户名:</td>
-            <td>${userInfo.username }</td>
+            <td>角色名:</td>
+            <td>${roleInfo.name }</td>
         </tr>
         <tr>
-            <td>用户密码:</td>
-            <td>${userInfo.password }</td>
+            <td>角色性别:</td>
+            <td>${roleInfo.sex }</td>
         </tr>
         <tr>
-            <td>用户邮箱:</td>
-            <td>${userInfo.email }</td>
+            <td>角色年龄:</td>
+            <td>${roleInfo.age }</td>
+        </tr>
+        <tr>
+            <td>角色描述:</td>
+            <td>${roleInfo.description }</td>
+        </tr>
+        <tr>
+            <td>角色视频:</td>
+            <td>${roleInfo.video }</td>
         </tr>
     </table>
     <div style="text-align: center;">
-        <a href="/user/home" class="btn btn-primary" role="button">首页</a>
-        <a href="/user/${userInfo.id }/update" class="btn btn-primary" role="button">更新</a>
+        <a href="/role/list" class="btn btn-primary" role="button">返回列表</a>
+        <a href="/role/${roleInfo.id }/update" class="btn btn-primary" role="button">更新</a>
     </div>
 </div>
 <!-- jQuery 3 -->

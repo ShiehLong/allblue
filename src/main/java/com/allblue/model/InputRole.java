@@ -1,11 +1,13 @@
 package com.allblue.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * @Description:
  * @Author Xone
  * @Date 17:30 2018/8/31
  **/
-public class Role {
+public class InputRole {
 
     private Integer id;
 
@@ -15,9 +17,9 @@ public class Role {
 
     private Integer age;
 
-    private String pic;
+    private MultipartFile pic;
 
-    private String Description;
+    private String description;
 
     private String video;
 
@@ -45,6 +47,14 @@ public class Role {
         this.sex = sex;
     }
 
+    public MultipartFile getPic() {
+        return pic;
+    }
+
+    public void setPic(MultipartFile pic) {
+        this.pic = pic;
+    }
+
     public Integer getAge() {
         return age;
     }
@@ -53,20 +63,12 @@ public class Role {
         this.age = age;
     }
 
-    public String getPic() {
-        return pic;
-    }
-
-    public void setPic(String pic) {
-        this.pic = pic;
-    }
-
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        this.Description = description;
+        this.description = description;
     }
 
     public String getVideo() {

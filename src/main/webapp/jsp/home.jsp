@@ -203,14 +203,14 @@
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-folder"></i> <span>Examples</span>
+                        <i class="fa fa-folder"></i> <span>数据中心</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="/user/list"><i class="fa fa-circle-o"></i> 用户列表</a></li>
-                        <li><a href="/jsp/fileupload.jsp"><i class="fa fa-circle-o"></i> 上传文件</a></li>
+                        <li><a href="/role/list"><i class="fa fa-circle-o"></i> 角色列表</a></li>
                     </ul>
                 </li>
             </ul>

@@ -1,7 +1,6 @@
 package com.allblue.service;
 
 import com.allblue.model.BlueUser;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

@@ -43,12 +43,11 @@
                 <td>${u.password }</td>
                 <td>${u.email }</td>
                 <td>
-                    <a href="${u.id }/update">更新</a>
-                    <a href="${u.id }/delete">删除</a>
+                    <a href="/user/${u.id }/update">更新</a>
+                    <a href="/user/${u.id }/delete">删除</a>
                 </td>
             </tr>
         </c:forEach>
     </c:if>
 </table>
 </body>
-</html>

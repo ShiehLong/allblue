@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -83,7 +84,7 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage() {
         logger.info("渲染登录页面！！！");
-        return "login";
+        return "user/login";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
@@ -136,7 +137,7 @@ public class UserController {
         usernameCookie.setPath("/");
         response.addCookie(usernameCookie);
         logger.info("清除数据，退出登录！！！");
-        return "login";
+        return "user/login";
     }
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
@@ -150,12 +151,11 @@ public class UserController {
         //获取用户信息列表
         List<BlueUser> list = userService.getUserList();
         model.addAttribute("list", list);
-        return "list";
+        return "user/list";
     }
 
     @RequestMapping(value = "/{id}/detail", method = RequestMethod.GET)
     public String detail(@PathVariable("id") int id, Model model,HttpSession session) {
-        //获取用户信息
         if (id == 0) {
             return "redirect:/user/home";
         }
@@ -167,27 +167,26 @@ public class UserController {
         //更新session
         session.setAttribute("blueUser", userInfo);
         model.addAttribute("userInfo", userInfo);
-        return "detail";
+        return "user/detail";
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
     public String updatePage(@PathVariable("id") int id, Model model) {
-        //获取用户信息
         if (id == 0) {
             return "redirect:/user/list";
         }
         BlueUser userInfo = userService.getUserInfo(id);
         logger.info("查询到用户信息如下：用户名-" + userInfo.getUsername() +
                 "/邮箱-" + userInfo.getEmail() + "/头像-" + userInfo.getPhoto());
-        if (userInfo == null) {
+        if (StringUtils.isEmpty(userInfo)) {
             return "redirect:/user/list";
         }
         model.addAttribute("userInfo", userInfo);
-        return "update";
+        return "user/update";
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
-    public String update(@PathVariable("id") int id, String email, String password, MultipartFile photo, HttpServletRequest request) {
+    public String update(@PathVariable("id") int id, String email, String password, MultipartFile photo) {
         //获取用户信息
         if (id == 0) {
             return "redirect:/user/list";
@@ -211,9 +210,9 @@ public class UserController {
         //获取图片原始名字
         String originalName = photo.getOriginalFilename();
         //上传图片
-        if (photo != null && originalName != null && originalName.length() > 0) {
+        if (originalName != null && originalName.length() > 0) {
             //图片存储物理地址
-            String store = "D:\\photos\\";
+            String store = "D:\\photos\\user\\";
             //生成uuid作为文件名称
             String uuid = UUID.randomUUID().toString().replaceAll("-", "");
             //图片新名称
@@ -227,7 +226,7 @@ public class UserController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            blueUser.setPhoto("/photos/" + newPhotoName);
+            blueUser.setPhoto("/photos/user/" + newPhotoName);
         }
 
         //update数据库
