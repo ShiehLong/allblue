@@ -44,10 +44,14 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public int deleteRole(Integer id) {
+    public boolean deleteRole(Integer id) {
+        boolean flag = false;
         int count = roleMapper.deleteRoleById(id);
         logger.info("删除角色条数:" + count);
-        return count;
+        if(count > 0){
+            flag = true;
+        }
+        return flag;
     }
 
     @Override

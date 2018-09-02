@@ -165,9 +165,17 @@ public class RoleController {
         return "role/roleList";
     }
 
+    @RequestMapping(value = "/roleHome", method = RequestMethod.GET)
+    public String roleHome(Model model) {
+        //获取用户信息列表
+        List<Role> list = roleService.getRoleList();
+        model.addAttribute("list", list);
+        return "role/roleHome";
+    }
+
     @RequestMapping(value = "/{id}/detail", method = RequestMethod.GET)
     public String roleDetail(@PathVariable("id") int id, Model model) {
-        //获取用户信息
+        //判断用户ID
         if (id == 0) {
             return "redirect:/role/list";
         }
@@ -179,6 +187,20 @@ public class RoleController {
         }
         model.addAttribute("roleInfo", roleInfo);
         return "role/roleDetail";
+    }
+
+    @RequestMapping(value = "/{id}/delete",method = RequestMethod.GET)
+    public String roleDelete(@PathVariable("id") int id){
+        if(id == 0){
+            return "redirect:/role/list";
+        }
+        boolean flag = roleService.deleteRole(id);
+        if(flag){
+            logger.info("删除角色成功!!!");
+        }else{
+            logger.info("删除角色失败！！！");
+        }
+        return "redirect:/role/list";
     }
 
 }

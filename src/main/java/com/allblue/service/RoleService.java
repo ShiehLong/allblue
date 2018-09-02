@@ -17,7 +17,7 @@ public interface RoleService {
 
     List<Role> getRoleList();
 
-    int deleteRole(Integer id);
+    boolean deleteRole(Integer id);
 
     /**
      * @Description:根据角色ID查询信息
