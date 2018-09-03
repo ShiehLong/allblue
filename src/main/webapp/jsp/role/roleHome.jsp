@@ -92,9 +92,9 @@
         <c:if test="${list.size() gt 0}">
             <c:forEach items="${list}" var="role">
                 <article class="white-panel">
-                    <img class="thumbnail gallerybox"
-                         src="${role.pic }"
-                         onclick=javascript:location.href="/role/${role.id}/detail">
+                    <a href="/role/${role.id}/detail">
+                    <img class="thumbnail gallerybox" src="${role.pic }" >
+                    </a>
                 </article>
             </c:forEach>
         </c:if>

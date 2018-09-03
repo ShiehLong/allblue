@@ -24,7 +24,7 @@
             <form action="/user/${userInfo.id}/update" method="post" enctype="multipart/form-data" role="form">
                 <div class="form-group" style="text-align: center;">
                     <label>
-                        <img id="image" src="/img/user1-128x128.jpg" class="img-circle" style="width: 128px;height: 128px;">
+                        <img id="image" src="/img/default.jpg" class="img-circle" style="width: 128px;height: 128px;">
                         <input type="file" name="photo" id="photo" style="width: 128px;display: none">
                     </label>
                 </div>

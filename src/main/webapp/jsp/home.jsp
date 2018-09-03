@@ -167,6 +167,7 @@
                     <ul class="treeview-menu">
                         <li class="active"><a href="/user/home"><i class="fa fa-circle-o"></i> 首页</a></li>
                         <li><a href="/role/roleHome"><i class="fa fa-circle-o"></i> 图片列表</a></li>
+                        <li><a href="/jsp/role/roleVideo.jsp"><i class="fa fa-circle-o"></i> 视频</a></li>
                     </ul>
                 </li>
 
@@ -192,35 +193,12 @@
 
 <!-- jQuery 3 -->
 <script src="/js/jquery.min.js"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="/js/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
     $.widget.bridge('uibutton', $.ui.button);
 </script>
 <!-- Bootstrap 3.3.7 -->
 <script src="/js/bootstrap.min.js"></script>
-<!-- Sparkline -->
-<script src="/js/jquery.sparkline.min.js"></script>
-<!-- jvectormap -->
-<script src="/js/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="/js/jquery-jvectormap-world-mill-en.js"></script>
-<!-- daterangepicker -->
-<script src="/js/moment.min.js"></script>
-<script src="/js/daterangepicker.js"></script>
-<!-- datepicker -->
-<script src="/js/bootstrap-datepicker.min.js"></script>
-<!-- Bootstrap WYSIHTML5 -->
-<script src="/js/bootstrap3-wysihtml5.all.min.js"></script>
-<!-- Slimscroll -->
-<script src="/js/jquery.slimscroll.min.js"></script>
-<!-- FastClick -->
-<script src="/js/fastclick.js"></script>
-<!-- AdminLTE App -->
-<script src="/js/adminlte.min.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="/js/dashboard.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="/js/demo.js"></script>
+
 </body>
 </html>
