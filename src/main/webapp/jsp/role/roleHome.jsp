@@ -15,9 +15,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>首页</title>
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/role/default.css">
+    <%@ include file="../common/head.jsp" %>
     <style type="text/css">
+        .htmleaf-container{
+            margin: 0 auto;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .htmleaf-header{
+            padding: 1em 190px 1em;
+            letter-spacing: -1px;
+            text-align: center;
+            background: #66677c;
+        }
+
+        .htmleaf-header h1 {
+            color: #D5D6E2;
+            font-weight: 600;
+            font-size: 2em;
+            line-height: 1;
+            margin-bottom: 0;
+            font-family: "Microsoft YaHei","宋体","Segoe UI", "Lucida Grande", Helvetica, Arial,sans-serif, FreeSans, Arimo;
+        }
+
         #gallery-wrapper {
             position: relative;
             max-width: 75%;
@@ -56,9 +77,6 @@
             transition: all 0.3s ease-in-out;
         }
     </style>
-    <!--[if IE]>
-    <script src="http://libs.useso.com/js/html5shiv/3.7/html5shiv.min.js"></script>
-    <![endif]-->
 </head>
 <body>
 <article class="htmleaf-container">

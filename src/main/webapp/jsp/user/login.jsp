@@ -45,7 +45,7 @@
         </div>
 
         <a href="#">忘记密码</a><br>
-        <a href="register.jsp" class="text-center">注册会员</a>
+        <a href="/jsp/user/register.jsp" class="text-center">注册会员</a>
 
     </div>
     <!-- /.login-box-body -->

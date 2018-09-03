@@ -59,7 +59,7 @@ public class RoleServiceImpl implements RoleService {
         Role roleInfo = new Role();
         roleInfo.setId(id);
         roleInfo = roleMapper.selectRoleInfo(roleInfo);
-        logger.info("用户信息【" + roleInfo + "】");
+        logger.info("角色信息【" + roleInfo + "】");
         return roleInfo;
     }
 }

@@ -1,6 +1,6 @@
 package com.allblue.controller;
 
-import com.allblue.model.InputRole;
+import com.allblue.dto.InputRole;
 import com.allblue.model.Role;
 import com.allblue.service.RoleService;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = {"text/json;charset=UTF-8"})
     public String addRole(@ModelAttribute InputRole inputRole) {
 
         //入参判断
@@ -101,7 +101,7 @@ public class RoleController {
         return "role/roleUpdate";
     }
 
-    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST, produces = {"text/json;charset=UTF-8"})
     public String updateRole(@PathVariable("id") int id, @ModelAttribute InputRole inputRole) {
         if (id == 0) {
             return "redirect:/role/list";

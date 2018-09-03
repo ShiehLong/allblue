@@ -1,4 +1,4 @@
-package com.allblue.model;
+package com.allblue.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
