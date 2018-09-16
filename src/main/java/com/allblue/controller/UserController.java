@@ -81,12 +81,6 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String loginPage() {
-        logger.info("渲染登录页面！！！");
-        return "user/login";
-    }
-
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
     @ResponseBody
     public String userLogin(HttpServletRequest request, HttpServletResponse response) {
@@ -105,7 +99,7 @@ public class UserController {
             re.put("msg", "登录成功");
 
             Cookie usernameCookie = new Cookie("username", username);
-            usernameCookie.setMaxAge(500);
+            usernameCookie.setMaxAge(50000000);
             usernameCookie.setPath("/");
             response.addCookie(usernameCookie);
 
@@ -116,7 +110,7 @@ public class UserController {
                     logger.info("Cookie里边的：" + session.getId());
                     cookie.setValue(session.getId());
                     cookie.setPath("/");
-                    cookie.setMaxAge(500);
+                    cookie.setMaxAge(50000000);
                     response.addCookie(cookie);
                 }
             }
@@ -140,12 +134,6 @@ public class UserController {
         return "user/login";
     }
 
-    @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public String home() {
-        logger.info("渲染home页面！！！");
-        return "home";
-    }
-
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
         //获取用户信息列表
@@ -157,11 +145,11 @@ public class UserController {
     @RequestMapping(value = "/{id}/detail", method = RequestMethod.GET)
     public String detail(@PathVariable("id") int id, Model model,HttpSession session) {
         if (id == 0) {
-            return "redirect:/user/home";
+            return "redirect:/index.jsp";
         }
         BlueUser userInfo = userService.getUserInfo(id);
         if (userInfo == null) {
-            return "redirect:/user/home";
+            return "redirect:/index.jsp";
         }
 
         //更新session

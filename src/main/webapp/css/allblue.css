@@ -3,10 +3,12 @@ html,
 body {
     height: 100%;
 }
+
 .layout-boxed html,
 .layout-boxed body {
     height: 100%;
 }
+
 body {
     font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 400;
@@ -21,9 +23,8 @@ body {
     padding: 15px;
     margin-right: auto;
     margin-left: auto;
-    padding-left: 15px;
-    padding-right: 15px;
 }
+
 /* H1 - H6 font */
 h1,
 h2,
@@ -39,10 +40,12 @@ h6,
 .h6 {
     font-family: 'Source Sans Pro', sans-serif;
 }
+
 /* General Links */
 a {
     color: #3c8dbc;
 }
+
 a:hover,
 a:active,
 a:focus {
@@ -50,72 +53,7 @@ a:focus {
     text-decoration: none;
     color: #72afd2;
 }
-/*
- * Page: Lock Screen
- * -----------------
- */
-/* ADD THIS CLASS TO THE <BODY> TAG */
-.lockscreen {
-    background: #d2d6de;
-}
-.lockscreen-logo {
-    font-size: 35px;
-    text-align: center;
-    margin-bottom: 25px;
-    font-weight: 300;
-}
-.lockscreen-logo a {
-    color: #444;
-}
-.lockscreen-wrapper {
-    max-width: 400px;
-    margin: 0 auto;
-    margin-top: 10%;
-}
-/* User name [optional] */
-.lockscreen .lockscreen-name {
-    text-align: center;
-    font-weight: 600;
-}
-/* Will contain the image and the sign in form */
-.lockscreen-item {
-    border-radius: 4px;
-    padding: 0;
-    background: #fff;
-    position: relative;
-    margin: 10px auto 30px auto;
-    width: 290px;
-}
-/* User image */
-.lockscreen-image {
-    border-radius: 50%;
-    position: absolute;
-    left: -10px;
-    top: -25px;
-    background: #fff;
-    padding: 5px;
-    z-index: 10;
-}
-.lockscreen-image > img {
-    border-radius: 50%;
-    width: 70px;
-    height: 70px;
-}
-/* Contains the password input and the login button */
-.lockscreen-credentials {
-    margin-left: 70px;
-}
-.lockscreen-credentials .form-control {
-    border: 0;
-}
-.lockscreen-credentials .btn {
-    background-color: #fff;
-    border: 0;
-    padding: 0 10px;
-}
-.lockscreen-footer {
-    margin-top: 10px;
-}
+
 /*
  * Page: Login & Register
  * ----------------------
@@ -127,19 +65,23 @@ a:focus {
     margin-bottom: 25px;
     font-weight: 300;
 }
+
 .login-logo a,
 .register-logo a {
     color: #444;
 }
+
 .login-page,
 .register-page {
     background: #d2d6de;
 }
+
 .login-box,
 .register-box {
     width: 360px;
     margin: 7% auto;
 }
+
 @media (max-width: 768px) {
     .login-box,
     .register-box {
@@ -147,6 +89,7 @@ a:focus {
         margin-top: 20px;
     }
 }
+
 .login-box-body,
 .register-box-body {
     background: #fff;
@@ -154,16 +97,83 @@ a:focus {
     border-top: 0;
     color: #666;
 }
+
 .login-box-body .form-control-feedback,
 .register-box-body .form-control-feedback {
     color: #777;
 }
+
 .login-box-msg,
 .register-box-msg {
     margin: 0;
     text-align: center;
     padding: 0 20px 20px 20px;
 }
+
 .social-auth-links {
     margin: 10px 0;
+}
+
+/*
+ * Page: roleHome
+ * ----------------------
+ */
+.htmleaf-container {
+    margin: 0 auto;
+    text-align: center;
+    overflow: hidden;
+}
+
+.htmleaf-header {
+    padding: 1em 190px 1em;
+    letter-spacing: -1px;
+    text-align: center;
+    background: #66677c;
+}
+
+.htmleaf-header h1 {
+    color: #D5D6E2;
+    font-weight: 600;
+    font-size: 2em;
+    line-height: 1;
+    margin-bottom: 0;
+    font-family: "Microsoft YaHei", "宋体", "Segoe UI", "Lucida Grande", Helvetica, Arial, sans-serif, FreeSans, Arimo;
+}
+
+#gallery-wrapper {
+    position: relative;
+    max-width: 75%;
+    width: 75%;
+    margin: 50px auto;
+}
+
+img.gallerybox {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+.white-panel {
+    position: absolute;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+}
+
+.white-panel h1 {
+    font-size: 1em;
+}
+
+.white-panel h1 a {
+    color: #A92733;
+}
+
+.white-panel:hover {
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+    margin-top: -5px;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }

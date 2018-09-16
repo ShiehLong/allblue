@@ -23,7 +23,7 @@
 <body>
 <div>
     <a href="/jsp/role/roleAdd.jsp" class="btn btn-primary" role="button">新增角色</a>
-    <a href="/jsp/home.jsp" class="btn btn-primary" role="button">首页</a>
+    <a href="/index.jsp" class="btn btn-primary" role="button">首页</a>
 </div>
 <div>
     <table width="80%" align="center" border="1">

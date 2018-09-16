@@ -1,59 +1,59 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>All Blue | Lockscreen</title>
-    <%@ include file="jsp/common/head.jsp" %>
+    <title>All Blue</title>
 </head>
-<body class="hold-transition lockscreen">
-<!-- Automatic element centering -->
-<div class="lockscreen-wrapper">
-    <div class="lockscreen-logo">
-        <a href="index.jsp"><b>All</b>Blue</a>
-    </div>
-    <!-- User name -->
-    <div class="lockscreen-name">OnePiece</div>
 
-    <!-- START LOCK SCREEN ITEM -->
-    <div class="lockscreen-item">
-        <!-- lockscreen image -->
-        <div class="lockscreen-image">
-            <img src="img/default.jpg" alt="User Image">
-        </div>
-        <!-- /.lockscreen-image -->
-
-        <!-- lockscreen credentials (contains the form) -->
-        <form class="lockscreen-credentials">
-            <div class="input-group">
-                <input type="password" class="form-control" placeholder="password">
-
-                <div class="input-group-btn">
-                    <button type="button" class="btn"><i class="fa fa-arrow-right text-muted"></i></button>
-                </div>
-            </div>
-        </form>
-        <!-- /.lockscreen credentials -->
-
-    </div>
-    <!-- /.lockscreen-item -->
-    <div class="help-block text-center">
-        Enter your password to retrieve your session
-    </div>
-    <div class="text-center">
-        <a href="/user/login">Or sign in as a different user</a>
-    </div>
-    <div class="lockscreen-footer text-center">
-        Copyright &copy; 2014-2016 <b><a href="https://adminlte.io" class="text-black">Almsaeed Studio</a></b><br>
-        All rights reserved
-    </div>
+<body onload="loadRoleList()">
+<%@ include file="/jsp/common/header.jsp" %>
+<div style="margin-top: 15px;">
+    <article class="htmleaf-container">
+        <section id="gallery-wrapper" class="wrapper"></section>
+    </article>
 </div>
-<!-- /.center -->
+<script src="/js/role/pinterest_grid.js"></script>
+<script type="text/javascript">
+    //瀑布流插件
+    $(function () {
+        $("#gallery-wrapper").pinterest_grid({
+            no_columns: 4,
+            padding_x: 10,
+            padding_y: 10,
+            margin_bottom: 50,
+            single_column_breakpoint: 700
+        });
 
-<!-- jQuery 3 -->
-<script src="js/jquery.min.js"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="js/bootstrap.min.js"></script>
+    });
+
+    function loadRoleList() {
+        $.ajax({
+            url: "/role/roleIndex",    //请求的url地址
+            dataType: "json",   //返回格式为json
+            async: true, //请求是否异步，默认为异步，这也是ajax重要特性
+            data: {},    //参数值
+            type: "GET",   //请求方式
+            success: function (data) {
+                var str = "";
+                //先将元素对应清空
+                $('#gallery-wrapper').empty();
+
+                if(data.length == 0){
+                    str += '<tr><td colspan="8">目前还没有角色数据</td></tr>';
+                }else {
+                    for (var i = 0; i < data.length; i++) {
+                        var role = data[i];
+                        str += '<article class="white-panel"><a href="/role/' + role.id + '/detail">' +
+                            '<img class="thumbnail gallerybox" src="' + role.pic + '"></a></article>';
+                    }
+                }
+                //将html动态拼接到对应的div上面
+                $('#gallery-wrapper').append(str);
+
+            }
+        });
+    }
+</script>
 </body>
 </html>
-
-

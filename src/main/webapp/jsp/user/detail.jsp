@@ -51,7 +51,7 @@
         </tr>
     </table>
     <div style="text-align: center;">
-        <a href="/user/home" class="btn btn-primary" role="button">首页</a>
+        <a href="/index.jsp" class="btn btn-primary" role="button">首页</a>
         <a href="/user/${userInfo.id }/update" class="btn btn-primary" role="button">更新</a>
     </div>
 </div>

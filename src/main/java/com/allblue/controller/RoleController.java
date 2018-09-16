@@ -1,5 +1,6 @@
 package com.allblue.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.allblue.dto.InputRole;
 import com.allblue.model.Role;
 import com.allblue.service.RoleService;
@@ -9,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -171,6 +169,14 @@ public class RoleController {
         List<Role> list = roleService.getRoleList();
         model.addAttribute("list", list);
         return "role/roleHome";
+    }
+
+    @RequestMapping(value = "/roleIndex", method = RequestMethod.GET)
+    @ResponseBody
+    public String roleIndex() {
+        //获取用户信息列表
+        List<Role> list = roleService.getRoleList();
+        return JSON.toJSONString(list);
     }
 
     @RequestMapping(value = "/{id}/detail", method = RequestMethod.GET)
