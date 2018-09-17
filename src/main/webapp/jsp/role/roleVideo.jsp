@@ -22,7 +22,7 @@
     <button onclick="makeNormal()">普通</button>
     <br>
     <video id="video1" width="800" height="600" controls>
-        <source src="/img/1.mp4" type="video/mp4">
+        <source src="/photos/role/1.mp4" type="video/mp4">
     </video>
 </div>
 

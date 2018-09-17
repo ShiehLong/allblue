@@ -35,13 +35,15 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
+
+        String url = "/jsp/user/login.jsp";
         request.setCharacterEncoding("UTF-8");
         logger.info("进入拦截器preHandle方法！！！！");
         //先从session拿取用户
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             logger.info("cookie信息为空！！！");
-            request.getRequestDispatcher("/jsp/user/login.jsp").forward(request, response);
+            request.getRequestDispatcher(url).forward(request, response);
             return false;
         }
         try {
@@ -52,7 +54,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 if (cookie.getName().equals("JSESSIONID")) {
                     if (!cookie.getValue().equals(sessionId)) {
                         logger.info("cookie信息与session信息不一致！！！");
-                        request.getRequestDispatcher("/jsp/user/login.jsp").forward(request, response);
+                        request.getRequestDispatcher(url).forward(request, response);
                         return false;
                     }
                 }
@@ -64,19 +66,20 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                     try {
                         String realPassword = userService.getUserInfo(cookieUsername).getPassword();
                         BlueUser user = (BlueUser) session.getAttribute("blueUser");
+                        logger.info("session内user信息：" + user);
                         if (user != null) {
                             if (user.getPassword().equals(realPassword)) {
                                 logger.info("验证用户信息通过！！！");
                                 return true;
                             } else {
                                 logger.info("用户信息已修改，请重新登录！！！");
-                                request.getRequestDispatcher("/jsp/user/login.jsp").forward(request, response);
+                                request.getRequestDispatcher(url).forward(request, response);
                                 return false;
                             }
                         }
                     } catch (NullPointerException e) {
                         logger.info("查询用户密码错误或者获取session信息错误！！！");
-                        request.getRequestDispatcher("/jsp/user/login.jsp").forward(request, response);
+                        request.getRequestDispatcher(url).forward(request, response);
                         return false;
                     }
 
@@ -87,7 +90,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         }
 
         logger.info("拦截器校验未通过！回到登录页面!!!");
-        request.getRequestDispatcher("/jsp/user/login.jsp").forward(request, response);
+        request.getRequestDispatcher(url).forward(request, response);
         return false;
     }
 }

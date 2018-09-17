@@ -1,71 +1,114 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Xone
-  Date: 2018/8/6
-  Time: 15:16
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <%@ include file="../common/head.jsp" %>
     <title>角色[${roleInfo.name}]详细信息</title>
-    <style type="text/css">
-        td {
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        div.container {
+            position: absolute;
+            top: 60px;
+            bottom: 0px;
+        }
+
+        div#image, #roleDetail {
+            width: 550px;
+            height: 550px;
+            max-width: 50%;
+            max-height: 100%;
             text-align: center;
         }
 
         img {
-            width: 128px;
-            height: 128px;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .close_video {
+            position: absolute;
+            top: 0px;
+            right: 200px;
+        }
+
+        .table {
+            display: table;
+            margin: 200px auto;
+            /*display: table时padding会失效*/
+        }
+
+        .row {
+            display: table-row;
+            /*display: table-row时margin、padding同时失效*/
+        }
+
+        .cell {
+            display: table-cell;
+            padding: 5px;
+            /*display: table-cell时margin会失效*/
         }
     </style>
 </head>
 
 <body>
-<div class="table-responsive">
-    <table class="table table-striped">
-        <tr>
-            <td>图片:</td>
-            <td><img id="image" src="${roleInfo.pic}" class="img-circle" style="width: 128px;height: 128px;"></td>
-
-        </tr>
-        <tr>
-            <td>角色标识:</td>
-            <td>${roleInfo.id }</td>
-        </tr>
-        <tr>
-            <td>角色名:</td>
-            <td>${roleInfo.name }</td>
-        </tr>
-        <tr>
-            <td>角色性别:</td>
-            <td>${roleInfo.sex }</td>
-        </tr>
-        <tr>
-            <td>角色年龄:</td>
-            <td>${roleInfo.age }</td>
-        </tr>
-        <tr>
-            <td>角色描述:</td>
-            <td>${roleInfo.description }</td>
-        </tr>
-        <tr>
-            <td>角色视频:</td>
-            <td>${roleInfo.video }</td>
-        </tr>
-    </table>
-    <div style="text-align: center;">
-        <a href="/role/list" class="btn btn-primary" role="button">返回列表</a>
-        <a href="/role/${roleInfo.id }/update" class="btn btn-primary" role="button">更新</a>
+<%@ include file="/jsp/common/header.jsp" %>
+<div class="container">
+    <div id="roleTab" class="row" style="display: block">
+        <div id="image" class="col-xs-8 col-sm-6">
+            <img src="${roleInfo.pic}" class="autoSize">
+        </div>
+        <div id="roleDetail" class="col-xs-4 col-sm-6">
+            <div class="table">
+                <div class="row">
+                    <div class="cell">姓名:</div>
+                    <div class="cell">${roleInfo.name }</div>
+                </div>
+                <div class="row">
+                    <div class="cell">性别:</div>
+                    <div class="cell">${roleInfo.sex }</div>
+                </div>
+                <div class="row">
+                    <div class="cell">年龄:</div>
+                    <div class="cell">${roleInfo.age }</div>
+                </div>
+                <div class="row">
+                    <div class="cell">描述:</div>
+                    <div class="cell">${roleInfo.description }</div>
+                </div>
+                <div class="row">
+                    <div class="cell">视频:</div>
+                    <div class="cell">
+                        <button id="playVideo" class="btn btn-primary">播放视频</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="videoTab" style="text-align:center;display: none">
+        <video id="roleVideo" width="800" height="590" controls>
+            <source src="/photos/role/1.mp4" type="video/mp4">
+        </video>
+        <div class="close_video">
+            <span id="closeVideo">×</span>
+        </div>
     </div>
 </div>
-<!-- jQuery 3 -->
-<script src="/js/jquery.min.js"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="/js/bootstrap.min.js"></script>
+<script>
+    $("#playVideo").click(function () {
+        document.getElementById('roleTab').style.display = 'none';
+        document.getElementById('videoTab').style.display = 'block';
+    });
+    $("#closeVideo").click(function () {
+        document.getElementById('roleVideo').pause();
+        document.getElementById('roleTab').style.display = 'block';
+        document.getElementById('videoTab').style.display = 'none';
+    });
+</script>
 </body>
 </html>
