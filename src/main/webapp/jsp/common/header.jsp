@@ -9,7 +9,7 @@
 <div>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
-            <div class="navbar-header">
+            <div class="navbar-header" style="margin-left: 30px;">
                 <a class="navbar-brand" href="/index.jsp">
                     <span><b>All</b>Blue</span>
                 </a>
@@ -64,14 +64,17 @@
 <!-- Bootstrap 3.3.7 -->
 <script src="/js/bootstrap.min.js"></script>
 <script>
-    var userId = ${blueUser.id};
-    if (userId != null & userId != "") {
-        document.getElementById('logoutTab').style.display = 'none';
-        document.getElementById('loginTab').style.display = 'block';
-    } else {
-        document.getElementById('logoutTab').style.display = 'block';
-        document.getElementById('loginTab').style.display = 'none';
-    }
+    $(function (){
+        var userId = "${blueUser.id}";
+        if (userId != null & userId != "") {
+            document.getElementById('logoutTab').style.display = 'none';
+            document.getElementById('loginTab').style.display = 'block';
+        } else {
+            document.getElementById('logoutTab').style.display = 'block';
+            document.getElementById('loginTab').style.display = 'none';
+        }
+    });
+
 </script>
 </body>
 </html>

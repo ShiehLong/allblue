@@ -95,7 +95,7 @@
             <source src="/photos/role/1.mp4" type="video/mp4">
         </video>
         <div class="close_video">
-            <span id="closeVideo">×</span>
+            <img id="closeVideo" width='16' height='16' src="/img/close.gif" style="vertical-align:middle"/>
         </div>
     </div>
 </div>

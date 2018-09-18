@@ -12,7 +12,7 @@
     <title>All Blue | Log in</title>
     <%@ include file="../common/head.jsp" %>
 </head>
-<body class="hold-transition login-page">
+<body class="login-page">
 <div class="login-box">
     <div class="login-logo">
         <a href="../../index.jsp"><b>All Blue</b></a>

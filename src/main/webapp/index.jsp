@@ -15,16 +15,18 @@
 </div>
 <script src="/js/role/pinterest_grid.js"></script>
 <script type="text/javascript">
-    //瀑布流插件
     $(function () {
-        $("#gallery-wrapper").pinterest_grid({
-            no_columns: 4,
-            padding_x: 10,
-            padding_y: 10,
-            margin_bottom: 50,
-            single_column_breakpoint: 700
-        });
-
+        var userId = "${blueUser.id}";
+        if (userId != null & userId != "") {
+            //瀑布流插件
+            $("#gallery-wrapper").pinterest_grid({
+                no_columns: 4,
+                padding_x: 10,
+                padding_y: 10,
+                margin_bottom: 50,
+                single_column_breakpoint: 700
+            });
+        }
     });
 
     function loadRoleList() {
@@ -39,9 +41,9 @@
                 //先将元素对应清空
                 $('#gallery-wrapper').empty();
 
-                if(data.length == 0){
+                if (data.length == 0) {
                     str += '<tr><td colspan="8">目前还没有角色数据</td></tr>';
-                }else {
+                } else {
                     for (var i = 0; i < data.length; i++) {
                         var role = data[i];
                         str += '<article class="white-panel"><a href="/role/' + role.id + '/detail">' +
@@ -50,7 +52,11 @@
                 }
                 //将html动态拼接到对应的div上面
                 $('#gallery-wrapper').append(str);
-
+            },
+            error: function (data) {
+                if (data.responseText == 'loseSession') {
+                    window.location.href = "/jsp/user/login.jsp";
+                }
             }
         });
     }
