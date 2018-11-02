@@ -74,7 +74,7 @@ CREATE TABLE `role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-/* 用户角色功能表*/
+/* =============用户角色功能表====================*/
 
 DROP TABLE IF EXISTS blue_user;
 CREATE TABLE `blue_user` (
@@ -83,6 +83,11 @@ CREATE TABLE `blue_user` (
   `email` varchar(64) NOT NULL COMMENT '邮箱',
   `password` varchar(64) NOT NULL COMMENT '密码',
   `photo` varchar(64) DEFAULT NULL COMMENT '头像',
+  `status` tinyint(1) DEFAULT NULL COMMENT '状态',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  `creator` varchar(255) NOT NULL COMMENT '创建者',
+  `modifier` varchar(255) NOT NULL COMMENT '修改人',
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '用户表';
 
@@ -92,7 +97,7 @@ CREATE TABLE `blue_role` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(50) DEFAULT NULL COMMENT '角色名称',
   `status` tinyint(1) DEFAULT NULL COMMENT '状态',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `creator` varchar(255) NOT NULL COMMENT '创建者',
   `modifier` varchar(255) NOT NULL COMMENT '修改人',
@@ -110,7 +115,7 @@ CREATE TABLE `blue_function` (
   `level` smallint(6) DEFAULT NULL COMMENT '级别',
   `parent_code` varchar(200) DEFAULT NULL COMMENT '父编号',
   `sort_id` int(11) DEFAULT NULL COMMENT '排序',
-  `status` tinyint(3) NOT NULL COMMENT '是否有效',
+  `status` tinyint(1) NOT NULL COMMENT '是否有效',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `creator` varchar(255) DEFAULT NULL COMMENT '创建者',
