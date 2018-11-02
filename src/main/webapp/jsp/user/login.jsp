@@ -22,7 +22,7 @@
         <p class="login-box-msg">扬&nbsp;&nbsp;帆&nbsp;&nbsp;起&nbsp;&nbsp;航</p>
 
         <div class="form-group has-feedback">
-            <input type="text" class="form-control" id="username" placeholder="用户名">
+            <input type="text" class="form-control" id="name" placeholder="用户名">
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
@@ -61,10 +61,10 @@
 <script>
     $(function () {
         $('button').click(function () {
-            var username = $("#username").val();
+            var name = $("#name").val();
             var password = $("#password").val();
 
-            if (username === "") {
+            if (name === "") {
                 alert("用户名不能为空！");
                 return false;
             }
@@ -75,7 +75,7 @@
             var url = "/user/login";
             $.post(url,
                 {
-                    username: username,
+                    name: name,
                     password: hex_sha1(password)
                 },
                 function (data) {

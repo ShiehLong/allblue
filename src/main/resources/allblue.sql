@@ -42,30 +42,17 @@ CREATE TABLE `blue_customer` (
 
 insert  into `blue_customer`(`id`,`customer_name`,`mobile`,`password`,`sex`,`effective`,`region`,`bank_card`,`idcard_num`,`remark`,`deleted_at`,`belong_user_id`,`group_id`) values (1,'pcz','18221531111','111111',1,2,1,'888888','888888','',0,NULL,NULL);
 
-/*Table structure for table `blue_group` */
-
-DROP TABLE IF EXISTS `blue_group`;
-
-CREATE TABLE `blue_group` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*Data for the table `blue_group` */
-
 /*Table structure for table `blue_user` */
 
 DROP TABLE IF EXISTS `blue_user`;
 
 CREATE TABLE `blue_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL UNIQUE,
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `photo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -86,3 +73,72 @@ CREATE TABLE `role` (
   `video` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+/* 用户角色功能表*/
+
+DROP TABLE IF EXISTS blue_user;
+CREATE TABLE `blue_user` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(64) NOT NULL UNIQUE COMMENT '用户名称',
+  `email` varchar(64) NOT NULL COMMENT '邮箱',
+  `password` varchar(64) NOT NULL COMMENT '密码',
+  `photo` varchar(64) DEFAULT NULL COMMENT '头像',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '用户表';
+
+
+DROP TABLE IF EXISTS blue_role;
+CREATE TABLE `blue_role` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(50) DEFAULT NULL COMMENT '角色名称',
+  `status` tinyint(1) DEFAULT NULL COMMENT '状态',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  `creator` varchar(255) NOT NULL COMMENT '创建者',
+  `modifier` varchar(255) NOT NULL COMMENT '修改人',
+  `remark` longtext COMMENT '角色描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8 COMMENT='角色表';
+
+
+DROP TABLE IF EXISTS blue_function;
+CREATE TABLE `blue_function` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `code` varchar(200) DEFAULT NULL COMMENT '菜单编号，唯一键',
+  `name` varchar(100) NOT NULL COMMENT '名字',
+  `url` varchar(400) DEFAULT NULL COMMENT 'url',
+  `level` smallint(6) DEFAULT NULL COMMENT '级别',
+  `parent_code` varchar(200) DEFAULT NULL COMMENT '父编号',
+  `sort_id` int(11) DEFAULT NULL COMMENT '排序',
+  `status` tinyint(3) NOT NULL COMMENT '是否有效',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  `creator` varchar(255) DEFAULT NULL COMMENT '创建者',
+  `modifier` varchar(255) DEFAULT NULL COMMENT '修改人',
+  `remark` varchar(500) DEFAULT NULL COMMENT '菜单描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1  CHARSET=utf8 COMMENT='菜单表';
+
+DROP TABLE IF EXISTS blue_role_function;
+CREATE TABLE `blue_role_function` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `creator` varchar(255) NOT NULL COMMENT '创建者',
+  `function_id` varchar(36) DEFAULT NULL COMMENT '菜单id',
+  `role_id` bigint(20) DEFAULT NULL COMMENT '角色id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8 COMMENT='角色菜单关系表';
+
+
+DROP TABLE IF EXISTS blue_user_role;
+CREATE TABLE `blue_user_role` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '用户id',
+  `status` tinyint(1) DEFAULT NULL COMMENT '状态',
+  `role_id` bigint(20) DEFAULT NULL COMMENT '角色id',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  `creator` varchar(255) NOT NULL COMMENT '创建者',
+  `modifier` varchar(255) NOT NULL COMMENT '修改人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8 COMMENT='用户角色关系表';

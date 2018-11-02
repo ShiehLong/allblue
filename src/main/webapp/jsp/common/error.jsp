@@ -15,7 +15,7 @@
     <meta name="Keywords" content="404错误页面"/>
     <meta name="Description" content="404错误页面"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-    <link href="../css/error404.css" rel="stylesheet" type="text/css"/>
+    <link href="../../css/error404.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript">setTimeout(function () {
         top.location = '../index.jsp';
     }, 5000)</script>
@@ -28,11 +28,11 @@
         <h2>抱歉，您访问的页面不存在或已被删除！ (｡•ˇ‸ˇ•｡)</h2>
         <p class="p1">5秒钟后将带您返回首页</p>
 
-        <a href="../index.jsp" class="btn">返回首页</a>
+        <a href="../../index.jsp" class="btn">返回首页</a>
         <a href="#" class="btn btn-brown">返回上一步</a>
     </div>
     <div class="pic">
-        <img src="../img/404.gif" alt=" "/>
+        <img src="../../img/404.gif" alt=" "/>
     </div>
 </div>
 </body>

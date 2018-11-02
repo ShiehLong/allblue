@@ -38,7 +38,7 @@
             <tr>
                 <td>${u.id }</td>
                 <td>
-                    <a href="/user/${u.id}/detail">${u.username }</a>
+                    <a href="/user/${u.id}/detail">${u.name }</a>
                 </td>
                 <td>${u.password }</td>
                 <td>${u.email }</td>

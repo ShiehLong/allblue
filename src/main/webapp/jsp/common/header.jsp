@@ -29,7 +29,7 @@
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <span>${blueUser.username}</span>
+                            <span>${blueUser.name}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
@@ -37,7 +37,7 @@
                                 <img src="${blueUser.photo}" class="img-circle" alt="User Image"
                                      style="width: 140px;height: 140px">
                                 <p>
-                                    ${blueUser.username}
+                                    ${blueUser.name}
                                 </p>
                             </li>
                             <!-- Menu Footer-->

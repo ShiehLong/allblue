@@ -7,7 +7,7 @@ public class BlueUser {
 
     private Integer id;
 
-    private String username;
+    private String name;
 
     private String email;
 
@@ -23,12 +23,12 @@ public class BlueUser {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
     public String getEmail() {

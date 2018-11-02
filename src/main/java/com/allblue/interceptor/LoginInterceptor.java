@@ -75,7 +75,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             }
 
             for (Cookie cookie2 : cookies) {
-                if (cookie2.getName().equals("username") && cookie2.getValue() != null) {
+                if (cookie2.getName().equals("name") && cookie2.getValue() != null) {
                     String cookieUsername = cookie2.getValue();
                     try {
                         String realPassword = userService.getUserInfo(cookieUsername).getPassword();

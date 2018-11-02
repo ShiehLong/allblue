@@ -18,7 +18,7 @@
 <div class="register-box">
     <div class="box box-primary">
         <div class="register-logo">
-            <h3 class="box-title">修&nbsp;改&nbsp;${userInfo.username}&nbsp;信&nbsp;息</h3>
+            <h3 class="box-title">修&nbsp;改&nbsp;${userInfo.name}&nbsp;信&nbsp;息</h3>
         </div>
         <div class="box-body">
             <form action="/user/${userInfo.id}/update" method="post" enctype="multipart/form-data" role="form">

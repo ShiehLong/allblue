@@ -22,7 +22,7 @@
         <p class="login-box-msg">注&nbsp;&nbsp;册&nbsp;&nbsp;会&nbsp;&nbsp;员</p>
 
         <div class="form-group has-feedback">
-            <input type="text" class="form-control" id="username" placeholder="用户名">
+            <input type="text" class="form-control" id="name" placeholder="用户名">
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
@@ -67,12 +67,12 @@
 <script>
     $(document).ready(function () {
         $('button').click(function () {
-            var username = $("#username").val();
+            var name = $("#name").val();
             var email = $("#email").val();
             var password = $("#password").val();
             var retryPassword = $("#retryPassword").val();
 
-            if (username === "") {
+            if (name === "") {
                 alert("用户名不能为空！");
                 return false;
             }
@@ -95,7 +95,7 @@
             var url = "/user/register";
             $.post(url,
                 {
-                    username: username,
+                    name: name,
                     email: email,
                     password: hex_sha1(password),
                 },

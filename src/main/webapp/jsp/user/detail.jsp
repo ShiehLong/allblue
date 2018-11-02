@@ -12,7 +12,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <%@ include file="../common/head.jsp" %>
-    <title>用户[${userInfo.username}]详细信息</title>
+    <title>用户[${userInfo.name}]详细信息</title>
     <style type="text/css">
         td {
             text-align: center;
@@ -39,7 +39,7 @@
         </tr>
         <tr>
             <td>用户名:</td>
-            <td>${userInfo.username }</td>
+            <td>${userInfo.name }</td>
         </tr>
         <tr>
             <td>用户密码:</td>

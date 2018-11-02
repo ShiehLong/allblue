@@ -3,14 +3,14 @@
 <mapper namespace="com.allblue.mapper.BlueUserMapper">
     <resultMap id="BaseResultMap" type="com.allblue.model.BlueUser">
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
         <result column="photo" property="photo" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, username, email, password, photo
+        id, name, email, password, photo
     </sql>
 
     <select id="selectUserInfo" resultMap="BaseResultMap" parameterType="com.allblue.model.BlueUser">
@@ -21,8 +21,8 @@
         <if test="id != null">
             AND id = #{id,jdbcType=INTEGER}
         </if>
-        <if test="username != null">
-            AND username = #{username,jdbcType=VARCHAR}
+        <if test="name != null">
+            AND name = #{name,jdbcType=VARCHAR}
         </if>
         <if test="password != null">
             AND password = #{password,jdbcType=VARCHAR}
@@ -31,8 +31,8 @@
     </select>
 
     <insert id="insert" parameterType="com.allblue.model.BlueUser" useGeneratedKeys="true" keyProperty="id">
-        insert into blue_user (username, email, password, photo)
-        values (#{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{photo,jdbcType=VARCHAR})
+        insert into blue_user (name, email, password, photo)
+        values (#{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{photo,jdbcType=VARCHAR})
     </insert>
 
     <select id="selectUserList" resultMap="BaseResultMap">
@@ -42,8 +42,8 @@
     <update id="updateById" parameterType="com.allblue.model.BlueUser">
         update blue_user
         <set>
-            <if test="username != null">
-                username = #{username,jdbcType=VARCHAR},
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
             </if>
             <if test="email != null">
                 email = #{email,jdbcType=VARCHAR},
@@ -91,8 +91,8 @@
             <if test="id != null">
                 id,
             </if>
-            <if test="username != null">
-                username,
+            <if test="name != null">
+                name,
             </if>
             <if test="email != null">
                 email,
@@ -105,8 +105,8 @@
             <if test="id != null">
                 #{id,jdbcType=INTEGER},
             </if>
-            <if test="username != null">
-                #{username,jdbcType=VARCHAR},
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
             </if>
             <if test="email != null">
                 #{email,jdbcType=VARCHAR},
@@ -124,8 +124,8 @@
         -->
         update blue_user
         <set>
-            <if test="username != null">
-                username = #{username,jdbcType=VARCHAR},
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
             </if>
             <if test="email != null">
                 email = #{email,jdbcType=VARCHAR},
@@ -143,7 +143,7 @@
           This element was generated on Thu Jul 19 18:13:59 CST 2018.
         -->
         update blue_user
-        set username = #{username,jdbcType=VARCHAR},
+        set name = #{name,jdbcType=VARCHAR},
         email = #{email,jdbcType=VARCHAR},
         password = #{password,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}

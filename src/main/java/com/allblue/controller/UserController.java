@@ -43,13 +43,13 @@ public class UserController {
     @ResponseBody
     public String userRegister(HttpServletRequest request) {
         //入参
-        String username = request.getParameter("username");
+        String name = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         //返回数据
         JSONObject re = new JSONObject();
         //入参判断
-        if (username == null || "".equals(username) ||
+        if (name == null || "".equals(name) ||
                 email == null || "".equals(email) ||
                 password == null || "".equals(password)) {
             re.put("result", "fail");
@@ -57,14 +57,14 @@ public class UserController {
             return JSON.toJSONString(re);
         }
         //判断用户名是否已存在
-        BlueUser isExistBlueUser = userService.getUserInfo(username);
+        BlueUser isExistBlueUser = userService.getUserInfo(name);
         if (null != isExistBlueUser) {
             re.put("result", "fail");
             re.put("msg", "用户名已存在，换一个试试~");
             return JSON.toJSONString(re);
         } else {
             BlueUser blueUser = new BlueUser();
-            blueUser.setUsername(username);
+            blueUser.setName(name);
             blueUser.setEmail(email);
             blueUser.setPassword(password);
             //插入数据库
@@ -72,7 +72,7 @@ public class UserController {
             if (id != 0) {
                 re.put("result", "success");
                 re.put("msg", "注册成功~");
-                logger.info("注册成功！！！注册信息：username:" + username + "   email:" + email + "   password:" + password);
+                logger.info("注册成功！！！注册信息：name:" + name + "   email:" + email + "   password:" + password);
             } else {
                 re.put("result", "fail");
                 re.put("msg", "注册失败,请重试~");
@@ -84,11 +84,11 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
     @ResponseBody
     public String userLogin(HttpServletRequest request, HttpServletResponse response) {
-        String username = request.getParameter("username");
+        String name = request.getParameter("name");
         String password = request.getParameter("password");
-        logger.info("username:" + username + "   password:" + password);
+        logger.info("name:" + name + "   password:" + password);
 
-        BlueUser blueUser = userService.getUserInfo(username, password);
+        BlueUser blueUser = userService.getUserInfo(name, password);
 
         JSONObject re = new JSONObject();
         if (blueUser != null && !"".equals(blueUser)) {
@@ -98,7 +98,7 @@ public class UserController {
             re.put("result", "success");
             re.put("msg", "登录成功");
 
-            Cookie usernameCookie = new Cookie("username", username);
+            Cookie usernameCookie = new Cookie("name", name);
             usernameCookie.setMaxAge(50000000);
             usernameCookie.setPath("/");
             response.addCookie(usernameCookie);
@@ -126,10 +126,10 @@ public class UserController {
     public String logout(HttpServletRequest request, HttpServletResponse response) {
 
         request.getSession().invalidate();
-        Cookie usernameCookie = new Cookie("username", "");
-        usernameCookie.setMaxAge(0);
-        usernameCookie.setPath("/");
-        response.addCookie(usernameCookie);
+        Cookie nameCookie = new Cookie("name", "");
+        nameCookie.setMaxAge(0);
+        nameCookie.setPath("/");
+        response.addCookie(nameCookie);
         logger.info("清除数据，退出登录！！！");
         return "user/login";
     }
@@ -164,7 +164,7 @@ public class UserController {
             return "redirect:/user/list";
         }
         BlueUser userInfo = userService.getUserInfo(id);
-        logger.info("查询到用户信息如下：用户名-" + userInfo.getUsername() +
+        logger.info("查询到用户信息如下：用户名-" + userInfo.getName() +
                 "/邮箱-" + userInfo.getEmail() + "/头像-" + userInfo.getPhoto());
         if (StringUtils.isEmpty(userInfo)) {
             return "redirect:/user/list";
