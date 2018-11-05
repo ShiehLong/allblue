@@ -52,5 +52,12 @@ public interface UserService {
      **/
     List<BlueUser> getUserList();
 
+    /**
+     * @Description:删除用户（置为无效）
+     * @Author Xone
+     * @Date 20:59 2018/11/5
+     **/
+    int delete(int id);
+
 }
 

@@ -24,13 +24,18 @@
             <form action="/user/${userInfo.id}/update" method="post" enctype="multipart/form-data" role="form">
                 <div class="form-group" style="text-align: center;">
                     <label>
-                        <img id="image" src="/img/default.jpg" class="img-circle" style="width: 128px;height: 128px;">
+                        <img id="image" src="${userInfo.photo}" class="img-circle" style="width: 128px;height: 128px;">
                         <input type="file" name="photo" id="photo" style="width: 128px;display: none">
                     </label>
                 </div>
                 <div class="form-group">
                     <label for="email">邮箱</label>
                     <input type="email" class="form-control" name="email" id="email" value="${userInfo.email}">
+                </div>
+                <div class="form-group">
+                    <label>状态&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <input type="radio" name="status" value="1">有效
+                    <input type="radio" name="status" value="0">无效
                 </div>
                 <div class="form-group">
                     <label for="password">密码</label>
@@ -59,10 +64,13 @@
     $(document).ready(function () {
         // 初始化内容
         var url = "${userInfo.photo}";
-        if (url !== "") {
+        if (url === null || url === "") {
             var img = document.getElementById("image");
-            img.src = url;
+            img.src = "/img/default.jpg";
         }
+
+        var status = "${userInfo.status}";
+        $("input[name=status][value=" + status + "]").attr("checked", true)
 
         //实现预览功能
         $("#photo").change(function preview() {

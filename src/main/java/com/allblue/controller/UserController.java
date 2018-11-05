@@ -57,8 +57,8 @@ public class UserController {
             return JSON.toJSONString(re);
         }
         //判断用户名是否已存在
-        BlueUser isExistBlueUser = userService.getUserInfo(name);
-        if (null != isExistBlueUser) {
+        BlueUser isExist = userService.getUserInfo(name);
+        if (null != isExist) {
             re.put("result", "fail");
             re.put("msg", "用户名已存在，换一个试试~");
             return JSON.toJSONString(re);
@@ -74,7 +74,7 @@ public class UserController {
             if (id != 0) {
                 re.put("result", "success");
                 re.put("msg", "注册成功~");
-                logger.info("注册成功！！！注册信息：name:" + name + "   email:" + email + "   password:" + password);
+                logger.info("注册成功！！！注册信息：name:" + name);
             } else {
                 re.put("result", "fail");
                 re.put("msg", "注册失败,请重试~");
@@ -145,7 +145,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{id}/detail", method = RequestMethod.GET)
-    public String detail(@PathVariable("id") int id, Model model,HttpSession session) {
+    public String detail(@PathVariable("id") int id, Model model, HttpSession session) {
         if (id == 0) {
             return "redirect:/index.jsp";
         }
@@ -155,7 +155,10 @@ public class UserController {
         }
 
         //更新session
-        session.setAttribute("blueUser", userInfo);
+        BlueUser cur = (BlueUser) session.getAttribute("blueUser");
+        if (cur.getId() == id) {
+            session.setAttribute("blueUser", userInfo);
+        }
         model.addAttribute("userInfo", userInfo);
         return "user/detail";
     }
@@ -166,8 +169,7 @@ public class UserController {
             return "redirect:/user/list";
         }
         BlueUser userInfo = userService.getUserInfo(id);
-        logger.info("查询到用户信息如下：用户名-" + userInfo.getName() +
-                "/邮箱-" + userInfo.getEmail() + "/头像-" + userInfo.getPhoto());
+        logger.info("更新用户信息页面【" + userInfo + "】");
         if (StringUtils.isEmpty(userInfo)) {
             return "redirect:/user/list";
         }
@@ -176,7 +178,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
-    public String update(@PathVariable("id") int id, String email, String password, MultipartFile photo, HttpSession session) {
+    public String update(@PathVariable("id") int id, String email, String password, Integer status, MultipartFile photo, HttpSession session) {
         //获取用户信息
         if (id == 0) {
             return "redirect:/user/list";
@@ -196,6 +198,9 @@ public class UserController {
         }
         if (password != null && !"".equals(password)) {
             blueUser.setPassword(password);
+        }
+        if (status == 0 || status == 1) {
+            blueUser.setStatus(status);
         }
         //获取图片原始名字
         String originalName = photo.getOriginalFilename();
@@ -230,5 +235,15 @@ public class UserController {
             logger.info("修改失败,请重试！！！");
         }
         return "redirect:/user/" + id + "/detail";
+    }
+
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
+    public String deleteUser(@PathVariable("id") int id) {
+        if (id == 0) {
+            return "redirect:/user/list";
+        }
+        userService.delete(id);
+        logger.info("删除ID为" + id + "的用户成功！");
+        return "redirect:/user/list";
     }
 }

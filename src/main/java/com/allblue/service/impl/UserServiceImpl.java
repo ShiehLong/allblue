@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
         userInfo.setName(name);
         userInfo.setPassword(password);
         userInfo = blueUserMapper.selectUserInfo(userInfo);
-        logger.info("【" + userInfo + "】");
+        logger.info("根据用户名密码查询结果【" + userInfo + "】");
         return userInfo;
     }
 
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         BlueUser userInfo = new BlueUser();
         userInfo.setName(name);
         userInfo = blueUserMapper.selectUserInfo(userInfo);
-        logger.info("【" + userInfo + "】");
+        logger.info("根据用户名查询结果【" + userInfo + "】");
         return userInfo;
     }
 
@@ -62,12 +62,26 @@ public class UserServiceImpl implements UserService {
         BlueUser userInfo = new BlueUser();
         userInfo.setId(id);
         userInfo = blueUserMapper.selectUserInfo(userInfo);
-        logger.info("【" + userInfo + "】");
+        logger.info("根据ID查询结果【" + userInfo + "】");
         return userInfo;
     }
 
     @Override
     public List<BlueUser> getUserList() {
-        return blueUserMapper.selectUserList();
+        List<BlueUser> list = blueUserMapper.selectUserList();
+        for (BlueUser blueUser : list) {
+            logger.info("查询所有用户数据成功！" + blueUser);
+        }
+        return list;
+    }
+
+    @Override
+    public int delete(int id) {
+        BlueUser userInfo = new BlueUser();
+        userInfo.setId(id);
+        userInfo.setStatus(0);
+        int count = blueUserMapper.updateById(userInfo);
+        logger.info("用户置为无效条数:" + count);
+        return count;
     }
 }

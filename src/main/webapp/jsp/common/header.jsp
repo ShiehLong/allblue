@@ -34,7 +34,7 @@
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li style="text-align: center">
-                                <img src="${blueUser.photo}" class="img-circle" alt="User Image"
+                                <img src="${blueUser.photo}" id="image" class="img-circle" alt="User Image"
                                      style="width: 140px;height: 140px">
                                 <p>
                                     ${blueUser.name}
@@ -66,9 +66,13 @@
 <script>
     $(function (){
         var userId = "${blueUser.id}";
-        if (userId != null & userId != "") {
+        var photo = "${blueUser.photo}";
+        if (userId !== null && userId !== "") {
             document.getElementById('logoutTab').style.display = 'none';
             document.getElementById('loginTab').style.display = 'block';
+            if(photo === null || photo === ""){
+               document.getElementById('image').src = "/img/default.jpg";
+            }
         } else {
             document.getElementById('logoutTab').style.display = 'block';
             document.getElementById('loginTab').style.display = 'none';
