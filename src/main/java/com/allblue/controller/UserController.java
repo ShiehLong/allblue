@@ -67,6 +67,8 @@ public class UserController {
             blueUser.setName(name);
             blueUser.setEmail(email);
             blueUser.setPassword(password);
+            blueUser.setCreator(name);
+            blueUser.setModifier(name);
             //插入数据库
             int id = userService.add(blueUser);
             if (id != 0) {
@@ -91,17 +93,17 @@ public class UserController {
         BlueUser blueUser = userService.getUserInfo(name, password);
 
         JSONObject re = new JSONObject();
-        if (blueUser != null && !"".equals(blueUser)) {
+        if (blueUser != null) {
             HttpSession session = request.getSession();
             session.setAttribute("blueUser", blueUser);
 
             re.put("result", "success");
             re.put("msg", "登录成功");
 
-            Cookie usernameCookie = new Cookie("name", name);
-            usernameCookie.setMaxAge(50000000);
-            usernameCookie.setPath("/");
-            response.addCookie(usernameCookie);
+            Cookie nameCookie = new Cookie("name", name);
+            nameCookie.setMaxAge(6000);
+            nameCookie.setPath("/");
+            response.addCookie(nameCookie);
 
             Cookie[] cookies = request.getCookies();
             logger.info("外部的SessionId:" + session.getId());
@@ -110,7 +112,7 @@ public class UserController {
                     logger.info("Cookie里边的：" + session.getId());
                     cookie.setValue(session.getId());
                     cookie.setPath("/");
-                    cookie.setMaxAge(50000000);
+                    cookie.setMaxAge(6000);
                     response.addCookie(cookie);
                 }
             }
@@ -174,7 +176,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
-    public String update(@PathVariable("id") int id, String email, String password, MultipartFile photo) {
+    public String update(@PathVariable("id") int id, String email, String password, MultipartFile photo, HttpSession session) {
         //获取用户信息
         if (id == 0) {
             return "redirect:/user/list";
@@ -216,6 +218,9 @@ public class UserController {
             }
             blueUser.setPhoto("/photos/user/" + newPhotoName);
         }
+        //从session中取当前的用户名
+        BlueUser cur = (BlueUser) session.getAttribute("blueUser");
+        blueUser.setModifier(cur.getName());
 
         //update数据库
         int count = userService.update(blueUser);

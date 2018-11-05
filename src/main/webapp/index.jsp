@@ -54,7 +54,7 @@
                 $('#gallery-wrapper').append(str);
             },
             error: function (data) {
-                if (data.responseText == 'loseSession') {
+                if (data.responseText === 'loseSession') {
                     window.location.href = "/jsp/user/login.jsp";
                 }
             }

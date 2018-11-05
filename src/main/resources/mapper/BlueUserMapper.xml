@@ -7,10 +7,15 @@
         <result column="email" property="email" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
         <result column="photo" property="photo" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="created_time" property="created_time" jdbcType="DATE"/>
+        <result column="modified_time" property="modified_time" jdbcType="DATE"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, name, email, password, photo
+        id, name, email, password, photo, status, created_time, modified_time, creator, modifier
     </sql>
 
     <select id="selectUserInfo" resultMap="BaseResultMap" parameterType="com.allblue.model.BlueUser">
@@ -31,8 +36,28 @@
     </select>
 
     <insert id="insert" parameterType="com.allblue.model.BlueUser" useGeneratedKeys="true" keyProperty="id">
-        insert into blue_user (name, email, password, photo)
-        values (#{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{photo,jdbcType=VARCHAR})
+        insert into blue_user (
+            name,
+            email,
+            password,
+            photo,
+            status,
+            created_time,
+            modified_time,
+            creator,
+            modifier
+        )
+        values (
+            #{name,jdbcType=VARCHAR},
+            #{email,jdbcType=VARCHAR},
+            #{password,jdbcType=VARCHAR},
+            #{photo,jdbcType=VARCHAR},
+            1,
+            SYSDATE(),
+            SYSDATE(),
+            #{creator,jdbcType=VARCHAR},
+            #{modifier,jdbcType=VARCHAR}
+        )
     </insert>
 
     <select id="selectUserList" resultMap="BaseResultMap">
@@ -52,7 +77,14 @@
                 password = #{password,jdbcType=VARCHAR},
             </if>
             <if test="photo != null">
-                photo = #{photo,jdbcType=VARCHAR}
+                photo = #{photo,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="modifier != null">
+                modifier = #{modifier,jdbcType=VARCHAR},
+                modified_time = SYSDATE()
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}

@@ -1,10 +1,5 @@
 package com.allblue.interceptor;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import com.allblue.model.BlueUser;
 import com.allblue.service.UserService;
 import org.slf4j.Logger;
@@ -13,11 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import java.io.PrintWriter;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private static String url = "/jsp/user/login.jsp";
 
     @Autowired
     private UserService userService;
@@ -38,20 +39,14 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
 
-        String url = "/jsp/user/login.jsp";
+
         request.setCharacterEncoding("UTF-8");
         logger.info("进入拦截器preHandle方法！！！！");
         //先从session拿取用户
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             logger.info("cookie信息为空！！！");
-            if (request.getHeader("x-requested-with") != null &&
-                    request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
-                //如果是ajax请求响应头会有x-requested-with
-                response.getWriter().write("loseSession");
-            } else {
-                request.getRequestDispatcher(url).forward(request, response);
-            }
+            ajaxRequest(request,response);
             return false;
         }
         try {
@@ -62,13 +57,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 if (cookie.getName().equals("JSESSIONID")) {
                     if (!cookie.getValue().equals(sessionId)) {
                         logger.info("cookie信息与session信息不一致！！！");
-                        if (request.getHeader("x-requested-with") != null &&
-                                request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
-                            //如果是ajax请求响应头会有x-requested-with
-                            response.getWriter().write("loseSession");
-                        } else {
-                            request.getRequestDispatcher(url).forward(request, response);
-                        }
+                        ajaxRequest(request,response);
                         return false;
                     }
                 }
@@ -87,25 +76,13 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                                 return true;
                             } else {
                                 logger.info("用户信息已修改，请重新登录！！！");
-                                if (request.getHeader("x-requested-with") != null &&
-                                        request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
-                                    //如果是ajax请求响应头会有x-requested-with
-                                    response.getWriter().write("loseSession");
-                                } else {
-                                    request.getRequestDispatcher(url).forward(request, response);
-                                }
+                                ajaxRequest(request,response);
                                 return false;
                             }
                         }
                     } catch (NullPointerException e) {
                         logger.info("查询用户密码错误或者获取session信息错误！！！");
-                        if (request.getHeader("x-requested-with") != null &&
-                                request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
-                            //如果是ajax请求响应头会有x-requested-with
-                            response.getWriter().write("loseSession");
-                        } else {
-                            request.getRequestDispatcher(url).forward(request, response);
-                        }
+                        ajaxRequest(request,response);
                         return false;
                     }
 
@@ -115,14 +92,31 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             logger.error("拦截器异常：" + e);
         }
         logger.info("拦截器校验未通过！回到登录页面!!!");
+        ajaxRequest(request,response);
+        return false;
+    }
+
+    /**
+    * @Description:由于ajax请求不能收到拦截器的返回消息，需要自己写入response
+    * @Author Xone
+    * @Date 15:57 2018/11/5
+    **/
+    public void ajaxRequest(HttpServletRequest request, HttpServletResponse response){
         if (request.getHeader("x-requested-with") != null &&
                 request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
             //如果是ajax请求响应头会有x-requested-with
-            response.getWriter().write("loseSession");
+            try {
+                response.getWriter().write("loseSession");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
-            request.getRequestDispatcher(url).forward(request, response);
+            try {
+                request.getRequestDispatcher(url).forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        return false;
     }
 }
 

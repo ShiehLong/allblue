@@ -1,4 +1,4 @@
-package com.allblue.dto;
+package com.allblue.model.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @Author Xone
  * @Date 17:30 2018/8/31
  **/
-public class InputRole {
+public class RoleDTO {
 
     private Integer id;
 

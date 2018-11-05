@@ -1,7 +1,7 @@
 package com.allblue.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.allblue.dto.InputRole;
+import com.allblue.model.dto.RoleDTO;
 import com.allblue.model.Role;
 import com.allblue.service.RoleService;
 import org.slf4j.Logger;
@@ -32,28 +32,28 @@ public class RoleController {
     private RoleService roleService;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = {"text/json;charset=UTF-8"})
-    public String addRole(@ModelAttribute InputRole inputRole) {
+    public String addRole(@ModelAttribute RoleDTO roleDTO) {
 
         //入参判断
-        if (inputRole.getName() == null || "".equals(inputRole.getName()) ||
-                inputRole.getSex() == null || "".equals(inputRole.getSex()) ||
-                inputRole.getAge() <= 0 ||
-                inputRole.getDescription() == null || "".equals(inputRole.getDescription()) ||
-                inputRole.getVideo() == null || "".equals(inputRole.getVideo()) ||
-                inputRole.getPic().getSize() <= 0) {
+        if (roleDTO.getName() == null || "".equals(roleDTO.getName()) ||
+                roleDTO.getSex() == null || "".equals(roleDTO.getSex()) ||
+                roleDTO.getAge() <= 0 ||
+                roleDTO.getDescription() == null || "".equals(roleDTO.getDescription()) ||
+                roleDTO.getVideo() == null || "".equals(roleDTO.getVideo()) ||
+                roleDTO.getPic().getSize() <= 0) {
             logger.info("角色信息不完整!!!");
             return "redirect:/role/list";
         }
 
         Role role = new Role();
-        role.setName(inputRole.getName());
-        role.setSex(inputRole.getSex());
-        role.setAge(inputRole.getAge());
-        role.setDescription(inputRole.getDescription());
-        role.setVideo(inputRole.getVideo());
+        role.setName(roleDTO.getName());
+        role.setSex(roleDTO.getSex());
+        role.setAge(roleDTO.getAge());
+        role.setDescription(roleDTO.getDescription());
+        role.setVideo(roleDTO.getVideo());
 
         //获取图片原始名字
-        String originalName = inputRole.getPic().getOriginalFilename();
+        String originalName = roleDTO.getPic().getOriginalFilename();
         //上传图片
         if (originalName != null && originalName.length() > 0) {
             //图片存储物理地址
@@ -66,7 +66,7 @@ public class RoleController {
             File file = new File(store + newPhotoName);
             //将内存中的图片写入磁盘
             try {
-                inputRole.getPic().transferTo(file);
+                roleDTO.getPic().transferTo(file);
                 logger.info("头像写入磁盘！！！");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -100,31 +100,31 @@ public class RoleController {
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST, produces = {"text/json;charset=UTF-8"})
-    public String updateRole(@PathVariable("id") int id, @ModelAttribute InputRole inputRole) {
+    public String updateRole(@PathVariable("id") int id, @ModelAttribute RoleDTO roleDTO) {
         if (id == 0) {
             return "redirect:/role/list";
         }
         //入参判断
-        if (inputRole.getName() == null || "".equals(inputRole.getName()) &&
-                inputRole.getSex() == null || "".equals(inputRole.getSex()) &&
-                inputRole.getAge() <= 0 &&
-                inputRole.getDescription() == null || "".equals(inputRole.getDescription()) &&
-                inputRole.getVideo() == null || "".equals(inputRole.getVideo()) &&
-                inputRole.getPic().getSize() <= 0) {
+        if (roleDTO.getName() == null || "".equals(roleDTO.getName()) &&
+                roleDTO.getSex() == null || "".equals(roleDTO.getSex()) &&
+                roleDTO.getAge() <= 0 &&
+                roleDTO.getDescription() == null || "".equals(roleDTO.getDescription()) &&
+                roleDTO.getVideo() == null || "".equals(roleDTO.getVideo()) &&
+                roleDTO.getPic().getSize() <= 0) {
             logger.info("角色信息不完整!!!");
             return "redirect:/role/list";
         }
 
         Role role = new Role();
-        role.setName(inputRole.getName());
-        role.setSex(inputRole.getSex());
-        role.setAge(inputRole.getAge());
-        role.setDescription(inputRole.getDescription());
-        role.setVideo(inputRole.getVideo());
+        role.setName(roleDTO.getName());
+        role.setSex(roleDTO.getSex());
+        role.setAge(roleDTO.getAge());
+        role.setDescription(roleDTO.getDescription());
+        role.setVideo(roleDTO.getVideo());
         role.setId(id);
 
         //获取图片原始名字
-        String originalName = inputRole.getPic().getOriginalFilename();
+        String originalName = roleDTO.getPic().getOriginalFilename();
         //上传图片
         if (originalName != null && originalName.length() > 0) {
             //图片存储物理地址
@@ -137,7 +137,7 @@ public class RoleController {
             File file = new File(store + newPhotoName);
             //将内存中的图片写入磁盘
             try {
-                inputRole.getPic().transferTo(file);
+                roleDTO.getPic().transferTo(file);
                 logger.info("头像写入磁盘！！！");
             } catch (IOException e) {
                 e.printStackTrace();

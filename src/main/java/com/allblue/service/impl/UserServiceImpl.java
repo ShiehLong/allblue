@@ -39,21 +39,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public BlueUser getUserInfo(String username, String password) {
+    public BlueUser getUserInfo(String name, String password) {
         BlueUser userInfo = new BlueUser();
-        userInfo.setName(username);
+        userInfo.setName(name);
         userInfo.setPassword(password);
         userInfo = blueUserMapper.selectUserInfo(userInfo);
-        logger.info("用户信息【" + userInfo + "】");
+        logger.info("【" + userInfo + "】");
         return userInfo;
     }
 
     @Override
-    public BlueUser getUserInfo(String username) {
+    public BlueUser getUserInfo(String name) {
         BlueUser userInfo = new BlueUser();
-        userInfo.setName(username);
+        userInfo.setName(name);
         userInfo = blueUserMapper.selectUserInfo(userInfo);
-        logger.info("用户信息【" + userInfo + "】");
+        logger.info("【" + userInfo + "】");
         return userInfo;
     }
 
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
         BlueUser userInfo = new BlueUser();
         userInfo.setId(id);
         userInfo = blueUserMapper.selectUserInfo(userInfo);
-        logger.info("用户信息【" + userInfo + "】");
+        logger.info("【" + userInfo + "】");
         return userInfo;
     }
 

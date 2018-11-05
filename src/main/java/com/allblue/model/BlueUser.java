@@ -1,19 +1,28 @@
 package com.allblue.model;
 
-import javax.persistence.Entity;
+import java.util.Date;
 
-@Entity  //如果我们当前这个bean要设置成实体对象，就需要加上Entity这个注解
 public class BlueUser {
-
+    //主键ID
     private Integer id;
-
+    //用户名称
     private String name;
-
+    //邮箱
     private String email;
-
+    //密码
     private String password;
-
+    //头像
     private String photo;
+    //状态
+    private Integer status;
+    //创建时间
+    private Date created_time;
+    //最后修改时间
+    private Date modified_time;
+    //创建者
+    private String creator;
+    //修改人
+    private String modifier;
 
     public Integer getId() {
         return id;
@@ -53,5 +62,50 @@ public class BlueUser {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getCreated_time() {
+        return created_time;
+    }
+
+    public void setCreated_time(Date created_time) {
+        this.created_time = created_time;
+    }
+
+    public Date getModified_time() {
+        return modified_time;
+    }
+
+    public void setModified_time(Date modified_time) {
+        this.modified_time = modified_time;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier;
+    }
+
+    @Override
+    public String toString() {
+        return "BlueUser信息：ID：" + this.getId() + "|name:" + this.getName() + "|email:" + this.getEmail();
     }
 }
