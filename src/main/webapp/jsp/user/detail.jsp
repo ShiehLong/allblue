@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Xone
-  Date: 2018/8/6
-  Time: 15:16
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -26,7 +19,8 @@
 </head>
 
 <body>
-<div class="table-responsive">
+<%@ include file="/jsp/common/header.jsp" %>
+<div class="table-responsive" style="margin-top: 60px;">
     <table class="table table-striped">
         <tr>
             <td>头像:</td>
