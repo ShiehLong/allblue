@@ -8,7 +8,6 @@
     <meta http-equiv="Content-Type" content="multipart/form-data;charset=utf-8"/>
 </head>
 <body class="hold-transition register-page">
-<%@ include file="/jsp/common/header.jsp" %>
 <div class="register-box">
     <div class="box box-primary">
         <div class="register-logo">
@@ -68,12 +67,12 @@
 
         //实现预览功能
         $("#photo").change(function preview() {
-            //获取文件框的第一个文件,因为文件有可能上传多个文件,咱这里是一个文件
+            //获取文件框的第一个文件,因为文件有可能上传多个文件,这里是一个文件
             var file = document.getElementById("photo").files[0];
             //可以进行一下文件类型的判断
             var fileType = file.type.split("/")[0];
-            if (fileType != "image") {
-                alert("请上传图片")
+            if (fileType !== "image") {
+                alert("请上传图片");
                 return;
             }
             //图片大小的限制
@@ -93,6 +92,7 @@
                 //获取文件在流中url
                 url = reader.result;
                 //将url赋值给img的src属性
+                console.log(url);
                 img.src = url;
             };
         });

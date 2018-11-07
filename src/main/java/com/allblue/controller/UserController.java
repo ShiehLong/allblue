@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.allblue.model.BlueUser;
 import com.allblue.service.UserService;
+import com.allblue.utils.PropUtil;
+import com.allblue.utils.UploadUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @Description:
@@ -35,6 +34,7 @@ import java.util.UUID;
 public class UserController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private PropUtil propUtil = new PropUtil("FrameWork.properties");
 
     @Autowired
     private UserService userService;
@@ -67,6 +67,7 @@ public class UserController {
             blueUser.setName(name);
             blueUser.setEmail(email);
             blueUser.setPassword(password);
+            HttpSession session = request.getSession();
             blueUser.setCreator(name);
             blueUser.setModifier(name);
             //插入数据库
@@ -202,26 +203,11 @@ public class UserController {
         if (status == 0 || status == 1) {
             blueUser.setStatus(status);
         }
-        //获取图片原始名字
-        String originalName = photo.getOriginalFilename();
-        //上传图片
-        if (originalName != null && originalName.length() > 0) {
-            //图片存储物理地址
-            String store = "D:\\photos\\user\\";
-            //生成uuid作为文件名称
-            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-            //图片新名称
-            String newPhotoName = uuid + originalName.substring(originalName.lastIndexOf("."));
-            //新图片生成
-            File file = new File(store + newPhotoName);
-            //将内存中的图片写入磁盘
-            try {
-                photo.transferTo(file);
-                logger.info("头像写入磁盘！！！");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            blueUser.setPhoto("/photos/user/" + newPhotoName);
+
+        //上传照片
+        String newName = UploadUtil.fileUpload(photo, propUtil.get("UserPhotoPath"));
+        if (newName != null) {
+            blueUser.setPhoto("/photos/user/" + newName);
         }
         //从session中取当前的用户名
         BlueUser cur = (BlueUser) session.getAttribute("blueUser");
@@ -243,7 +229,7 @@ public class UserController {
             return "redirect:/user/list";
         }
         userService.delete(id);
-        logger.info("删除ID为" + id + "的用户成功！");
+        logger.info("删除ID为【" + id + "】的用户成功！");
         return "redirect:/user/list";
     }
 }

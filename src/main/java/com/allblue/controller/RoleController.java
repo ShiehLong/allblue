@@ -1,9 +1,11 @@
 package com.allblue.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.allblue.model.dto.RoleDTO;
 import com.allblue.model.Role;
+import com.allblue.model.dto.RoleDTO;
 import com.allblue.service.RoleService;
+import com.allblue.utils.PropUtil;
+import com.allblue.utils.UploadUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @Description:
@@ -27,6 +26,7 @@ import java.util.UUID;
 public class RoleController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private PropUtil propUtil = new PropUtil("FrameWork.properties");
 
     @Autowired
     private RoleService roleService;
@@ -52,26 +52,10 @@ public class RoleController {
         role.setDescription(roleDTO.getDescription());
         role.setVideo(roleDTO.getVideo());
 
-        //获取图片原始名字
-        String originalName = roleDTO.getPic().getOriginalFilename();
-        //上传图片
-        if (originalName != null && originalName.length() > 0) {
-            //图片存储物理地址
-            String store = "D:\\photos\\role\\";
-            //生成uuid作为文件名称
-            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-            //图片新名称
-            String newPhotoName = uuid + originalName.substring(originalName.lastIndexOf("."));
-            //新图片生成
-            File file = new File(store + newPhotoName);
-            //将内存中的图片写入磁盘
-            try {
-                roleDTO.getPic().transferTo(file);
-                logger.info("头像写入磁盘！！！");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            role.setPic("/photos/role/" + newPhotoName);
+        //上传照片
+        String newName = UploadUtil.fileUpload(roleDTO.getPic(), propUtil.get("RolePhotoPath"));
+        if (newName != null) {
+            role.setPic("/photos/role/" + newName);
         }
 
         int id = roleService.addRole(role);
@@ -123,26 +107,10 @@ public class RoleController {
         role.setVideo(roleDTO.getVideo());
         role.setId(id);
 
-        //获取图片原始名字
-        String originalName = roleDTO.getPic().getOriginalFilename();
-        //上传图片
-        if (originalName != null && originalName.length() > 0) {
-            //图片存储物理地址
-            String store = "D:\\photos\\role\\";
-            //生成uuid作为文件名称
-            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-            //图片新名称
-            String newPhotoName = uuid + originalName.substring(originalName.lastIndexOf("."));
-            //新图片生成
-            File file = new File(store + newPhotoName);
-            //将内存中的图片写入磁盘
-            try {
-                roleDTO.getPic().transferTo(file);
-                logger.info("头像写入磁盘！！！");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            role.setPic("/photos/role/" + newPhotoName);
+        //上传照片
+        String newName = UploadUtil.fileUpload(roleDTO.getPic(), propUtil.get("RolePhotoPath"));
+        if (newName != null) {
+            role.setPic("/photos/role/" + newName);
         }
 
         int count = roleService.updateRole(role);
@@ -195,15 +163,15 @@ public class RoleController {
         return "role/roleDetail";
     }
 
-    @RequestMapping(value = "/{id}/delete",method = RequestMethod.GET)
-    public String roleDelete(@PathVariable("id") int id){
-        if(id == 0){
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
+    public String roleDelete(@PathVariable("id") int id) {
+        if (id == 0) {
             return "redirect:/role/list";
         }
         boolean flag = roleService.deleteRole(id);
-        if(flag){
+        if (flag) {
             logger.info("删除角色成功!!!");
-        }else{
+        } else {
             logger.info("删除角色失败！！！");
         }
         return "redirect:/role/list";

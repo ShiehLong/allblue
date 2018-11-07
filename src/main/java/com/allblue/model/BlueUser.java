@@ -106,6 +106,6 @@ public class BlueUser {
 
     @Override
     public String toString() {
-        return "BlueUser信息：ID：" + this.getId() + "|name:" + this.getName() + "|email:" + this.getEmail();
+        return "BlueUser信息：ID：" + this.getId() + "|name:" + this.getName() + "|email:" + this.getEmail() + "|status:" + this.getStatus() + "|modified_time:" + this.getModified_time();
     }
 }

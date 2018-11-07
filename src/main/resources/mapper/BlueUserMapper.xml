@@ -8,8 +8,8 @@
         <result column="password" property="password" jdbcType="VARCHAR"/>
         <result column="photo" property="photo" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
-        <result column="created_time" property="created_time" jdbcType="DATE"/>
-        <result column="modified_time" property="modified_time" jdbcType="DATE"/>
+        <result column="created_time" property="created_time" jdbcType="TIMESTAMP"/>
+        <result column="modified_time" property="modified_time" jdbcType="TIMESTAMP"/>
         <result column="creator" property="creator" jdbcType="VARCHAR"/>
         <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
     </resultMap>

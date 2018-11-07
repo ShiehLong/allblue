@@ -12,7 +12,7 @@ import java.util.Properties;
  * @Date 9:58 2018/10/11
  **/
 public class PropUtil {
-    private static Logger logger = Logger.getLogger(PropUtil.class);
+    private Logger logger = Logger.getLogger(this.getClass());
     private static Properties properties = null;
 
     public PropUtil(String path) {

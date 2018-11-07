@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -40,7 +41,7 @@
                     <td>${u.email }</td>
                     <td>${u.status}</td>
                     <td>${u.modifier}</td>
-                    <td>${u.modified_time}</td>
+                    <td><fmt:formatDate value="${u.modified_time}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                     <td>
                         <a href="/user/${u.id }/update">更新</a>
                         <a href="/user/${u.id }/delete">删除</a>
