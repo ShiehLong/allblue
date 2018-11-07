@@ -4,7 +4,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>用户列表</title>
     <style>
         table td {
@@ -14,7 +13,7 @@
 </head>
 <body>
 <%@ include file="/jsp/common/header.jsp" %>
-<div class="table-responsive" style="padding: 10px;">
+<div class="table-responsive" style="margin-top: 60px;">
     <table width="80%" align="center" border="1">
         <tr>
             <td>用户ID</td>

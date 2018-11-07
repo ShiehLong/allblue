@@ -4,29 +4,10 @@
 <html>
 <head>
     <title>修改用户信息</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <meta http-equiv="Content-Type" content="multipart/form-data;charset=utf-8"/>
-    <!-- Bootstrap 3.3.7 -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="/css/allblue.css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Google Font -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
 </head>
 <body class="hold-transition register-page">
+<%@ include file="/jsp/common/header.jsp" %>
 <div class="register-box">
     <div class="box box-primary">
         <div class="register-logo">
@@ -65,11 +46,6 @@
         </div>
     </div>
 </div>
-
-<!-- jQuery 3 -->
-<script src="/js/jquery.min.js"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="/js/bootstrap.min.js"></script>
 <!--sha1加密-->
 <script type="text/ecmascript" src="/js/sha1.js"></script>
 <script>
