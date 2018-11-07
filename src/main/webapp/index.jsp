@@ -8,7 +8,7 @@
 
 <body onload="loadRoleList()">
 <%@ include file="/jsp/common/header.jsp" %>
-<div style="margin-top: 15px;">
+<div style="padding:10px;">
     <article class="htmleaf-container">
         <section id="gallery-wrapper" class="wrapper"></section>
     </article>
