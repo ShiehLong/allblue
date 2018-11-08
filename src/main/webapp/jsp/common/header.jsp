@@ -26,7 +26,7 @@
             </a>
         </div>
         <div>
-            <ul id="loginTab" class="nav navbar-nav navbar-right" style="margin-right: 30px;display: none">
+            <ul class="nav navbar-nav navbar-right" style="margin-right: 30px;">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         数据中心
@@ -36,6 +36,7 @@
                         <li><a href="/user/list">用户列表</a></li>
                         <li class="divider"></li>
                         <li><a href="/role/list">角色列表</a></li>
+                        <li><a href="/jsp/user/test.jsp">test</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -63,27 +64,15 @@
                     </ul>
                 </li>
             </ul>
-            <ul id="logoutTab" class="nav navbar-nav navbar-right" style="display: block">
-                <li><a href="/jsp/user/login.jsp"><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
-            </ul>
         </div>
     </div>
 </nav>
 
 <script>
     $(function () {
-        var userId = "${blueUser.id}";
         var photo = "${blueUser.photo}";
-        if (userId !== null && userId !== "") {
-            document.getElementById('logoutTab').style.display = 'none';
-            document.getElementById('loginTab').style.display = 'block';
-            if (photo === null || photo === "") {
-                document.getElementById('topPhoto').src = "/img/default.jpg";
-            }
-        } else {
-            document.getElementById('logoutTab').style.display = 'block';
-            document.getElementById('loginTab').style.display = 'none';
+        if (photo === null || photo === "") {
+            document.getElementById('topPhoto').src = "/img/default.jpg";
         }
     });
-
 </script>

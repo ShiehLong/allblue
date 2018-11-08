@@ -6,9 +6,9 @@
     <title>All Blue</title>
 </head>
 
-<body onload="loadRoleList()">
+<body onload="loadRoleList()" style="background: #d2d6de;">
 <%@ include file="/jsp/common/header.jsp" %>
-<div style="padding:10px;">
+<div>
     <article class="htmleaf-container">
         <section id="gallery-wrapper" class="wrapper"></section>
     </article>

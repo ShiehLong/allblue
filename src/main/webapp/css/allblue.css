@@ -14,7 +14,8 @@ body {
     font-weight: 400;
     overflow-x: hidden;
     overflow-y: auto;
-    background: #d2d6de;
+    background: #ffffff;
+    padding-top: 60px;
 }
 
 /* Content */
@@ -52,6 +53,10 @@ a:focus {
     outline: none;
     text-decoration: none;
     color: #72afd2;
+}
+
+table td {
+    text-align: center;
 }
 
 /*
@@ -115,7 +120,7 @@ a:focus {
 }
 
 /*
- * Page: roleHome
+ * Page: index图片画廊
  * ----------------------
  */
 .htmleaf-container {
@@ -124,27 +129,11 @@ a:focus {
     overflow: hidden;
 }
 
-.htmleaf-header {
-    padding: 1em 190px 1em;
-    letter-spacing: -1px;
-    text-align: center;
-    background: #66677c;
-}
-
-.htmleaf-header h1 {
-    color: #D5D6E2;
-    font-weight: 600;
-    font-size: 2em;
-    line-height: 1;
-    margin-bottom: 0;
-    font-family: "Microsoft YaHei", "宋体", "Segoe UI", "Lucida Grande", Helvetica, Arial, sans-serif, FreeSans, Arimo;
-}
-
 #gallery-wrapper {
     position: relative;
     max-width: 75%;
     width: 75%;
-    margin: 50px auto;
+    margin: 0 auto;
 }
 
 img.gallerybox {
