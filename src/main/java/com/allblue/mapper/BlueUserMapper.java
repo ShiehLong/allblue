@@ -1,10 +1,9 @@
 package com.allblue.mapper;
 
 import com.allblue.model.BlueUser;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
-import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BlueUserMapper {
@@ -47,4 +46,10 @@ public interface BlueUserMapper {
     **/
     int updateById(BlueUser userInfo);
 
+    /**
+    * @Description:根据条件模糊查询
+    * @Author Xone
+    * @Date 15:07 2018/11/9
+    **/
+    List<BlueUser> selectUserListBySearch(String opts);
 }

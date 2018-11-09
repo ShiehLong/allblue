@@ -84,4 +84,13 @@ public class UserServiceImpl implements UserService {
         logger.info("用户置为无效条数:" + count);
         return count;
     }
+
+    @Override
+    public List<BlueUser> getUserListBySearch(String opts) {
+        List<BlueUser> list = blueUserMapper.selectUserListBySearch(opts);
+        for (BlueUser blueUser : list) {
+            logger.info("查询所有用户数据成功！" + blueUser);
+        }
+        return list;
+    }
 }

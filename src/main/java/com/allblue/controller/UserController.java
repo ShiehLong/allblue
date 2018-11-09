@@ -232,4 +232,14 @@ public class UserController {
         logger.info("删除ID为【" + id + "】的用户成功！");
         return "redirect:/user/list";
     }
+
+    @RequestMapping(value = "/getUserListBySearch", method = RequestMethod.POST)
+    public String getUserListBySearch(HttpServletRequest request, Model model) {
+        String opts = request.getParameter("searchContext");
+        //获取用户信息列表
+        List<BlueUser> list = userService.getUserListBySearch(opts);
+        model.addAttribute("list", list);
+        model.addAttribute("searchContext",opts);
+        return "user/list";
+    }
 }

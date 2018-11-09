@@ -17,6 +17,14 @@
 <!-- Google Font -->
 <link rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<script>
+    $(document).ready(function () {
+        var photo = "${blueUser.photo}";
+        if (photo === null || photo === "") {
+            document.getElementById('topPhoto').src = "/img/default.jpg";
+        }
+    });
+</script>
 
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container-fluid">
@@ -36,7 +44,6 @@
                         <li><a href="/user/list">用户列表</a></li>
                         <li class="divider"></li>
                         <li><a href="/role/list">角色列表</a></li>
-                        <li><a href="/jsp/user/test.jsp">test</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -67,12 +74,3 @@
         </div>
     </div>
 </nav>
-
-<script>
-    $(function () {
-        var photo = "${blueUser.photo}";
-        if (photo === null || photo === "") {
-            document.getElementById('topPhoto').src = "/img/default.jpg";
-        }
-    });
-</script>

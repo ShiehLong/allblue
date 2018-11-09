@@ -64,6 +64,14 @@
         select * from blue_user order by id ASC
     </select>
 
+    <select id="selectUserListBySearch" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        *
+        from blue_user
+        where name LIKE CONCAT('%',#{opts,jdbcType=VARCHAR},'%')
+        OR email LIKE CONCAT('%',#{opts,jdbcType=VARCHAR},'%')
+    </select>
+
     <update id="updateById" parameterType="com.allblue.model.BlueUser">
         update blue_user
         <set>

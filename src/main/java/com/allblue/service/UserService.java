@@ -59,5 +59,11 @@ public interface UserService {
      **/
     int delete(int id);
 
+    /**
+    * @Description:根据条件模糊查询用户列表
+    * @Author Xone
+    * @Date 14:53 2018/11/9
+    **/
+    List<BlueUser> getUserListBySearch(String opts);
 }
 
