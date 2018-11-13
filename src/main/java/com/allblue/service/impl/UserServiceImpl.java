@@ -28,14 +28,14 @@ public class UserServiceImpl implements UserService {
     public int add(BlueUser userInfo) {
         blueUserMapper.insert(userInfo);
         int id = userInfo.getId();
-        logger.info("用户注册ID:" + id);
+//        logger.info("用户注册ID:" + id);
         return id;
     }
 
     @Override
     public int update(BlueUser userInfo) {
         int count = blueUserMapper.updateById(userInfo);
-        logger.info("更新用户信息条数:" + count);
+//        logger.info("更新用户信息条数:" + count);
         return count;
     }
 
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         userInfo.setName(name);
         userInfo.setPassword(password);
         userInfo = blueUserMapper.selectUserInfo(userInfo);
-        logger.info("根据用户名密码查询结果【" + userInfo + "】");
+//        logger.info("根据用户名密码查询结果【" + userInfo + "】");
         return userInfo;
     }
 
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         BlueUser userInfo = new BlueUser();
         userInfo.setName(name);
         userInfo = blueUserMapper.selectUserInfo(userInfo);
-        logger.info("根据用户名查询结果【" + userInfo + "】");
+//        logger.info("根据用户名查询结果【" + userInfo + "】");
         return userInfo;
     }
 
@@ -63,16 +63,16 @@ public class UserServiceImpl implements UserService {
         BlueUser userInfo = new BlueUser();
         userInfo.setId(id);
         userInfo = blueUserMapper.selectUserInfo(userInfo);
-        logger.info("根据ID查询结果【" + userInfo + "】");
+//        logger.info("根据ID查询结果【" + userInfo + "】");
         return userInfo;
     }
 
     @Override
     public List<BlueUser> getUserList() {
         List<BlueUser> list = blueUserMapper.selectUserList();
-        for (BlueUser blueUser : list) {
-            logger.info("查询所有用户数据成功！" + blueUser);
-        }
+//        for (BlueUser blueUser : list) {
+//            logger.info("查询所有用户数据成功！" + blueUser);
+//        }
         return list;
     }
 
@@ -82,32 +82,32 @@ public class UserServiceImpl implements UserService {
         userInfo.setId(id);
         userInfo.setStatus(0);
         int count = blueUserMapper.updateById(userInfo);
-        logger.info("用户置为无效条数:" + count);
+//        logger.info("用户置为无效条数:" + count);
         return count;
     }
 
     @Override
     public List<BlueUser> getUserListBySearch(String opts) {
         List<BlueUser> list = blueUserMapper.selectUserListBySearch(opts);
-        for (BlueUser blueUser : list) {
-            logger.info("查询所有用户数据成功！" + blueUser);
-        }
+//        for (BlueUser blueUser : list) {
+//            logger.info("查询所有用户数据成功！" + blueUser);
+//        }
         return list;
     }
 
     @Override
     public int getUserTotalCount(String opts) {
         int count = blueUserMapper.selectUserTotalCount(opts);
-        logger.info("查询用户条数为:" + count);
+//        logger.info("查询用户条数为:" + count);
         return count;
     }
 
     @Override
     public List<BlueUser> getUserListBySearchDTO(SearchDTO searchDTO) {
         List<BlueUser> list = blueUserMapper.selectUserListBySearchDTO(searchDTO);
-        for (BlueUser blueUser : list) {
-            logger.info("查询用户数据成功！" + blueUser);
-        }
+//        for (BlueUser blueUser : list) {
+//            logger.info("查询用户数据成功！" + blueUser);
+//        }
         return list;
     }
 }

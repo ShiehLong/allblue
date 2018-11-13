@@ -62,9 +62,6 @@
                         </li>
                         <!-- Menu Footer-->
                         <li>
-                            <div class="pull-left" style="padding-left: 15px">
-                                <a href="/user/${blueUser.id}/detail" class="btn btn-default">详情</a>
-                            </div>
                             <div class="pull-right" style="padding-right: 15px">
                                 <a href="/user/logout" class="btn btn-default"> 退出</a>
                             </div>

@@ -73,7 +73,7 @@ public class UserController {
             if (id != 0) {
                 re.put("result", "success");
                 re.put("msg", "注册成功~");
-                logger.info("注册成功！！！注册信息：name:" + name);
+                logger.info("注册成功！信息：name:" + name);
             } else {
                 re.put("result", "fail");
                 re.put("msg", "注册失败,请重试~");
@@ -105,10 +105,10 @@ public class UserController {
             response.addCookie(nameCookie);
 
             Cookie[] cookies = request.getCookies();
-            logger.info("外部的SessionId:" + session.getId());
+//            logger.info("外部的SessionId:" + session.getId());
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("JSESSIONID")) {
-                    logger.info("Cookie里边的：" + session.getId());
+//                    logger.info("Cookie里边的：" + session.getId());
                     cookie.setValue(session.getId());
                     cookie.setPath("/");
                     cookie.setMaxAge(6000);
@@ -120,6 +120,7 @@ public class UserController {
             re.put("result", "fail");
             re.put("msg", "用户名或密码错误~");
         }
+        logger.info("用户【" + name + "】登录成功！");
         return JSON.toJSONString(re);
     }
 
@@ -159,7 +160,7 @@ public class UserController {
             if (id == 0) {
                 return ResultInfo.error();
             }
-            logger.info("新建用户成功：name:" + name);
+            logger.info("新建用户【" + name + "】成功");
             return ResultInfo.success();
         }
     }
@@ -173,6 +174,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{id}/detail", method = RequestMethod.GET)
+    @ResponseBody
     public ResultInfo detail(@PathVariable("id") int id) {
         if (id == 0) {
             return ResultInfo.error("用户ID不正确！");
@@ -181,7 +183,6 @@ public class UserController {
         if (userInfo == null) {
             return ResultInfo.error("用户信息不存在！");
         }
-        logger.info("编辑用户信息：" + userInfo);
         return ResultInfo.success("SUCCESS", userInfo);
     }
 
@@ -195,27 +196,30 @@ public class UserController {
         if (StringUtils.isEmpty(userInfo)) {
             return "redirect:/user/list";
         }
-        //更新session
-        BlueUser cur = (BlueUser) session.getAttribute("blueUser");
-        if (cur.getId() == id) {
-            session.setAttribute("blueUser", userInfo);
-        }
+
         model.addAttribute("userInfo", userInfo);
         return "user/update";
     }
 
-    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
-    public String update(@PathVariable("id") int id, String email, String password, Integer status, MultipartFile photo, HttpSession session) {
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultInfo update(@PathVariable("id") int id,
+                             @RequestParam(value = "photo", required = false) String photo,
+                             @RequestParam(value = "email", required = false) String email,
+                             @RequestParam(value = "status", required = false) Integer status,
+                             @RequestParam(value = "password", required = false) String password,
+                             HttpSession session) {
         //获取用户信息
         if (id == 0) {
-            return "redirect:/user/list";
+            return ResultInfo.error();
         }
         //入参判断
         if ((email == null || "".equals(email)) &&
                 (password == null || "".equals(password)) &&
-                photo.getSize() <= 0) {
-            logger.info("请填写要修改的信息!!!");
-            return "redirect:/user/" + id + "/update";
+                (photo == null || "".equals(photo)) &&
+                (status == null)) {
+            logger.error("请填写要修改的信息!!!");
+            return ResultInfo.error();
         }
 
         BlueUser blueUser = new BlueUser();
@@ -229,34 +233,48 @@ public class UserController {
         if (status == 0 || status == 1) {
             blueUser.setStatus(status);
         }
-
-        //上传照片
-        String newName = UploadUtil.fileUpload(photo, propUtil.get("UserPhotoPath"));
-        if (newName != null) {
-            blueUser.setPhoto("/photos/user/" + newName);
+        if (photo != null) {
+            blueUser.setPhoto(photo);
         }
         //从session中取当前的用户名
-        BlueUser cur = (BlueUser) session.getAttribute("blueUser");
-        blueUser.setModifier(cur.getName());
+        BlueUser sn = (BlueUser) session.getAttribute("blueUser");
+        blueUser.setModifier(sn.getName());
 
         //update数据库
         int count = userService.update(blueUser);
         if (count != 0) {
             logger.info("更新用户信息成功！！！");
+            //更新session
+            if (sn.getId() == id) {
+                BlueUser bu = userService.getUserInfo(id);
+                session.setAttribute("blueUser", bu);
+            }
+            return ResultInfo.success();
         } else {
             logger.info("修改失败,请重试！！！");
+            return ResultInfo.error();
         }
-        return "redirect:/user/" + id + "/detail";
+    }
+
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultInfo upload(
+            @RequestParam(value = "uploadImage", required = false) MultipartFile photo) {
+        //上传照片
+        String newName = UploadUtil.fileUpload(photo, propUtil.get("UserPhotoPath"));
+        String url = "/photos/user/" + newName;
+        return ResultInfo.success(url);
     }
 
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
-    public String deleteUser(@PathVariable("id") int id) {
+    @ResponseBody
+    public ResultInfo deleteUser(@PathVariable("id") int id) {
         if (id == 0) {
-            return "redirect:/user/list";
+            return ResultInfo.error();
         }
         userService.delete(id);
         logger.info("删除ID为【" + id + "】的用户成功！");
-        return "redirect:/user/list";
+        return ResultInfo.success();
     }
 
     @RequestMapping(value = "/getUserListBySearch", method = RequestMethod.POST)
@@ -271,19 +289,17 @@ public class UserController {
 
     @RequestMapping(value = "/getUserListBySearchDTO", method = RequestMethod.POST)
     @ResponseBody
-    public String getUserListBySearchDTO(HttpServletRequest request) {
-        String opts = request.getParameter("searchContext");
-        String sortName = request.getParameter("sort");
-        String sortOrder = request.getParameter("order");
-        String pageNumber = request.getParameter("offset");
-        String pageSize = request.getParameter("limit");
+    public ResultInfo getUserListBySearchDTO(
+            @RequestParam(value = "searchContext", required = false) String opts,
+            @RequestParam(value = "sort", required = false) String sortName,
+            @RequestParam(value = "order", required = false) String sortOrder,
+            @RequestParam(value = "offset", required = false) String pageNumber,
+            @RequestParam(value = "limit", required = false) String pageSize) {
 
         //获取用户数量
         int totalCount = userService.getUserTotalCount(opts);
 
         if (totalCount > 0) {
-            JSONObject re = new JSONObject();
-
             SearchDTO searchDTO = new SearchDTO();
             int pn = Integer.parseInt(pageNumber);
             int pz = Integer.parseInt(pageSize);
@@ -295,13 +311,8 @@ public class UserController {
 
             List<BlueUser> list = userService.getUserListBySearchDTO(searchDTO);
 
-            re.put("status", "success");
-            re.put("totalCount", totalCount);
-            re.put("result", list);
-
-            return JSON.toJSONString(re);
-
+            return ResultInfo.success(Integer.toString(totalCount), list);
         }
-        return "";
+        return ResultInfo.error();
     }
 }

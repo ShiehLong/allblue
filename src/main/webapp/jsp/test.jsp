@@ -88,23 +88,18 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 id="editModalLabel">
-                    修改用户信息
+
                 </h4>
+                <input type="text" id="edit_id" value="" style="display: none">
             </div>
             <div class="modal-body">
                 <form id="edit_user_form" class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">
+                    <div class="form-group text-center">
+                        <label>
                             <img id="image" src="/img/default.jpg" class="img-circle"
                                  style="width: 128px;height: 128px;" alt="photo">
                             <input type="file" id="photo" style="width: 128px;display: none">
                         </label>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_name" class="col-sm-2 control-label">用户名</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="edit_name" value="">
-                        </div>
                     </div>
                     <div class="form-group">
                         <label for="edit_email" class="col-sm-2 control-label">邮箱</label>

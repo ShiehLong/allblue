@@ -27,9 +27,23 @@ $(function () {
             //获取文件在流中url
             url = reader.result;
             //将url赋值给img的src属性
-            console.log(url);
             img.src = url;
         };
+        var data = new FormData();
+        data.append("uploadImage", file);
+        $.ajax({
+            type: "POST",
+            url: "/user/upload",
+            data: data,
+            dataType: 'JSON',
+            processData: false,  // 告诉jQuery不要去处理发送的数据
+            contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
+            success: function (data) {
+                if (data.status === 0) {
+                    img.src = data.statusInfo;
+                }
+            }
+        });
     });
 });
 
@@ -72,8 +86,6 @@ function initTable() {
         uniqueId: "id",                     //每一行的唯一标识，一般为主键列
         responseHandler: responseHandler,
         columns: [{
-            checkbox: false
-        }, {
             field: 'id',
             title: '序号',
             align: 'center'
@@ -134,8 +146,8 @@ function initTable() {
 function responseHandler(res) {
     if (res) {
         return {
-            "rows": res["result"],
-            "total": res["totalCount"]
+            "rows": res.data,
+            "total": res.statusInfo
         };
     } else {
         return {
@@ -165,33 +177,34 @@ function changeDateFormat(cellval) {
 function operateFormatter(value, row, index) {
     var id = row.id;
     return [
-        '<button id="btn_edit" type="button" class="btn btn-info" data-toggle="modal" data-target="#editUser" onclick="editUser(' + id + ')">修改</button>',
-        '<button id="btn_delete" type="button" class="btn btn-warning" style="margin-left: 10px;" onclick="deleteUser(' + id + ')">删除</button>'
+        '<button id="btn_edit" type="button" class="btn btn-info" data-toggle="modal" data-target="#editUser">修改</button>',
+        '<button id="btn_delete" type="button" class="btn btn-warning" style="margin-left: 10px;">删除</button>'
     ].join('');
 }
 
 window.operateEvents = {
     // 点击修改按钮执行的方法
-    // 'click #btn_edit': function (e, value, row, index) {
-    //     $.ajax({
-    //         type: "GET",
-    //         url: "/user/" + row['id'] + "/detail",
-    //         data: {},
-    //         dataType: 'JSON',
-    //         success: function (data) {
-    //             if (data.status !== 0) {
-    //                 console.info("info", data.statusInfo);
-    //                 return;
-    //             }
-    //             console.success("success", '获取用户信息成功！' + data);
-    //             var userInfo = data.data;
-    //             document.getElementById("editModalLabel").innerText = userInfo.name;
-    //             document.getElementById("image").src = userInfo.photo;
-    //             document.getElementById("edit_email").value = userInfo.email;
-    //             $("input[name=status][value=" + userInfo.status + "]").attr("checked", true);
-    //         }
-    //     });
-    // },
+    'click #btn_edit': function (e, value, row, index) {
+        $.ajax({
+            type: "GET",
+            url: "/user/" + row['id'] + "/detail",
+            data: {},
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.status !== 0) {
+                    console.log(data.statusInfo);
+                    return;
+                }
+                var userInfo = data.data;
+                document.getElementById("edit_id").value = userInfo.id;
+                document.getElementById("editModalLabel").innerText = "修改用户【" + userInfo.name + "】信息";
+                document.getElementById("image").src = userInfo.photo;
+                document.getElementById("edit_email").value = userInfo.email;
+                $("input[name=status][value=" + userInfo.status + "]").attr("checked", true);
+            }
+        });
+    },
+
     // 点击删除按钮执行的方法
     'click #btn_delete': function (e, value, row, index) {
         $.ajax({
@@ -200,11 +213,11 @@ window.operateEvents = {
             data: {},
             dataType: 'JSON',
             success: function (data) {
-                if (data.result !== 0) {
-                    console.info("info", data.message);
+                if (data.status !== 0) {
+                    console.log(data.statusInfo);
                     return;
                 }
-                console.success("success", '删除成功');
+                console.log('删除成功');
                 $("#table").bootstrapTable('refresh');
             }
         });
@@ -218,6 +231,7 @@ $(window).resize(function () {
     });
 });
 
+//新建用户保存操作
 function submitCreateForm() {
     var name = $("#create_name").val();
     var email = $("#create_email").val();
@@ -240,48 +254,58 @@ function submitCreateForm() {
                 $("#createUser").modal('hide');
                 $("#table").bootstrapTable('refresh');
             } else {
-                console.log("保存失败，服务器内部异常！", "error");
+                console.log("保存失败，服务器内部异常！");
             }
         },
         error: function () {
-            console.log("操作失败，请检查网络！", "error");
+            console.log("操作失败，请检查网络！");
         }
     });
 }
 
+//修改用户信息保存操作
 function submitEditForm() {
+
+    var photo = $("#image").attr("src");
+    var email = $("#edit_email").val();
+    var status = $("input[name='status']:checked").val();
+    var password = $("#password").val();
+    var retryPassword = $("#retryPassword").val();
+    var id = $("#edit_id").val();
+
+    if (photo === "" && email === "" && password === "" && retryPassword === "") {
+        alert("请填写需要变更信息！");
+        return false;
+    }
+
+    if (retryPassword !== password) {
+        alert("两次密码不一致！");
+        return false;
+    }
+    if (password !== "") {
+        var passwords = hex_sha1(password);
+    }
+
     $.ajax({
         type: "POST",
-        url: "/wadmin/ad/addAd",
-        dataType: 'JSON',
-        success: function (data) {
-            if (data.result !== 0) {
-                console.info("info", data.message);
-                return;
+        url: "/user/" + id + "/update",
+        dataType: 'json',
+        data: {
+            photo: photo,
+            email: email,
+            status: status,
+            password: passwords
+        },
+        success: function (result) {
+            if (result.status === 0) {
+                $("#editUser").modal('hide');
+                $("#table").bootstrapTable('refresh');
+            } else {
+                console.log("保存失败，服务器内部异常！");
             }
-            console.success("success", '标签');
-            $("#table").bootstrapTable('insertRow', {index: 0, row: data.data});
-        }
-    });
-}
-
-function editUser(id) {
-    $.ajax({
-        type: "GET",
-        url: "/user/" + id + "/detail",
-        data: {},
-        dataType: 'JSON',
-        success: function (data) {
-            if (data.status !== 0) {
-                console.info("info", data.statusInfo);
-                return;
-            }
-            console.success("success", '获取用户信息成功！' + data);
-            // var userInfo = data.data;
-            // document.getElementById("editModalLabel").innerText = userInfo.name;
-            // document.getElementById("image").src = userInfo.photo;
-            // document.getElementById("edit_email").value = userInfo.email;
-            // $("input[name=status][value=" + userInfo.status + "]").attr("checked", true);
+        },
+        error: function () {
+            console.log("操作失败，请检查网络！");
         }
     });
 }

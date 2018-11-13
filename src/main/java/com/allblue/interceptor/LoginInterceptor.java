@@ -41,12 +41,12 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 
         request.setCharacterEncoding("UTF-8");
-        logger.info("进入拦截器preHandle方法！！！！");
+//        logger.info("进入拦截器preHandle方法！！！！");
         //先从session拿取用户
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
-            logger.info("cookie信息为空！！！");
-            ajaxRequest(request,response);
+            logger.error("cookie信息为空！！！");
+            ajaxRequest(request, response);
             return false;
         }
         try {
@@ -56,8 +56,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("JSESSIONID")) {
                     if (!cookie.getValue().equals(sessionId)) {
-                        logger.info("cookie信息与session信息不一致！！！");
-                        ajaxRequest(request,response);
+                        logger.error("cookie信息与session信息不一致！！！");
+                        ajaxRequest(request, response);
                         return false;
                     }
                 }
@@ -69,20 +69,20 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                     try {
                         String realPassword = userService.getUserInfo(cookieUsername).getPassword();
                         BlueUser user = (BlueUser) session.getAttribute("blueUser");
-                        logger.info("session内user信息：" + user);
+//                        logger.info("session内user信息：" + user);
                         if (user != null) {
                             if (user.getPassword().equals(realPassword)) {
-                                logger.info("验证用户信息通过！！！");
+                                logger.info("拦截器验证用户信息通过！！！");
                                 return true;
                             } else {
-                                logger.info("用户信息已修改，请重新登录！！！");
-                                ajaxRequest(request,response);
+                                logger.error("用户信息已修改，请重新登录！！！");
+                                ajaxRequest(request, response);
                                 return false;
                             }
                         }
                     } catch (NullPointerException e) {
-                        logger.info("查询用户密码错误或者获取session信息错误！！！");
-                        ajaxRequest(request,response);
+                        logger.error("查询用户密码错误或者获取session信息错误:" + e);
+                        ajaxRequest(request, response);
                         return false;
                     }
 
@@ -91,17 +91,17 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         } catch (Exception e) {
             logger.error("拦截器异常：" + e);
         }
-        logger.info("拦截器校验未通过！回到登录页面!!!");
-        ajaxRequest(request,response);
+        logger.error("拦截器校验未通过！回到登录页面!!!");
+        ajaxRequest(request, response);
         return false;
     }
 
     /**
-    * @Description:由于ajax请求不能收到拦截器的返回消息，需要自己写入response
-    * @Author Xone
-    * @Date 15:57 2018/11/5
-    **/
-    public void ajaxRequest(HttpServletRequest request, HttpServletResponse response){
+     * @Description:由于ajax请求不能收到拦截器的返回消息，需要自己写入response
+     * @Author Xone
+     * @Date 15:57 2018/11/5
+     **/
+    public void ajaxRequest(HttpServletRequest request, HttpServletResponse response) {
         if (request.getHeader("x-requested-with") != null &&
                 request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
             //如果是ajax请求响应头会有x-requested-with
