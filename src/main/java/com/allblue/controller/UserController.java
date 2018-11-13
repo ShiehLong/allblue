@@ -3,6 +3,8 @@ package com.allblue.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.allblue.model.BlueUser;
+import com.allblue.model.dto.ResultInfo;
+import com.allblue.model.dto.SearchDTO;
 import com.allblue.service.UserService;
 import com.allblue.utils.PropUtil;
 import com.allblue.utils.UploadUtil;
@@ -12,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
@@ -67,7 +66,6 @@ public class UserController {
             blueUser.setName(name);
             blueUser.setEmail(email);
             blueUser.setPassword(password);
-            HttpSession session = request.getSession();
             blueUser.setCreator(name);
             blueUser.setModifier(name);
             //插入数据库
@@ -137,6 +135,35 @@ public class UserController {
         return "user/login";
     }
 
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultInfo save(@RequestParam(value = "name") String name,
+                           @RequestParam(value = "email") String email,
+                           HttpSession session) {
+        //判断用户名是否已存在
+        BlueUser isExist = userService.getUserInfo(name);
+        if (null != isExist) {
+            return ResultInfo.error();
+        } else {
+            //获取session内当前操作用户名
+            BlueUser bl = (BlueUser) session.getAttribute("blueUser");
+
+            BlueUser blueUser = new BlueUser();
+            blueUser.setName(name);
+            blueUser.setEmail(email);
+            blueUser.setPassword(propUtil.get("DefaultPassword"));
+            blueUser.setCreator(bl.getName());
+            blueUser.setModifier(bl.getName());
+            //插入数据库
+            int id = userService.add(blueUser);
+            if (id == 0) {
+                return ResultInfo.error();
+            }
+            logger.info("新建用户成功：name:" + name);
+            return ResultInfo.success();
+        }
+    }
+
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model) {
         //获取用户信息列表
@@ -146,26 +173,20 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{id}/detail", method = RequestMethod.GET)
-    public String detail(@PathVariable("id") int id, Model model, HttpSession session) {
+    public ResultInfo detail(@PathVariable("id") int id) {
         if (id == 0) {
-            return "redirect:/index.jsp";
+            return ResultInfo.error("用户ID不正确！");
         }
         BlueUser userInfo = userService.getUserInfo(id);
         if (userInfo == null) {
-            return "redirect:/index.jsp";
+            return ResultInfo.error("用户信息不存在！");
         }
-
-        //更新session
-        BlueUser cur = (BlueUser) session.getAttribute("blueUser");
-        if (cur.getId() == id) {
-            session.setAttribute("blueUser", userInfo);
-        }
-        model.addAttribute("userInfo", userInfo);
-        return "user/detail";
+        logger.info("编辑用户信息：" + userInfo);
+        return ResultInfo.success("SUCCESS", userInfo);
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
-    public String updatePage(@PathVariable("id") int id, Model model) {
+    public String updatePage(@PathVariable("id") int id, Model model, HttpSession session) {
         if (id == 0) {
             return "redirect:/user/list";
         }
@@ -173,6 +194,11 @@ public class UserController {
         logger.info("更新用户信息页面【" + userInfo + "】");
         if (StringUtils.isEmpty(userInfo)) {
             return "redirect:/user/list";
+        }
+        //更新session
+        BlueUser cur = (BlueUser) session.getAttribute("blueUser");
+        if (cur.getId() == id) {
+            session.setAttribute("blueUser", userInfo);
         }
         model.addAttribute("userInfo", userInfo);
         return "user/update";
@@ -239,7 +265,43 @@ public class UserController {
         //获取用户信息列表
         List<BlueUser> list = userService.getUserListBySearch(opts);
         model.addAttribute("list", list);
-        model.addAttribute("searchContext",opts);
+        model.addAttribute("searchContext", opts);
         return "user/list";
+    }
+
+    @RequestMapping(value = "/getUserListBySearchDTO", method = RequestMethod.POST)
+    @ResponseBody
+    public String getUserListBySearchDTO(HttpServletRequest request) {
+        String opts = request.getParameter("searchContext");
+        String sortName = request.getParameter("sort");
+        String sortOrder = request.getParameter("order");
+        String pageNumber = request.getParameter("offset");
+        String pageSize = request.getParameter("limit");
+
+        //获取用户数量
+        int totalCount = userService.getUserTotalCount(opts);
+
+        if (totalCount > 0) {
+            JSONObject re = new JSONObject();
+
+            SearchDTO searchDTO = new SearchDTO();
+            int pn = Integer.parseInt(pageNumber);
+            int pz = Integer.parseInt(pageSize);
+            searchDTO.setOffset(pn * pz);
+            searchDTO.setLimit(pz);
+            searchDTO.setSearchContext(opts);
+            searchDTO.setSortName(sortName);
+            searchDTO.setSortOrder(sortOrder);
+
+            List<BlueUser> list = userService.getUserListBySearchDTO(searchDTO);
+
+            re.put("status", "success");
+            re.put("totalCount", totalCount);
+            re.put("result", list);
+
+            return JSON.toJSONString(re);
+
+        }
+        return "";
     }
 }

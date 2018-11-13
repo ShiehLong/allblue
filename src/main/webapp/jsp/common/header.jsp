@@ -44,6 +44,7 @@
                         <li><a href="/user/list">用户列表</a></li>
                         <li class="divider"></li>
                         <li><a href="/role/list">角色列表</a></li>
+                        <li><a href="/jsp/test.jsp">t1</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">

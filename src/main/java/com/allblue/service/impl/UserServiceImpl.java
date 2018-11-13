@@ -2,6 +2,7 @@ package com.allblue.service.impl;
 
 import com.allblue.mapper.BlueUserMapper;
 import com.allblue.model.BlueUser;
+import com.allblue.model.dto.SearchDTO;
 import com.allblue.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,6 +91,22 @@ public class UserServiceImpl implements UserService {
         List<BlueUser> list = blueUserMapper.selectUserListBySearch(opts);
         for (BlueUser blueUser : list) {
             logger.info("查询所有用户数据成功！" + blueUser);
+        }
+        return list;
+    }
+
+    @Override
+    public int getUserTotalCount(String opts) {
+        int count = blueUserMapper.selectUserTotalCount(opts);
+        logger.info("查询用户条数为:" + count);
+        return count;
+    }
+
+    @Override
+    public List<BlueUser> getUserListBySearchDTO(SearchDTO searchDTO) {
+        List<BlueUser> list = blueUserMapper.selectUserListBySearchDTO(searchDTO);
+        for (BlueUser blueUser : list) {
+            logger.info("查询用户数据成功！" + blueUser);
         }
         return list;
     }

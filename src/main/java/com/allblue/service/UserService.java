@@ -1,6 +1,7 @@
 package com.allblue.service;
 
 import com.allblue.model.BlueUser;
+import com.allblue.model.dto.SearchDTO;
 
 import java.util.List;
 
@@ -65,5 +66,19 @@ public interface UserService {
     * @Date 14:53 2018/11/9
     **/
     List<BlueUser> getUserListBySearch(String opts);
+
+    /**
+     * @Description:根据条件模糊查询用户列表
+     * @Author Xone
+     * @Date 14:53 2018/11/9
+     **/
+    int getUserTotalCount(String opts);
+
+    /**
+     * @Description:根据条件模糊查询用户列表
+     * @Author Xone
+     * @Date 14:53 2018/11/9
+     **/
+    List<BlueUser> getUserListBySearchDTO(SearchDTO searchDTO);
 }
 

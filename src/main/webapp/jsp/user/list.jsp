@@ -31,7 +31,7 @@
                         </span>
                             <span>
                             <div class="form-group">
-                                <input id="search-context" type="text" name="searchContext" class="form-control"
+                                <input id="search_context" type="text" name="searchContext" class="form-control"
                                        placeholder="请输入查询信息" value="${searchContext}">
                             </div>
                             <button type="submit" class="btn btn-primary" id="searchUser"
@@ -229,29 +229,6 @@
                 </div>
             </div>
         </div>
-        <%--删除model--%>
-        <div id="deleteUser" class="modal fade" role="dialog" aria-labelledby="deleteModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="deleteModalLabel">
-                            删除用户
-                        </h3>
-                    </div>
-                    <div class="modal-body">
-                        <p>
-                            显示信息
-                        </p>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-                        <button class="btn btn-primary">保存</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
 </div>
@@ -267,7 +244,7 @@
         }
 
         var status = "${userInfo.status}";
-        $("input[name=status][value=" + status + "]").attr("checked", true)
+        $("input[name=status][value=" + status + "]").attr("checked", true);
 
         //实现预览功能
         $("#photo").change(function preview() {

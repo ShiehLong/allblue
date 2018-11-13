@@ -1,6 +1,7 @@
 package com.allblue.mapper;
 
 import com.allblue.model.BlueUser;
+import com.allblue.model.dto.SearchDTO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -52,4 +53,18 @@ public interface BlueUserMapper {
     * @Date 15:07 2018/11/9
     **/
     List<BlueUser> selectUserListBySearch(String opts);
+
+    /**
+     * @Description:根据条件模糊查询数据条数
+     * @Author Xone
+     * @Date 15:07 2018/11/9
+     **/
+    int selectUserTotalCount(String opts);
+
+    /**
+     * @Description:根据条件模糊查询
+     * @Author Xone
+     * @Date 15:07 2018/11/9
+     **/
+    List<BlueUser> selectUserListBySearchDTO(SearchDTO searchDTO);
 }

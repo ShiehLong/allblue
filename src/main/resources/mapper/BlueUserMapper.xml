@@ -72,6 +72,24 @@
         OR email LIKE CONCAT('%',#{opts,jdbcType=VARCHAR},'%')
     </select>
 
+    <select id="selectUserTotalCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select
+        count(*)
+        from blue_user
+            where name LIKE CONCAT('%',#{opts},'%')
+            OR email LIKE CONCAT('%',#{opts},'%')
+    </select>
+
+    <select id="selectUserListBySearchDTO" resultMap="BaseResultMap" parameterType="com.allblue.model.dto.SearchDTO">
+        select
+        *
+        from blue_user
+            where name LIKE CONCAT('%',#{searchContext},'%')
+            OR email LIKE CONCAT('%',#{searchContext},'%')
+        ORDER BY #{sortName} #{sortOrder}
+        LIMIT #{offset},#{limit}
+    </select>
+
     <update id="updateById" parameterType="com.allblue.model.BlueUser">
         update blue_user
         <set>
