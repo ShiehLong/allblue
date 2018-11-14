@@ -8,17 +8,12 @@ import java.util.List;
 
 @Repository
 public interface BlueUserMapper {
-
-    int deleteByPrimaryKey(Integer id);
-
     /**
-    * @Description:插入用户信息
-    * @Author Xone
-    * @Date 14:08 2018/8/25
-    **/
+     * @Description:插入用户信息
+     * @Author Xone
+     * @Date 14:08 2018/8/25
+     **/
     int insert(BlueUser userInfo);
-
-    int insertSelective(BlueUser record);
 
     /**
      * @Description:根据用户信息查询用户
@@ -27,32 +22,19 @@ public interface BlueUserMapper {
      **/
     BlueUser selectUserInfo(BlueUser userInfo);
 
-    BlueUser selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(BlueUser record);
-
-    int updateByPrimaryKey(BlueUser record);
-
     /**
-    * @Description:查询所有用户信息
-    * @Author Xone
-    * @Date 14:08 2018/8/25
-    **/
+     * @Description:查询所有用户信息
+     * @Author Xone
+     * @Date 14:08 2018/8/25
+     **/
     List<BlueUser> selectUserList();
 
     /**
-    * @Description:更新用户信息
-    * @Author Xone
-    * @Date 21:20 2018/8/25
-    **/
+     * @Description:更新用户信息
+     * @Author Xone
+     * @Date 21:20 2018/8/25
+     **/
     int updateById(BlueUser userInfo);
-
-    /**
-    * @Description:根据条件模糊查询
-    * @Author Xone
-    * @Date 15:07 2018/11/9
-    **/
-    List<BlueUser> selectUserListBySearch(String opts);
 
     /**
      * @Description:根据条件模糊查询数据条数

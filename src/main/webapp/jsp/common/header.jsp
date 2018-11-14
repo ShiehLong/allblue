@@ -1,13 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<!-- Bootstrap 3.3.7 -->
-<link rel="stylesheet" href="/css/bootstrap.min.css">
+<!-- 引入bootstrap样式 -->
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<!-- 引入bootstrap-table样式 -->
+<link href="/css/bootstrap-table.min.css" rel="stylesheet">
 <!-- Theme style -->
 <link rel="stylesheet" href="/css/allblue.css">
 
-<!-- jQuery 3 -->
+<!-- jquery -->
 <script src="/js/jquery.min.js"></script>
-<!-- Bootstrap 3.3.7 -->
 <script src="/js/bootstrap.min.js"></script>
+
+<!-- bootstrap-table.min.js -->
+<script src="/js/bootstrap-table.min.js"></script>
+<!-- 引入中文语言包 -->
+<script src="/js/bootstrap-table-zh-CN.min.js"></script>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -17,14 +23,6 @@
 <!-- Google Font -->
 <link rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-<script>
-    $(document).ready(function () {
-        var photo = "${blueUser.photo}";
-        if (photo === null || photo === "") {
-            document.getElementById('topPhoto').src = "/img/default.jpg";
-        }
-    });
-</script>
 
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container-fluid">
@@ -41,31 +39,22 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="/user/list">用户列表</a></li>
+                        <li><a href="/jsp/user/list.jsp">用户列表</a></li>
                         <li class="divider"></li>
                         <li><a href="/role/list">角色列表</a></li>
-                        <li><a href="/jsp/test.jsp">t1</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="${blueUser.photo}" id="topPhoto" class="img-circle" alt="photo"
+                             style="width: 18px;height: 18px">
                         <span>${blueUser.name}</span>
+                        <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <!-- User image -->
-                        <li style="text-align: center">
-                            <img src="${blueUser.photo}" id="topPhoto" class="img-circle" alt="User Image"
-                                 style="width: 140px;height: 140px">
-                            <p>
-                                ${blueUser.name}
-                            </p>
-                        </li>
-                        <!-- Menu Footer-->
-                        <li>
-                            <div class="pull-right" style="padding-right: 15px">
-                                <a href="/user/logout" class="btn btn-default"> 退出</a>
-                            </div>
-                        </li>
+                        <li><a href="/jsp/user/detail.jsp">详情</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/user/logout"> 退出</a></li>
                     </ul>
                 </li>
             </ul>

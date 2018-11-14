@@ -30,7 +30,7 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="login-page">
+<body class="login-page" style="padding-top: 0px;">
 <div class="login-box">
     <div class="login-logo">
         <a href="../../index.jsp"><b>All Blue</b></a>

@@ -17,7 +17,7 @@
 <script type="text/javascript">
     $(function () {
         var userId = "${blueUser.id}";
-        if (userId != null & userId != "") {
+        if (userId !== null && userId !== "") {
             //瀑布流插件
             $("#gallery-wrapper").pinterest_grid({
                 no_columns: 4,
@@ -41,7 +41,7 @@
                 //先将元素对应清空
                 $('#gallery-wrapper').empty();
 
-                if (data.length == 0) {
+                if (data.length === 0) {
                     str += '<tr><td colspan="8">目前还没有角色数据</td></tr>';
                 } else {
                     for (var i = 0; i < data.length; i++) {

@@ -1,5 +1,13 @@
 $(function () {
+    //初始化表数据
     initTable();
+
+    //关闭模态框后清空数据
+    $('#createUser').on('hidden.bs.modal', function () {
+        $('#create_name').val("");
+        $('#create_email').val("");
+    });
+
     //实现预览功能
     $("#photo").change(function preview() {
         //获取文件框的第一个文件,因为文件有可能上传多个文件,这里是一个文件
@@ -40,7 +48,7 @@ $(function () {
             contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
             success: function (data) {
                 if (data.status === 0) {
-                    img.src = data.statusInfo;
+                    img.src = data.message;
                 }
             }
         });
@@ -82,7 +90,7 @@ function initTable() {
         // showRefresh: true,                  //是否显示刷新按钮
         // minimumCountColumns: 2,             //最少允许的列数
         // clickToSelect: true,                //是否启用点击选中行
-        height: $(window).height() - 40,     //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        height: $(window).height() - 110,     //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
         uniqueId: "id",                     //每一行的唯一标识，一般为主键列
         responseHandler: responseHandler,
         columns: [{
@@ -147,7 +155,7 @@ function responseHandler(res) {
     if (res) {
         return {
             "rows": res.data,
-            "total": res.statusInfo
+            "total": res.message
         };
     } else {
         return {
@@ -175,9 +183,8 @@ function changeDateFormat(cellval) {
 
 // 修改按钮、删除按钮
 function operateFormatter(value, row, index) {
-    var id = row.id;
     return [
-        '<button id="btn_edit" type="button" class="btn btn-info" data-toggle="modal" data-target="#editUser">修改</button>',
+        '<button id="btn_edit" type="button" class="btn btn-info" data-toggle="modal">修改</button>',
         '<button id="btn_delete" type="button" class="btn btn-warning" style="margin-left: 10px;">删除</button>'
     ].join('');
 }
@@ -192,7 +199,7 @@ window.operateEvents = {
             dataType: 'JSON',
             success: function (data) {
                 if (data.status !== 0) {
-                    console.log(data.statusInfo);
+                    console.log(data.message);
                     return;
                 }
                 var userInfo = data.data;
@@ -200,7 +207,15 @@ window.operateEvents = {
                 document.getElementById("editModalLabel").innerText = "修改用户【" + userInfo.name + "】信息";
                 document.getElementById("image").src = userInfo.photo;
                 document.getElementById("edit_email").value = userInfo.email;
-                $("input[name=status][value=" + userInfo.status + "]").attr("checked", true);
+                if (userInfo.status === 1) {
+                    $("input[name=status][value='1']").attr("checked", true);
+                    $("input[name=status][value='0']").removeAttr('checked');
+                } else {
+                    $("input[name=status][value='0']").attr("checked", true);
+                    $("input[name=status][value='1']").removeAttr('checked');
+                }
+                // 显示模态框
+                $('#editUser').modal('show');
             }
         });
     },
@@ -214,7 +229,7 @@ window.operateEvents = {
             dataType: 'JSON',
             success: function (data) {
                 if (data.status !== 0) {
-                    console.log(data.statusInfo);
+                    console.log(data.message);
                     return;
                 }
                 console.log('删除成功');
@@ -236,7 +251,7 @@ function submitCreateForm() {
     var name = $("#create_name").val();
     var email = $("#create_email").val();
     if (name === "" && email === "") {
-        alert("请填写用户信息!")
+        alert("请填写用户信息!");
         return false;
     }
 

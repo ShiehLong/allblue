@@ -12,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -66,6 +64,7 @@ public class UserController {
             blueUser.setName(name);
             blueUser.setEmail(email);
             blueUser.setPassword(password);
+            blueUser.setPhoto(propUtil.get("DefaultPhoto"));
             blueUser.setCreator(name);
             blueUser.setModifier(name);
             //插入数据库
@@ -144,7 +143,7 @@ public class UserController {
         //判断用户名是否已存在
         BlueUser isExist = userService.getUserInfo(name);
         if (null != isExist) {
-            return ResultInfo.error();
+            return ResultInfo.error("用户已存在！");
         } else {
             //获取session内当前操作用户名
             BlueUser bl = (BlueUser) session.getAttribute("blueUser");
@@ -153,24 +152,16 @@ public class UserController {
             blueUser.setName(name);
             blueUser.setEmail(email);
             blueUser.setPassword(propUtil.get("DefaultPassword"));
+            blueUser.setPhoto(propUtil.get("DefaultPhoto"));
             blueUser.setCreator(bl.getName());
             blueUser.setModifier(bl.getName());
             //插入数据库
             int id = userService.add(blueUser);
             if (id == 0) {
-                return ResultInfo.error();
+                return ResultInfo.error("新增用户失败！");
             }
-            logger.info("新建用户【" + name + "】成功");
-            return ResultInfo.success();
+            return ResultInfo.success("新建用户【" + name + "】成功!");
         }
-    }
-
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public String list(Model model) {
-        //获取用户信息列表
-        List<BlueUser> list = userService.getUserList();
-        model.addAttribute("list", list);
-        return "user/list";
     }
 
     @RequestMapping(value = "/{id}/detail", method = RequestMethod.GET)
@@ -183,22 +174,8 @@ public class UserController {
         if (userInfo == null) {
             return ResultInfo.error("用户信息不存在！");
         }
+        logger.info("查询用户【" + id + "】成功");
         return ResultInfo.success("SUCCESS", userInfo);
-    }
-
-    @RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
-    public String updatePage(@PathVariable("id") int id, Model model, HttpSession session) {
-        if (id == 0) {
-            return "redirect:/user/list";
-        }
-        BlueUser userInfo = userService.getUserInfo(id);
-        logger.info("更新用户信息页面【" + userInfo + "】");
-        if (StringUtils.isEmpty(userInfo)) {
-            return "redirect:/user/list";
-        }
-
-        model.addAttribute("userInfo", userInfo);
-        return "user/update";
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
@@ -209,17 +186,15 @@ public class UserController {
                              @RequestParam(value = "status", required = false) Integer status,
                              @RequestParam(value = "password", required = false) String password,
                              HttpSession session) {
-        //获取用户信息
-        if (id == 0) {
-            return ResultInfo.error();
-        }
         //入参判断
+        if (id == 0) {
+            return ResultInfo.error("用户ID不正确！");
+        }
         if ((email == null || "".equals(email)) &&
                 (password == null || "".equals(password)) &&
                 (photo == null || "".equals(photo)) &&
                 (status == null)) {
-            logger.error("请填写要修改的信息!!!");
-            return ResultInfo.error();
+            return ResultInfo.error("请填写要修改的信息!!!");
         }
 
         BlueUser blueUser = new BlueUser();
@@ -233,7 +208,7 @@ public class UserController {
         if (status == 0 || status == 1) {
             blueUser.setStatus(status);
         }
-        if (photo != null) {
+        if (photo != null && !"".equals(photo)) {
             blueUser.setPhoto(photo);
         }
         //从session中取当前的用户名
@@ -243,16 +218,14 @@ public class UserController {
         //update数据库
         int count = userService.update(blueUser);
         if (count != 0) {
-            logger.info("更新用户信息成功！！！");
             //更新session
             if (sn.getId() == id) {
                 BlueUser bu = userService.getUserInfo(id);
                 session.setAttribute("blueUser", bu);
             }
-            return ResultInfo.success();
+            return ResultInfo.success("更新用户【" + id + "】信息成功！");
         } else {
-            logger.info("修改失败,请重试！！！");
-            return ResultInfo.error();
+            return ResultInfo.error("修改失败,请重试！");
         }
     }
 
@@ -270,21 +243,10 @@ public class UserController {
     @ResponseBody
     public ResultInfo deleteUser(@PathVariable("id") int id) {
         if (id == 0) {
-            return ResultInfo.error();
+            return ResultInfo.error("用户ID不正确！");
         }
         userService.delete(id);
-        logger.info("删除ID为【" + id + "】的用户成功！");
-        return ResultInfo.success();
-    }
-
-    @RequestMapping(value = "/getUserListBySearch", method = RequestMethod.POST)
-    public String getUserListBySearch(HttpServletRequest request, Model model) {
-        String opts = request.getParameter("searchContext");
-        //获取用户信息列表
-        List<BlueUser> list = userService.getUserListBySearch(opts);
-        model.addAttribute("list", list);
-        model.addAttribute("searchContext", opts);
-        return "user/list";
+        return ResultInfo.success("删除用户【" + id + "】成功！");
     }
 
     @RequestMapping(value = "/getUserListBySearchDTO", method = RequestMethod.POST)
@@ -293,26 +255,25 @@ public class UserController {
             @RequestParam(value = "searchContext", required = false) String opts,
             @RequestParam(value = "sort", required = false) String sortName,
             @RequestParam(value = "order", required = false) String sortOrder,
-            @RequestParam(value = "offset", required = false) String pageNumber,
-            @RequestParam(value = "limit", required = false) String pageSize) {
+            @RequestParam(value = "offset", required = false) Integer pageNumber,
+            @RequestParam(value = "limit", required = false) Integer pageSize) {
 
         //获取用户数量
         int totalCount = userService.getUserTotalCount(opts);
-
         if (totalCount > 0) {
+            //设置参数
             SearchDTO searchDTO = new SearchDTO();
-            int pn = Integer.parseInt(pageNumber);
-            int pz = Integer.parseInt(pageSize);
-            searchDTO.setOffset(pn * pz);
-            searchDTO.setLimit(pz);
+            searchDTO.setOffset(pageNumber);
+            searchDTO.setLimit(pageSize);
             searchDTO.setSearchContext(opts);
             searchDTO.setSortName(sortName);
             searchDTO.setSortOrder(sortOrder);
 
+            //获取符合条件的用户列表
             List<BlueUser> list = userService.getUserListBySearchDTO(searchDTO);
 
             return ResultInfo.success(Integer.toString(totalCount), list);
         }
-        return ResultInfo.error();
+        return ResultInfo.error("用户数量<0!");
     }
 }

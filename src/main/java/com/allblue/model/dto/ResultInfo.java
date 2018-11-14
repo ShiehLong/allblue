@@ -1,5 +1,8 @@
 package com.allblue.model.dto;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 客户端的HTTP调用的应答结果类.
  *
@@ -7,6 +10,8 @@ package com.allblue.model.dto;
  * @description 应答结果类，返回信息包括调用状态、可读的msg、结果数据.
  */
 public class ResultInfo {
+
+    private static Logger logger = LoggerFactory.getLogger(ResultInfo.class);
 
     // 应答结果状态码——成功
     private static final int RESULT_CODE_SUCCESS = 0;
@@ -18,22 +23,22 @@ public class ResultInfo {
     private static final int RESULT_CODE_BUSINESSERR = 1100;
 
     private int status = RESULT_CODE_SUCCESS;
-    private String statusInfo = "SUCCESS"; // 操作结果描述信息
+    private String message = "SUCCESS"; // 操作结果描述信息
 
     private Object data;// 操作返回数据绑定
 
     public ResultInfo() {
     }
 
-    public ResultInfo(int status, String statusInfo) {
+    public ResultInfo(int status, String message) {
         this.status = status;
-        this.statusInfo = statusInfo;
+        this.message = message;
     }
 
-    public ResultInfo(int status, String statusInfo, Object data) {
+    public ResultInfo(int status, String message, Object data) {
         super();
         this.status = status;
-        this.statusInfo = statusInfo;
+        this.message = message;
         this.data = data;
     }
 
@@ -45,8 +50,8 @@ public class ResultInfo {
         return status;
     }
 
-    public String getStatusInfo() {
-        return statusInfo;
+    public String getMessage() {
+        return message;
     }
 
     public void setData(Object data) {
@@ -57,8 +62,8 @@ public class ResultInfo {
         this.status = status;
     }
 
-    public void setStatusInfo(String statusInfo) {
-        this.statusInfo = statusInfo;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override
@@ -67,7 +72,7 @@ public class ResultInfo {
         int result = 1;
         result = prime * result + ((data == null) ? 0 : data.hashCode());
         result = prime * result + status;
-        result = prime * result + ((statusInfo == null) ? 0 : statusInfo.hashCode());
+        result = prime * result + ((message == null) ? 0 : message.hashCode());
         return result;
     }
 
@@ -93,11 +98,11 @@ public class ResultInfo {
         if (status != other.status) {
             return false;
         }
-        if (statusInfo == null) {
-            if (other.statusInfo != null) {
+        if (message == null) {
+            if (other.message != null) {
                 return false;
             }
-        } else if (!statusInfo.equals(other.statusInfo)) {
+        } else if (!message.equals(other.message)) {
             return false;
         }
         return true;
@@ -119,6 +124,7 @@ public class ResultInfo {
     }
 
     public static ResultInfo error(String errorMessage) {
+        logger.error(errorMessage);
         ResultInfo res = new ResultInfo(RESULT_CODE_COMMONERR, errorMessage);
         return res;
     }
@@ -134,6 +140,7 @@ public class ResultInfo {
     }
 
     public static ResultInfo success(String message) {
+        logger.info(message);
         ResultInfo res = new ResultInfo(RESULT_CODE_SUCCESS, message);
         return res;
     }

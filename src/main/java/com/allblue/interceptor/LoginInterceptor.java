@@ -72,7 +72,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 //                        logger.info("session内user信息：" + user);
                         if (user != null) {
                             if (user.getPassword().equals(realPassword)) {
-                                logger.info("拦截器验证用户信息通过！！！");
+                                logger.info("拦截器验证通过！");
                                 return true;
                             } else {
                                 logger.error("用户信息已修改，请重新登录！！！");

@@ -33,7 +33,7 @@ public class UploadUtil {
             //将内存中的图片写入磁盘
             try {
                 mf.transferTo(file);
-                logger.info("文件" + newPhotoName + "写入磁盘" + path + "成功！！！");
+                logger.info("文件" + newPhotoName + "写入磁盘" + path + "成功！");
                 return newPhotoName;
             } catch (IOException e) {
                 e.printStackTrace();

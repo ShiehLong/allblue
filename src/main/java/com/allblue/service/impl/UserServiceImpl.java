@@ -87,15 +87,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<BlueUser> getUserListBySearch(String opts) {
-        List<BlueUser> list = blueUserMapper.selectUserListBySearch(opts);
-//        for (BlueUser blueUser : list) {
-//            logger.info("查询所有用户数据成功！" + blueUser);
-//        }
-        return list;
-    }
-
-    @Override
     public int getUserTotalCount(String opts) {
         int count = blueUserMapper.selectUserTotalCount(opts);
 //        logger.info("查询用户条数为:" + count);
