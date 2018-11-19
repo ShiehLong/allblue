@@ -3,63 +3,17 @@ $(function () {
     initTable();
 
     //关闭模态框后清空数据
-    $('#createUser').on('hidden.bs.modal', function () {
+    $('#createRole').on('hidden.bs.modal', function () {
         $('#create_name').val("");
-        $('#create_email').val("");
+        $('#create_remark').val("");
     });
     //关闭模态框后清空数据
-    $('#editUser').on('hidden.bs.modal', function () {
+    $('#editRole').on('hidden.bs.modal', function () {
         $('#edit_id').val("");
-        $('#create_email').val("");
-        $('#image').src = "/img/default.jpg";
+        $('#edit_name').val("");
         $("input[name=status][value='0']").removeAttr('checked');
         $("input[name=status][value='1']").removeAttr('checked');
-    });
-
-    //实现预览功能
-    $("#photo").change(function preview() {
-        //获取文件框的第一个文件,因为文件有可能上传多个文件,这里是一个文件
-        var file = document.getElementById("photo").files[0];
-        //可以进行一下文件类型的判断
-        var fileType = file.type.split("/")[0];
-        if (fileType !== "image") {
-            alert("请上传图片");
-            return;
-        }
-        //图片大小的限制
-        var fileSize = Math.round(file.size / 1024 / 1024);
-        if (fileSize >= 3) {
-            alert("请上传小于少于3M的图片");
-            return;
-        }
-        //获取img对象
-        var img = document.getElementById("image");
-        //建一条文件流来读取图片
-        var reader = new FileReader();
-        //根据url将文件添加的流中
-        reader.readAsDataURL(file);
-        //实现onload接口
-        reader.onload = function (e) {
-            //获取文件在流中url
-            url = reader.result;
-            //将url赋值给img的src属性
-            img.src = url;
-        };
-        var data = new FormData();
-        data.append("uploadImage", file);
-        $.ajax({
-            type: "POST",
-            url: "/blueUser/upload",
-            data: data,
-            dataType: 'JSON',
-            processData: false,  // 告诉jQuery不要去处理发送的数据
-            contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
-            success: function (data) {
-                if (data.status === 0) {
-                    img.src = data.message;
-                }
-            }
-        });
+        $('#edit_remark').val("");
     });
 });
 
@@ -70,7 +24,7 @@ function doQuery() {
 //初始化Table
 function initTable() {
     $('#table').bootstrapTable({
-        url: '/blueUser/getUserListBySearchDTO',                  //请求后台的URL（*）
+        url: '/blueRole/getRoleList',       //请求后台的URL（*）
         method: 'post',                     //请求方式（*）
         // toolbar: '#toolbar',             //工具按钮用哪个容器
         striped: true,                      //是否显示行间隔色
@@ -107,11 +61,7 @@ function initTable() {
             align: 'center'
         }, {
             field: 'name',
-            title: '姓名',
-            align: 'center'
-        }, {
-            field: 'email',
-            title: '邮箱',
+            title: '角色名',
             align: 'center'
         }, {
             field: 'status',
@@ -202,7 +152,7 @@ window.operateEvents = {
     'click #btn_edit': function (e, value, row, index) {
         $.ajax({
             type: "GET",
-            url: "/blueUser/" + row['id'] + "/detail",
+            url: "/blueRole/" + row['id'] + "/detail",
             data: {},
             dataType: 'JSON',
             success: function (data) {
@@ -210,14 +160,13 @@ window.operateEvents = {
                     console.log(data.message);
                     return;
                 }
-                var userInfo = data.data;
-                document.getElementById("edit_id").value = userInfo.id;
-                document.getElementById("editModalLabel").innerText = "修改用户【" + userInfo.name + "】信息";
-                document.getElementById("image").src = userInfo.photo;
-                document.getElementById("edit_email").value = userInfo.email;
-                $("input[name=status][value='" + userInfo.status + "']").attr("checked", true);
+                var roleInfo = data.data;
+                document.getElementById("edit_id").value = roleInfo.id;
+                document.getElementById("edit_name").value = roleInfo.name;
+                $("input[name=status][value='"+roleInfo.status+"']").attr("checked", true);
+                document.getElementById("edit_remark").value = roleInfo.remark;
                 // 显示模态框
-                $('#editUser').modal('show');
+                $('#editRole').modal('show');
             }
         });
     },
@@ -226,7 +175,7 @@ window.operateEvents = {
     'click #btn_delete': function (e, value, row, index) {
         $.ajax({
             type: "GET",
-            url: "/blueUser/" + row['id'] + "/delete",
+            url: "/blueRole/" + row['id'] + "/delete",
             data: {},
             dataType: 'JSON',
             success: function (data) {
@@ -251,9 +200,9 @@ $(window).resize(function () {
 //新建用户保存操作
 function submitCreateForm() {
     var name = $("#create_name").val();
-    var email = $("#create_email").val();
-    if (name === "" && email === "") {
-        alert("请填写用户信息!");
+    var remark = $("#create_remark").val();
+    if (name === "" && remark === "") {
+        alert("请填写角色信息!");
         return false;
     }
 
@@ -261,14 +210,14 @@ function submitCreateForm() {
     $.ajax({
         type: "POST",
         dataType: "json",
-        url: "/blueUser/save",
+        url: "/blueRole/save",
         data: {
             name: name,
-            email: email
+            remark: remark
         },
         success: function (result) {
             if (result.status === 0) {
-                $("#createUser").modal('hide');
+                $("#createRole").modal('hide');
                 $("#table").bootstrapTable('refresh');
             } else {
                 console.log("保存失败，服务器内部异常！");
@@ -283,39 +232,28 @@ function submitCreateForm() {
 //修改用户信息保存操作
 function submitEditForm() {
 
-    var photo = $("#image").attr("src");
-    var email = $("#edit_email").val();
+    var name = $("#edit_name").val();
     var status = $("input[name='status']:checked").val();
-    var password = $("#password").val();
-    var retryPassword = $("#retryPassword").val();
+    var remark = $("#edit_remark").val();
     var id = $("#edit_id").val();
 
-    if (photo === "" && email === "" && password === "" && retryPassword === "") {
+    if (name === "" && remark === "") {
         alert("请填写需要变更信息！");
         return false;
     }
 
-    if (retryPassword !== password) {
-        alert("两次密码不一致！");
-        return false;
-    }
-    if (password !== "") {
-        var passwords = hex_sha1(password);
-    }
-
     $.ajax({
         type: "POST",
-        url: "/blueUser/" + id + "/update",
+        url: "/blueRole/" + id + "/update",
         dataType: 'json',
         data: {
-            photo: photo,
-            email: email,
+            name: name,
             status: status,
-            password: passwords
+            remark: remark
         },
         success: function (result) {
             if (result.status === 0) {
-                $("#editUser").modal('hide');
+                $("#editRole").modal('hide');
                 $("#table").bootstrapTable('refresh');
             } else {
                 console.log("保存失败，服务器内部异常！");

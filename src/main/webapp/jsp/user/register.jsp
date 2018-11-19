@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Xone
-  Date: 2018/7/17
-  Time: 14:27
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -110,12 +103,12 @@
                 alert("两次密码不一致！");
                 return false;
             }
-            var url = "/user/register";
+            var url = "/blueUser/register";
             $.post(url,
                 {
                     name: name,
                     email: email,
-                    password: hex_sha1(password),
+                    password: hex_sha1(password)
                 },
                 function (data) {
                     if (data["result"] === "success") {

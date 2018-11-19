@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.allblue.model.BlueUser;
 import com.allblue.model.dto.ResultInfo;
 import com.allblue.model.dto.SearchDTO;
-import com.allblue.service.UserService;
+import com.allblue.service.BlueUserService;
 import com.allblue.utils.PropUtil;
 import com.allblue.utils.UploadUtil;
 import org.slf4j.Logger;
@@ -27,14 +27,14 @@ import java.util.List;
  * @Date 19:08 2018/7/19
  **/
 @Controller
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/blueUser")
+public class BlueUserController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private PropUtil propUtil = new PropUtil("FrameWork.properties");
 
     @Autowired
-    private UserService userService;
+    private BlueUserService blueUserService;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "text/json;charset=UTF-8")
     @ResponseBody
@@ -54,7 +54,7 @@ public class UserController {
             return JSON.toJSONString(re);
         }
         //判断用户名是否已存在
-        BlueUser isExist = userService.getUserInfo(name);
+        BlueUser isExist = blueUserService.getUserInfo(name);
         if (null != isExist) {
             re.put("result", "fail");
             re.put("msg", "用户名已存在，换一个试试~");
@@ -68,7 +68,7 @@ public class UserController {
             blueUser.setCreator(name);
             blueUser.setModifier(name);
             //插入数据库
-            int id = userService.add(blueUser);
+            int id = blueUserService.add(blueUser);
             if (id != 0) {
                 re.put("result", "success");
                 re.put("msg", "注册成功~");
@@ -88,7 +88,7 @@ public class UserController {
         String password = request.getParameter("password");
         logger.info("name:" + name + "   password:" + password);
 
-        BlueUser blueUser = userService.getUserInfo(name, password);
+        BlueUser blueUser = blueUserService.getUserInfo(name, password);
 
         JSONObject re = new JSONObject();
         if (blueUser != null) {
@@ -141,7 +141,7 @@ public class UserController {
                            @RequestParam(value = "email") String email,
                            HttpSession session) {
         //判断用户名是否已存在
-        BlueUser isExist = userService.getUserInfo(name);
+        BlueUser isExist = blueUserService.getUserInfo(name);
         if (null != isExist) {
             return ResultInfo.error("用户已存在！");
         } else {
@@ -156,7 +156,7 @@ public class UserController {
             blueUser.setCreator(bl.getName());
             blueUser.setModifier(bl.getName());
             //插入数据库
-            int id = userService.add(blueUser);
+            int id = blueUserService.add(blueUser);
             if (id == 0) {
                 return ResultInfo.error("新增用户失败！");
             }
@@ -170,7 +170,7 @@ public class UserController {
         if (id == 0) {
             return ResultInfo.error("用户ID不正确！");
         }
-        BlueUser userInfo = userService.getUserInfo(id);
+        BlueUser userInfo = blueUserService.getUserInfo(id);
         if (userInfo == null) {
             return ResultInfo.error("用户信息不存在！");
         }
@@ -216,11 +216,11 @@ public class UserController {
         blueUser.setModifier(sn.getName());
 
         //update数据库
-        int count = userService.update(blueUser);
+        int count = blueUserService.update(blueUser);
         if (count != 0) {
             //更新session
             if (sn.getId() == id) {
-                BlueUser bu = userService.getUserInfo(id);
+                BlueUser bu = blueUserService.getUserInfo(id);
                 session.setAttribute("blueUser", bu);
             }
             return ResultInfo.success("更新用户【" + id + "】信息成功！");
@@ -245,7 +245,7 @@ public class UserController {
         if (id == 0) {
             return ResultInfo.error("用户ID不正确！");
         }
-        userService.delete(id);
+        blueUserService.delete(id);
         return ResultInfo.success("删除用户【" + id + "】成功！");
     }
 
@@ -259,7 +259,7 @@ public class UserController {
             @RequestParam(value = "limit", required = false) Integer pageSize) {
 
         //获取用户数量
-        int totalCount = userService.getUserTotalCount(opts);
+        int totalCount = blueUserService.getUserTotalCount(opts);
         if (totalCount > 0) {
             //设置参数
             SearchDTO searchDTO = new SearchDTO();
@@ -270,7 +270,7 @@ public class UserController {
             searchDTO.setSortOrder(sortOrder);
 
             //获取符合条件的用户列表
-            List<BlueUser> list = userService.getUserListBySearchDTO(searchDTO);
+            List<BlueUser> list = blueUserService.getUserListBySearchDTO(searchDTO);
 
             return ResultInfo.success(Integer.toString(totalCount), list);
         }

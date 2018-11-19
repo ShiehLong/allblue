@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Xone
-  Date: 2018/7/17
-  Time: 13:38
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -90,7 +83,7 @@
                 alert("密码不能为空！");
                 return false;
             }
-            var url = "/user/login";
+            var url = "/blueUser/login";
             $.post(url,
                 {
                     name: name,

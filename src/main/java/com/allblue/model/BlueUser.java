@@ -106,6 +106,17 @@ public class BlueUser {
 
     @Override
     public String toString() {
-        return "BlueUser信息：ID：" + this.getId() + "|name:" + this.getName() + "|email:" + this.getEmail() + "|status:" + this.getStatus() + "|modified_time:" + this.getModified_time();
+        return "BlueUser{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", photo='" + photo + '\'' +
+                ", status=" + status +
+                ", created_time=" + created_time +
+                ", modified_time=" + modified_time +
+                ", creator='" + creator + '\'' +
+                ", modifier='" + modifier + '\'' +
+                '}';
     }
 }

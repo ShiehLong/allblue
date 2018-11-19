@@ -40,6 +40,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="/jsp/user/list.jsp">用户列表</a></li>
+                        <li><a href="/jsp/role/list.jsp">角色列表</a></li>
                         <li class="divider"></li>
                         <li><a href="/role/list">角色列表</a></li>
                     </ul>
@@ -54,7 +55,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="/jsp/user/detail.jsp">详情</a></li>
                         <li class="divider"></li>
-                        <li><a href="/user/logout"> 退出</a></li>
+                        <li><a href="/blueUser/logout"> 退出</a></li>
                     </ul>
                 </li>
             </ul>

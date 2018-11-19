@@ -1,7 +1,7 @@
 package com.allblue.interceptor;
 
 import com.allblue.model.BlueUser;
-import com.allblue.service.UserService;
+import com.allblue.service.BlueUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     private static String url = "/jsp/user/login.jsp";
 
     @Autowired
-    private UserService userService;
+    private BlueUserService blueUserService;
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
@@ -67,7 +67,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 if (cookie2.getName().equals("name") && cookie2.getValue() != null) {
                     String cookieUsername = cookie2.getValue();
                     try {
-                        String realPassword = userService.getUserInfo(cookieUsername).getPassword();
+                        String realPassword = blueUserService.getUserInfo(cookieUsername).getPassword();
                         BlueUser user = (BlueUser) session.getAttribute("blueUser");
 //                        logger.info("session内user信息：" + user);
                         if (user != null) {

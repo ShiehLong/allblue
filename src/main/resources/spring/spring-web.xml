@@ -45,8 +45,8 @@
             <!-- 拦截所有的请求，这个必须写在前面，也就是写在【不拦截】的上面 -->
             <mvc:mapping path="/**"/>
             <!-- 但是排除下面这些，也就是不拦截请求 -->
-            <mvc:exclude-mapping path="/user/register"/>
-            <mvc:exclude-mapping path="/user/login"/>
+            <mvc:exclude-mapping path="/blueUser/register"/>
+            <mvc:exclude-mapping path="/blueUser/login"/>
             <mvc:exclude-mapping path="/fonts/*"/>
             <mvc:exclude-mapping path="/jsp/*"/>
             <mvc:exclude-mapping path="/css/*"/>
