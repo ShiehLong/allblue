@@ -1,7 +1,7 @@
 var zTreeObject;
 
 $(document).ready(function () {
-    $("#tree-container").css("height", $(document).height()-250 + "px");
+    $("#tree-container").css("height", $(document).height() - 250 + "px");
     createTree();
 });
 
@@ -21,9 +21,7 @@ function createTree() {
             }
         },
         edit: {
-            enable: true,
-            idKey:"code",
-            pIdkey:"parent_code"
+            enable: true
         }
     };
 
@@ -62,20 +60,97 @@ function createTree() {
     $.ajax({
         type: "get",
         dataType: "json",
-        url: 'authority/getZtreeNodes',
+        url: '/system/getSystemList',
         success: function (result) {
             if (result.status === 0) {
                 var zNodes = result.data;
+                console.log(zNodes);
                 zTreeObject = $.fn.zTree.init($("#regionZTree"), setting, zNodes);
             } else {
-                console.log("权限数据加载失败，服务器内部异常！", 2);
+                console.log("权限数据加载失败，服务器内部异常！");
             }
         },
         error: function () {
-            console.log("操作失败，请检查网络！", 2);
+            console.log("操作失败，请检查网络！");
         }
     });
 }
+
+// 打开创建弹窗
+function openCreateModel() {
+
+    $.ajax({
+        type: "get",
+        async: 'false',
+        dataType: "json",
+        url: '/system/getAllSystem',
+        success: function (result) {
+            if (result.status === 0) {
+                var html = "";
+                html += "<option value = ''>请选择所属系统</option>";
+                for (var i = 0; i < result.data.length; i++) {
+                    html += "<option value=" + result.data[i].code + ">"
+                        + result.data[i].name + "</option>";
+                }
+                $("#create_pcode").html(html);
+
+                // 显示模态框
+                $('#createSystem').modal('show');
+            } else {
+                console.log("获取权限信息失败，服务器内部异常！");
+            }
+        },
+        error: function () {
+            console.log("操作失败，请检查网络！");
+        }
+    });
+
+    //模态框关闭前，清除上次校验样式
+    $('#createSystem').on('hidden.bs.modal', function (e) {
+        $('#create_name').val("");
+        $('#create_code').val("");
+        $("#create_pcode").html("");
+        $('#create_url').val("");
+        $('#create_remark').val("");
+    });
+}
+
+// 提交创建表单
+function submitCreateForm() {
+
+    var name = $('#create_name').val();
+    var code = $('#create_code').val();
+    var parent_code = $("#create_pcode").val();
+    var url = $('#create_url').val();
+    var remark = $('#create_remark').val();
+
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "/system/save",
+        data: {
+            name: name,
+            code: code,
+            parent_code: parent_code,
+            url: url,
+            remark: remark
+        },
+        success: function (result) {
+            if (result.status === 0) {
+                console.log("保存成功！", 1);
+                $("#createSystem").modal('hide');
+                zTreeObject.destroy();
+                createTree();
+            } else {
+                console.log("保存失败，服务器内部异常！");
+            }
+        },
+        error: function () {
+            console.log("操作失败，请检查网络！");
+        }
+    });
+}
+
 
 var newCount = 1;
 
