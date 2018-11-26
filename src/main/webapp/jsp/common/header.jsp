@@ -41,7 +41,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="/jsp/user/list.jsp">用户列表</a></li>
                         <li><a href="/jsp/role/list.jsp">角色列表</a></li>
-                        <li><a href="/jsp/function/list.jsp">菜单树</a></li>
+                        <li><a href="/jsp/system/list.jsp">菜单树</a></li>
                         <li class="divider"></li>
                         <li><a href="/role/list">角色列表</a></li>
                     </ul>

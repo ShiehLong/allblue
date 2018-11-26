@@ -106,8 +106,8 @@ CREATE TABLE `blue_role` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8 COMMENT='角色表';
 
 
-DROP TABLE IF EXISTS blue_function;
-CREATE TABLE `blue_function` (
+DROP TABLE IF EXISTS blue_system;
+CREATE TABLE `blue_system` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `code` varchar(200) DEFAULT NULL COMMENT '菜单编号，唯一键',
   `name` varchar(100) NOT NULL COMMENT '名字',
@@ -124,12 +124,12 @@ CREATE TABLE `blue_function` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1  CHARSET=utf8 COMMENT='菜单表';
 
-DROP TABLE IF EXISTS blue_role_function;
-CREATE TABLE `blue_role_function` (
+DROP TABLE IF EXISTS blue_role_system;
+CREATE TABLE `blue_role_system` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `creator` varchar(255) NOT NULL COMMENT '创建者',
-  `function_id` varchar(36) DEFAULT NULL COMMENT '菜单id',
+  `system_id` varchar(36) DEFAULT NULL COMMENT '菜单id',
   `role_id` bigint(20) DEFAULT NULL COMMENT '角色id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8 COMMENT='角色菜单关系表';
