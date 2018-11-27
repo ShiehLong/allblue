@@ -2,6 +2,7 @@ package com.allblue.service.impl;
 
 import com.allblue.mapper.BlueSystemMapper;
 import com.allblue.model.BlueSystem;
+import com.allblue.model.dto.ZTreeNode;
 import com.allblue.service.BlueSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class BlueSystemServiceImpl implements BlueSystemService{
     private BlueSystemMapper blueSystemMapper;
 
     @Override
-    public List<BlueSystem> getSystemList() {
+    public List<ZTreeNode> getSystemList() {
         return blueSystemMapper.selectSystemList();
     }
 
@@ -57,7 +58,7 @@ public class BlueSystemServiceImpl implements BlueSystemService{
     }
 
     @Override
-    public List<BlueSystem> getAllSystem() {
+    public List<ZTreeNode> getAllSystem() {
         return blueSystemMapper.selectAllSystem();
     }
 }

@@ -54,9 +54,33 @@
         #{code,jdbcType=VARCHAR},
         #{name,jdbcType=VARCHAR},
         #{url,jdbcType=VARCHAR},
-        #{level,jdbcType=INTEGER},
+        (
+          SELECT level from
+          (
+            (select max(level)+1 level from blue_system where 1=1
+              <if test="parent_code!=null and parent_code!=''">
+              and code = #{parent_code}
+              </if>
+              <if test="parent_code==null or parent_code==''">
+               and code is null
+              </if>
+            )
+          ) tmp
+        ),
         #{parent_code,jdbcType=VARCHAR},
-        #{sort_id,jdbcType=INTEGER},
+        (
+          SELECT sort_id from
+          (
+            (select max(sort_id)+1 sort_id from blue_system where 1=1
+              <if test="parent_code!=null and parent_code!=''">
+              and parent_code = #{parent_code}
+              </if>
+              <if test="parent_code==null or parent_code==''">
+              and parent_code is null
+              </if>
+            )
+          ) tmp
+        ),
         1,
         SYSDATE(),
         SYSDATE(),
@@ -66,12 +90,24 @@
         )
     </insert>
 
-    <select id="selectSystemList" resultMap="BaseResultMap">
-        select * from blue_system
+    <select id="selectSystemList" resultType="com.allblue.model.dto.ZTreeNode">
+        SELECT
+          `code` as id,
+          `name`,
+          `parent_code` AS pId
+        FROM
+          blue_system
+        order by
+          level,sort_id
     </select>
 
-    <select id="selectAllSystem" resultMap="BaseResultMap">
-        select code,name from blue_system GROUP BY code
+    <select id="selectAllSystem" resultType="com.allblue.model.dto.ZTreeNode">
+        select
+          `code` AS id,
+          `name`
+        from
+          blue_system
+        GROUP BY code
     </select>
 
     <update id="updateById" parameterType="com.allblue.model.BlueSystem">

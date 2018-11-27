@@ -1,6 +1,7 @@
 package com.allblue.mapper;
 
 import com.allblue.model.BlueSystem;
+import com.allblue.model.dto.ZTreeNode;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface BlueSystemMapper {
      * @Author Xone
      * @Date 21:08 2018/11/26
      **/
-    List<BlueSystem> selectSystemList();
+    List<ZTreeNode> selectSystemList();
 
     /**
      * @Description: 插入系统数据
@@ -38,5 +39,5 @@ public interface BlueSystemMapper {
      * @Author Xone
      * @Date 21:08 2018/11/26
      **/
-    List<BlueSystem> selectAllSystem();
+    List<ZTreeNode> selectAllSystem();
 }

@@ -12,7 +12,7 @@
         <div class="col-md-12" style="text-align: left;">
                 <span class="auth-menu">
                     <button type="button" class="btn btn-default" onclick="openCreateModel()">
-                        新建页面元素
+                        新建
                     </button>
                 </span>
         </div>
@@ -62,9 +62,9 @@
 
 
                     <div class="form-group">
-                        <label for="create_pcode" class="col-sm-2 control-label">所属系统</label>
+                        <label for="create_parentCode" class="col-sm-2 control-label">所属系统</label>
                         <div class="col-sm-10">
-                            <select id="create_pcode" name="systemId" class="form-control select2" >
+                            <select id="create_parentCode" name="systemId" class="form-control select2" >
 
                             </select>
 
@@ -96,6 +96,69 @@
         </div>
     </div>
 </div>
+
+<!-- 编辑模态框 -->
+<div id="editSystem" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">编辑系统</h4>
+            </div>
+
+            <!-- 表单体 -->
+            <div class="modal-body">
+                <form id="edit_auth-form"  class="form-horizontal">
+                    <input id="edit_id" type="hidden" name="id" value="">
+
+                    <div class="form-group">
+                        <label for="edit_name" class="col-sm-2 control-label">菜单名称</label>
+                        <div class="col-sm-10">
+                            <input id="edit_name" type="text"  name="name" class="form-control" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_code" class="col-sm-2 control-label">系统编码</label>
+                        <div class="col-sm-10">
+                            <input id="edit_code" type="text"  name="code" class="form-control" readonly aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_parentCode" class="col-sm-2 control-label">父级编码</label>
+                        <div class="col-sm-10">
+                            <input id="edit_parentCode" type="text"  name="parentCode" class="form-control" readonly aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_url" class="col-sm-2 control-label">菜单链接</label>
+                        <div class="col-sm-10">
+                            <textarea id="edit_url" class="form-control" rows="3" name="url"></textarea>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="edit_remark" class="col-sm-2 control-label">菜单描述</label>
+                        <div class="col-sm-10">
+                            <textarea id="edit_remark" class="form-control" rows="3" name="remark"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="submit-edit_form" type="button" class="btn btn-primary" onclick="submitEditForm()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript" src="/js/jquery.ztree.all.min.js"></script>
 <script src="/js/system/list.js"></script>
 </body>

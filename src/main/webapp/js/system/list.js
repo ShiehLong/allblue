@@ -21,41 +21,16 @@ function createTree() {
             }
         },
         edit: {
-            enable: true
+            enable: true,
+            showRemoveBtn: showRemoveBtn,
+            removeTitle: "删除节点",
+            showRenameBtn: false
+        },
+        callback: {
+            beforeRemove: beforeRemove,
+            onRemove: onRemove //移除事件
         }
     };
-
-    var zNodes = [
-        {id: 1, pId: 0, name: "父节点1"},
-        {id: 11, pId: 1, name: "父节点11"},
-        {id: 111, pId: 11, name: "叶子节点111"},
-        {id: 112, pId: 11, name: "叶子节点112"},
-        {id: 113, pId: 11, name: "叶子节点113"},
-        {id: 114, pId: 11, name: "叶子节点114"},
-        {id: 12, pId: 1, name: "父节点12"},
-        {id: 121, pId: 12, name: "叶子节点121"},
-        {id: 122, pId: 12, name: "叶子节点122"},
-        {id: 123, pId: 12, name: "叶子节点123"},
-        {id: 124, pId: 12, name: "叶子节点124"},
-        {id: 13, pId: 1, name: "父节点13", isParent: true},
-        {id: 2, pId: 0, name: "父节点2"},
-        {id: 21, pId: 2, name: "父节点21"},
-        {id: 211, pId: 21, name: "叶子节点211"},
-        {id: 212, pId: 21, name: "叶子节点212"},
-        {id: 213, pId: 21, name: "叶子节点213"},
-        {id: 214, pId: 21, name: "叶子节点214"},
-        {id: 22, pId: 2, name: "父节点22"},
-        {id: 221, pId: 22, name: "叶子节点221"},
-        {id: 222, pId: 22, name: "叶子节点222"},
-        {id: 223, pId: 22, name: "叶子节点223"},
-        {id: 224, pId: 22, name: "叶子节点224"},
-        {id: 23, pId: 2, name: "父节点23"},
-        {id: 231, pId: 23, name: "叶子节点231"},
-        {id: 232, pId: 23, name: "叶子节点232"},
-        {id: 233, pId: 23, name: "叶子节点233"},
-        {id: 234, pId: 23, name: "叶子节点234"},
-        {id: 3, pId: 0, name: "父节点3", isParent: true}
-    ];
     // 获取zTree的节点数据
     $.ajax({
         type: "get",
@@ -64,7 +39,6 @@ function createTree() {
         success: function (result) {
             if (result.status === 0) {
                 var zNodes = result.data;
-                console.log(zNodes);
                 zTreeObject = $.fn.zTree.init($("#regionZTree"), setting, zNodes);
             } else {
                 console.log("权限数据加载失败，服务器内部异常！");
@@ -74,6 +48,41 @@ function createTree() {
             console.log("操作失败，请检查网络！");
         }
     });
+}
+
+function addHoverDom(treeId, treeNode) {
+    var sObj = $("#" + treeNode.tId + "_span");
+
+    if (treeNode.editNameFlag || $("#editBtn_" + treeNode.tId).length > 0) return;
+
+    var addStr = "<span class='button edit' id='editBtn_" + treeNode.tId
+        + "' title='编辑节点' onfocus='this.blur();'></span>";
+    sObj.after(addStr);
+
+    var btn = $("#editBtn_" + treeNode.tId);
+    if (btn) btn.bind("click", function () {
+        openEditModel(treeNode.id);
+        return false;
+    });
+};
+
+function removeHoverDom(treeId, treeNode) {
+    $("#editBtn_" + treeNode.tId).unbind().remove();
+};
+
+function beforeRemove(treeId, treeNode) {
+    var zTree = $.fn.zTree.getZTreeObj("regionZTree");
+    zTree.selectNode(treeNode);
+    return confirm("确认删除 节点 -- " + treeNode.name + " 吗？");
+}
+
+function onRemove(e, treeId, treeNode) {
+    //需要对删除做判定或者其它操作，在这里写~~
+    $.post('./index.php?r=data/del&id=' + treeNode.id);
+}
+
+function showRemoveBtn(treeId, treeNode) {
+    return !(treeNode.level === 0);
 }
 
 // 打开创建弹窗
@@ -89,7 +98,7 @@ function openCreateModel() {
                 var html = "";
                 html += "<option value = ''>请选择所属系统</option>";
                 for (var i = 0; i < result.data.length; i++) {
-                    html += "<option value=" + result.data[i].code + ">"
+                    html += "<option value=" + result.data[i].id + ">"
                         + result.data[i].name + "</option>";
                 }
                 $("#create_pcode").html(html);
@@ -109,7 +118,7 @@ function openCreateModel() {
     $('#createSystem').on('hidden.bs.modal', function (e) {
         $('#create_name').val("");
         $('#create_code').val("");
-        $("#create_pcode").html("");
+        $("#create_parentCode").html("");
         $('#create_url').val("");
         $('#create_remark').val("");
     });
@@ -120,7 +129,7 @@ function submitCreateForm() {
 
     var name = $('#create_name').val();
     var code = $('#create_code').val();
-    var parent_code = $("#create_pcode").val();
+    var parent_code = $("#create_parentCode").val();
     var url = $('#create_url').val();
     var remark = $('#create_remark').val();
 
@@ -151,98 +160,74 @@ function submitCreateForm() {
     });
 }
 
+// 打开编辑弹窗
+function openEditModel(code) {
 
-var newCount = 1;
+    $.ajax({
+        type: "get",
+        dataType: "json",
+        url: '/system/' + code + '/detail',
+        success: function (result) {
+            if (result.status === 0) {
+                var systemInfo = result.data;
+                $('#edit_name').val(systemInfo.name);
+                $('#edit_code').val(systemInfo.code);
+                $("#edit_parentCode").val(systemInfo.parent_code);
+                $('#edit_url').val(systemInfo.url);
+                $('#edit_remark').val(systemInfo.remark);
 
-function addHoverDom(treeId, treeNode) {
-    var sObj = $("#" + treeNode.tId + "_span");
-    if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
-    var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
-        + "' title='add node' onfocus='this.blur();'></span>";
-    sObj.after(addStr);
-    var btn = $("#addBtn_" + treeNode.tId);
-    if (btn) btn.bind("click", function () {
-        var zTree = $.fn.zTree.getZTreeObj("regionZTree");
-        zTree.addNodes(treeNode, {id: (100 + newCount), pId: treeNode.id, name: "new node" + (newCount++)});
-        return false;
+                // 显示模态框
+                $('#editSystem').modal('show');
+            } else {
+                console.log("获取权限信息失败，服务器内部异常！");
+            }
+        },
+        error: function () {
+            console.log("操作失败，请检查网络！");
+        }
     });
-};
 
-function removeHoverDom(treeId, treeNode) {
-    $("#addBtn_" + treeNode.tId).unbind().remove();
-};
-
-/**
- * 添加节点
- * @param obj
- */
-function addZTreeNode(obj) {
-    var treeObj = $.fn.zTree.getZTreeObj("regionZTree");
-    var parentZNode = treeObj.getSelectedNodes(); //获取父节点
-    var newNode = obj;
-    newNode.nodeFlg = 1;  // 可以自定义节点标识
-    newNode = treeObj.addNodes(parentZNode[0], newNode, true);
+    //模态框关闭前，清除上次校验样式
+    $('#editSystem').on('hidden.bs.modal', function (e) {
+        $('#edit_name').val("");
+        $('#edit_code').val("");
+        $("#edit_parentCode").val("");
+        $('#edit_url').val("");
+        $('#edit_remark').val("");
+    });
 }
 
-/**
- * 修改子节点
- * @param obj
- */
-function editZTreeNode(obj) {
-    var zTree = $.fn.zTree.getZTreeObj("regionZTree");
-    var nodes = zTree.getSelectedNodes();
-    for (var i = 0; i < nodes.length; i++) {
-        nodes[i].name = obj;
-        zTree.updateNode(nodes[i]);
-    }
-}
+// 提交编辑表单
+function submitEditForm() {
 
-/**
- *  删除子节点 --选中节点
- * @param obj
- */
-function removeZTreeNodeBySelect() {
-    var zTree = $.fn.zTree.getZTreeObj("regionZTree");
-    var nodes = zTree.getSelectedNodes(); //获取选中节点
-    for (var i = 0; i < nodes.length; i++) {
-        zTree.removeNode(nodes[i]);
-    }
-}
+    var name = $('#edit_name').val();
+    var code = $('#edit_code').val();
+    var parent_code = $("#edit_parentCode").val();
+    var url = $('#edit_url').val();
+    var remark = $('#edit_remark').val();
 
-/**
- *  删除子节点 --勾选节点
- * @param obj
- */
-function removeZTreeNodeByChecked() {
-    var zTree = $.fn.zTree.getZTreeObj("regionZTree");
-    var nodes = zTree.getCheckedNodes(true); //获取勾选节点
-    for (var i = 0; i < nodes.length; i++) {
-        zTree.removeNode(nodes[i]);
-    }
-}
-
-/**
- *  根据节点id 批量删除子节点
- * @param obj
- */
-function removeZTreeNodebPi(obj) {
-    var idnodes = obj.split(",");
-    var zTree = $.fn.zTree.getZTreeObj("regionZTree");
-    var nodes = zTree.getSelectedNodes();
-    for (var i = 0; i < nodes.length; i++) {
-        var nodes = zTree.getNodeByParam("id", nodes[i]);
-        zTree.removeNode(nodes);
-    }
-}
-
-/**
- * 选择节点
- * @param obj
- */
-function selectzTreeNode(obj) {
-    var zTree = $.fn.zTree.getZTreeObj("regionZTree");
-    var node = zTree.getNodeByParam("id", obj);
-    if (node != null) {
-        zTree.selectNode(node, true);//指定选中ID的节点
-    }
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "/system/" + code + "/update",
+        data: {
+            name: name,
+            parent_code: parent_code,
+            url: url,
+            remark: remark
+        },
+        success: function (result) {
+            if (result.status === 0) {
+                console.log("保存成功！", 1);
+                $("#editSystem").modal('hide');
+                zTreeObject.destroy();
+                createTree();
+            } else {
+                console.log("保存失败，服务器内部异常！");
+            }
+        },
+        error: function () {
+            console.log("操作失败，请检查网络！");
+        }
+    });
 }

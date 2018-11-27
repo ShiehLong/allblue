@@ -1,6 +1,7 @@
 package com.allblue.service;
 
 import com.allblue.model.BlueSystem;
+import com.allblue.model.dto.ZTreeNode;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface BlueSystemService {
      * @Author Xone
      * @Date 20:53 2018/11/26
      **/
-    List<BlueSystem> getSystemList();
+    List<ZTreeNode> getSystemList();
 
     /**
      * @Description: 获取系统信息
@@ -58,5 +59,5 @@ public interface BlueSystemService {
      * @Author Xone
      * @Date 22:53 2018/11/26
      **/
-    List<BlueSystem> getAllSystem();
+    List<ZTreeNode> getAllSystem();
 }

@@ -3,6 +3,7 @@ package com.allblue.controller;
 import com.allblue.model.BlueSystem;
 import com.allblue.model.BlueUser;
 import com.allblue.model.dto.ResultInfo;
+import com.allblue.model.dto.ZTreeNode;
 import com.allblue.service.BlueSystemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,18 +32,18 @@ public class BlueSystemController {
     @ResponseBody
     public ResultInfo getSystemList() {
         //查询系统列表
-        List<BlueSystem> list = blueSystemService.getSystemList();
+        List<ZTreeNode> list = blueSystemService.getSystemList();
         if (list == null) return ResultInfo.error("系统数据为空");
-        return ResultInfo.success("系统数据获取成功",list);
+        return ResultInfo.success("系统数据获取成功", list);
     }
 
     @RequestMapping(value = "/getAllSystem", method = RequestMethod.GET)
     @ResponseBody
     public ResultInfo getAllSystem() {
         //查询系统列表
-        List<BlueSystem> list = blueSystemService.getAllSystem();
+        List<ZTreeNode> list = blueSystemService.getAllSystem();
         if (list == null) return ResultInfo.error("系统数据为空");
-        return ResultInfo.success("系统数据获取成功",list);
+        return ResultInfo.success("系统数据获取成功", list);
     }
 
 
@@ -63,14 +64,12 @@ public class BlueSystemController {
             BlueUser blueUser = (BlueUser) session.getAttribute("blueUser");
 
             int level = 1;
-            int sort_id = 1;
             BlueSystem blueSystem = new BlueSystem();
             blueSystem.setCode(code);
             blueSystem.setName(name);
             blueSystem.setUrl(url);
             blueSystem.setLevel(level);
             blueSystem.setParent_code(parent_code);
-            blueSystem.setSort_id(sort_id);
             blueSystem.setCreator(blueUser.getName());
             blueSystem.setModifier(blueUser.getName());
             blueSystem.setRemark(remark);
@@ -83,55 +82,53 @@ public class BlueSystemController {
         }
     }
 
-    @RequestMapping(value = "/{id}/detail", method = RequestMethod.GET)
+    @RequestMapping(value = "/{code}/detail", method = RequestMethod.GET)
     @ResponseBody
-    public ResultInfo detail(@PathVariable("id") int id) {
-        if (id == 0) {
-            return ResultInfo.error("系统ID不正确！");
-        }
-        BlueSystem systemInfo = blueSystemService.getSystemInfo(id);
+    public ResultInfo detail(@PathVariable("code") String code) {
+
+        BlueSystem systemInfo = blueSystemService.getSystemInfo(code);
         if (systemInfo == null) {
             return ResultInfo.error("系统信息不存在！");
         }
-        logger.info("查询系统【" + id + "】成功");
         return ResultInfo.success("SUCCESS", systemInfo);
     }
 
-    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/{code}/update", method = RequestMethod.POST)
     @ResponseBody
-    public ResultInfo update(@PathVariable("id") int id,
+    public ResultInfo update(@PathVariable("code") String code,
                              @RequestParam(value = "name", required = false) String name,
-                             @RequestParam(value = "status", required = false) Integer status,
+                             @RequestParam(value = "parent_code", required = false) String parent_code,
+                             @RequestParam(value = "url", required = false) String url,
                              @RequestParam(value = "remark", required = false) String remark,
                              HttpSession session) {
-        //入参判断
-        if (id == 0) {
-            return ResultInfo.error("系统ID不正确！");
-        }
+
         if ((name == null || "".equals(name)) &&
                 (remark == null || "".equals(remark)) &&
-                (status == null)) {
+                (url == null|| "".equals(url))) {
             return ResultInfo.error("请填写要修改的信息!!!");
         }
 
-        BlueSystem BlueSystem = new BlueSystem();
-        BlueSystem.setId(id);
+        BlueSystem blueSystem = new BlueSystem();
+        blueSystem.setCode(code);
         if (name != null && !"".equals(name)) {
-            BlueSystem.setName(name);
+            blueSystem.setName(name);
+        }
+        if (parent_code != null && !"".equals(parent_code)) {
+            blueSystem.setParent_code(parent_code);
         }
         if (remark != null && !"".equals(remark)) {
-            BlueSystem.setRemark(remark);
+            blueSystem.setRemark(remark);
         }
-        if (status == 0 || status == 1) {
-            BlueSystem.setStatus(status);
+        if (url != null && !"".equals(url)) {
+            blueSystem.setUrl(url);
         }
         BlueUser blueUser = (BlueUser) session.getAttribute("blueUser");
-        BlueSystem.setModifier(blueUser.getName());
+        blueSystem.setModifier(blueUser.getName());
 
         //update数据库
-        int count = blueSystemService.update(BlueSystem);
+        int count = blueSystemService.update(blueSystem);
         if (count != 0) {
-            return ResultInfo.success("更新系统【" + id + "】信息成功！");
+            return ResultInfo.success("更新系统【" + name + "】信息成功！");
         } else {
             return ResultInfo.error("修改失败,请重试！");
         }
