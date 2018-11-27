@@ -26,13 +26,6 @@ public interface BlueSystemService {
     BlueSystem getSystemInfo(String code);
 
     /**
-     * @Description: 获取系统信息
-     * @Author Xone
-     * @Date 20:53 2018/11/26
-     **/
-    BlueSystem getSystemInfo(int id);
-
-    /**
      * @Description: 新增系统
      * @Author Xone
      * @Date 20:53 2018/11/26
@@ -51,7 +44,7 @@ public interface BlueSystemService {
      * @Author Xone
      * @Date 20:53 2018/11/26
      **/
-    void delete(int id);
+    void delete(String code);
 
 
     /**
@@ -60,4 +53,11 @@ public interface BlueSystemService {
      * @Date 22:53 2018/11/26
      **/
     List<ZTreeNode> getAllSystem();
+
+    /**
+     * @Description: 根据parent_code获取code列表
+     * @Author Xone
+     * @Date 22:53 2018/11/26
+     **/
+    List<String> getListByParentCode(String code);
 }

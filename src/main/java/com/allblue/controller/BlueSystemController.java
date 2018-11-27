@@ -58,7 +58,7 @@ public class BlueSystemController {
         //判断系统名是否已存在
         BlueSystem isExist = blueSystemService.getSystemInfo(code);
         if (null != isExist) {
-            return ResultInfo.error("系统已存在！");
+            return ResultInfo.error("code已存在！");
         } else {
             //获取session内当前操作用户名
             BlueUser blueUser = (BlueUser) session.getAttribute("blueUser");
@@ -86,6 +86,9 @@ public class BlueSystemController {
     @ResponseBody
     public ResultInfo detail(@PathVariable("code") String code) {
 
+        if (code == null || "".equals(code)) {
+            return ResultInfo.error("系统code为空！");
+        }
         BlueSystem systemInfo = blueSystemService.getSystemInfo(code);
         if (systemInfo == null) {
             return ResultInfo.error("系统信息不存在！");
@@ -97,14 +100,16 @@ public class BlueSystemController {
     @ResponseBody
     public ResultInfo update(@PathVariable("code") String code,
                              @RequestParam(value = "name", required = false) String name,
-                             @RequestParam(value = "parent_code", required = false) String parent_code,
                              @RequestParam(value = "url", required = false) String url,
                              @RequestParam(value = "remark", required = false) String remark,
                              HttpSession session) {
 
+        if (code == null || "".equals(code)) {
+            return ResultInfo.error("系统code为空！");
+        }
         if ((name == null || "".equals(name)) &&
                 (remark == null || "".equals(remark)) &&
-                (url == null|| "".equals(url))) {
+                (url == null || "".equals(url))) {
             return ResultInfo.error("请填写要修改的信息!!!");
         }
 
@@ -112,9 +117,6 @@ public class BlueSystemController {
         blueSystem.setCode(code);
         if (name != null && !"".equals(name)) {
             blueSystem.setName(name);
-        }
-        if (parent_code != null && !"".equals(parent_code)) {
-            blueSystem.setParent_code(parent_code);
         }
         if (remark != null && !"".equals(remark)) {
             blueSystem.setRemark(remark);
@@ -134,14 +136,27 @@ public class BlueSystemController {
         }
     }
 
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
+    @RequestMapping(value = "/{code}/delete", method = RequestMethod.GET)
     @ResponseBody
-    public ResultInfo deleteUser(@PathVariable("id") int id) {
-        if (id == 0) {
-            return ResultInfo.error("系统ID不正确！");
+    public ResultInfo deleteUser(@PathVariable("code") String code) {
+        if (code == null || "".equals(code)) {
+            return ResultInfo.error("系统code为空！");
         }
-        blueSystemService.delete(id);
-        return ResultInfo.success("删除系统【" + id + "】成功！");
+        deleteAll(code);
+        return ResultInfo.success("删除系统【" + code + "】成功！");
+    }
+
+    /**
+     * 删除code，在删除code为父节点的子数据
+     **/
+    private void deleteAll(String code) {
+        blueSystemService.delete(code);
+        List<String> codeList = blueSystemService.getListByParentCode(code);
+        if(codeList != null){
+            for (String subCode:codeList) {
+                deleteAll(subCode);
+            }
+        }
     }
 
 }

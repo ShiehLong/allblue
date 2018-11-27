@@ -40,4 +40,18 @@ public interface BlueSystemMapper {
      * @Date 21:08 2018/11/26
      **/
     List<ZTreeNode> selectAllSystem();
+
+    /**
+     * @Description: 更新系统数据
+     * @Author Xone
+     * @Date 21:08 2018/11/26
+     **/
+    int updateByCode(BlueSystem blueSystem);
+
+    /**
+     * @Description: 根据parent'Code获取系统code列表
+     * @Author Xone
+     * @Date 21:08 2018/11/26
+     **/
+    List<String> selectListByParentCode(String code);
 }

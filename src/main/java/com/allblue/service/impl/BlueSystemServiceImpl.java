@@ -15,7 +15,7 @@ import java.util.List;
  * @Date 17:39 2018/11/26
  **/
 @Service
-public class BlueSystemServiceImpl implements BlueSystemService{
+public class BlueSystemServiceImpl implements BlueSystemService {
 
     @Autowired
     private BlueSystemMapper blueSystemMapper;
@@ -40,25 +40,25 @@ public class BlueSystemServiceImpl implements BlueSystemService{
     }
 
     @Override
-    public BlueSystem getSystemInfo(int id) {
-        BlueSystem blueSystem = new BlueSystem();
-        blueSystem.setId(id);
-        blueSystem = blueSystemMapper.selectSystemInfo(blueSystem);
-        return blueSystem;
-    }
-
-    @Override
     public int update(BlueSystem blueSystem) {
-        return 0;
+        return blueSystemMapper.updateByCode(blueSystem);
     }
 
     @Override
-    public void delete(int id) {
-
+    public void delete(String code) {
+        BlueSystem blueSystem = new BlueSystem();
+        blueSystem.setCode(code);
+        blueSystem.setStatus(0);
+        blueSystemMapper.updateByCode(blueSystem);
     }
 
     @Override
     public List<ZTreeNode> getAllSystem() {
         return blueSystemMapper.selectAllSystem();
+    }
+
+    @Override
+    public List<String> getListByParentCode(String code) {
+        return blueSystemMapper.selectListByParentCode(code);
     }
 }

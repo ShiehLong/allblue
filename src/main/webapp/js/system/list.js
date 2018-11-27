@@ -71,14 +71,28 @@ function removeHoverDom(treeId, treeNode) {
 };
 
 function beforeRemove(treeId, treeNode) {
-    var zTree = $.fn.zTree.getZTreeObj("regionZTree");
-    zTree.selectNode(treeNode);
     return confirm("确认删除 节点 -- " + treeNode.name + " 吗？");
 }
 
 function onRemove(e, treeId, treeNode) {
-    //需要对删除做判定或者其它操作，在这里写~~
-    $.post('./index.php?r=data/del&id=' + treeNode.id);
+    var code = treeNode.id;
+    $.ajax({
+        type: "get",
+        dataType: "json",
+        url: "/system/" + code + "/delete",
+        data: {},
+        success: function (result) {
+            if (result.status === 0) {
+                zTreeObject.destroy();
+                createTree();
+            } else {
+                console.log("保存失败，服务器内部异常！");
+            }
+        },
+        error: function () {
+            console.log("操作失败，请检查网络！");
+        }
+    });
 }
 
 function showRemoveBtn(treeId, treeNode) {
@@ -101,7 +115,7 @@ function openCreateModel() {
                     html += "<option value=" + result.data[i].id + ">"
                         + result.data[i].name + "</option>";
                 }
-                $("#create_pcode").html(html);
+                $("#create_parentCode").html(html);
 
                 // 显示模态框
                 $('#createSystem').modal('show');
@@ -146,7 +160,6 @@ function submitCreateForm() {
         },
         success: function (result) {
             if (result.status === 0) {
-                console.log("保存成功！", 1);
                 $("#createSystem").modal('hide');
                 zTreeObject.destroy();
                 createTree();
@@ -218,7 +231,6 @@ function submitEditForm() {
         },
         success: function (result) {
             if (result.status === 0) {
-                console.log("保存成功！", 1);
                 $("#editSystem").modal('hide');
                 zTreeObject.destroy();
                 createTree();

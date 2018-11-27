@@ -26,12 +26,18 @@
         *
         from blue_system
         where 1=1
-        <if test="id != null">
-            AND id = #{id,jdbcType=INTEGER}
-        </if>
         <if test="code != null">
             AND code = #{code,jdbcType=VARCHAR}
         </if>
+
+    </select>
+
+    <select id="selectListByParentCode" resultType="java.lang.String" parameterType="java.lang.String">
+        select
+        code
+        from blue_system
+        where
+        parent_code = #{code,jdbcType=VARCHAR}
 
     </select>
 
@@ -55,31 +61,31 @@
         #{name,jdbcType=VARCHAR},
         #{url,jdbcType=VARCHAR},
         (
-          SELECT level from
-          (
-            (select max(level)+1 level from blue_system where 1=1
-              <if test="parent_code!=null and parent_code!=''">
-              and code = #{parent_code}
-              </if>
-              <if test="parent_code==null or parent_code==''">
-               and code is null
-              </if>
-            )
-          ) tmp
+        SELECT level from
+        (
+        (select max(level)+1 level from blue_system where 1=1
+        <if test="parent_code!=null and parent_code!=''">
+            and code = #{parent_code}
+        </if>
+        <if test="parent_code==null or parent_code==''">
+            and code is null
+        </if>
+        )
+        ) tmp
         ),
         #{parent_code,jdbcType=VARCHAR},
         (
-          SELECT sort_id from
-          (
-            (select max(sort_id)+1 sort_id from blue_system where 1=1
-              <if test="parent_code!=null and parent_code!=''">
-              and parent_code = #{parent_code}
-              </if>
-              <if test="parent_code==null or parent_code==''">
-              and parent_code is null
-              </if>
-            )
-          ) tmp
+        SELECT sort_id from
+        (
+        (select COALESCE(max(sort_id),0)+1 sort_id from blue_system where 1=1
+        <if test="parent_code!=null and parent_code!=''">
+            and parent_code = #{parent_code}
+        </if>
+        <if test="parent_code==null or parent_code==''">
+            and parent_code is null
+        </if>
+        )
+        ) tmp
         ),
         1,
         SYSDATE(),
@@ -97,24 +103,31 @@
           `parent_code` AS pId
         FROM
           blue_system
+        WHERE
+          status = 1
         order by
-          level,sort_id
+          level,parent_code,sort_id
     </select>
 
     <select id="selectAllSystem" resultType="com.allblue.model.dto.ZTreeNode">
-        select
+        SELECT
           `code` AS id,
           `name`
-        from
+        FROM
           blue_system
+        WHERE
+          status = 1
         GROUP BY code
     </select>
 
-    <update id="updateById" parameterType="com.allblue.model.BlueSystem">
+    <update id="updateByCode" parameterType="com.allblue.model.BlueSystem">
         update blue_system
         <set>
             <if test="name != null">
                 name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
             </if>
             <if test="status != null">
                 status = #{status,jdbcType=INTEGER},
@@ -127,6 +140,6 @@
                 remark = #{remark,jdbcType=VARCHAR}
             </if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where code = #{code,jdbcType=INTEGER}
     </update>
 </mapper>
