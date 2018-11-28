@@ -127,10 +127,10 @@ CREATE TABLE `blue_system` (
 DROP TABLE IF EXISTS blue_role_system;
 CREATE TABLE `blue_role_system` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `creator` varchar(255) NOT NULL COMMENT '创建者',
   `system_id` varchar(36) DEFAULT NULL COMMENT '菜单id',
   `role_id` bigint(20) DEFAULT NULL COMMENT '角色id',
+  `creator` varchar(255) NOT NULL COMMENT '创建者',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8 COMMENT='角色菜单关系表';
 
@@ -139,11 +139,8 @@ DROP TABLE IF EXISTS blue_user_role;
 CREATE TABLE `blue_user_role` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `user_id` bigint(20) DEFAULT NULL COMMENT '用户id',
-  `status` tinyint(1) DEFAULT NULL COMMENT '状态',
   `role_id` bigint(20) DEFAULT NULL COMMENT '角色id',
-  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',
   `creator` varchar(255) NOT NULL COMMENT '创建者',
-  `modifier` varchar(255) NOT NULL COMMENT '修改人',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8 COMMENT='用户角色关系表';

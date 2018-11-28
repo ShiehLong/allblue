@@ -47,11 +47,11 @@ function initTable() {
         pageNumber: 1,                      //初始化加载第一页，默认第一页
         pageSize: 10,                       //每页的记录行数（*）
         pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
-        // search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-        // showColumns: true,                  //是否显示所有的列
-        // showRefresh: true,                  //是否显示刷新按钮
-        // minimumCountColumns: 2,             //最少允许的列数
-        // clickToSelect: true,                //是否启用点击选中行
+        search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+        showColumns: false,                  //是否显示所有的列
+        showRefresh: false,                  //是否显示刷新按钮
+        minimumCountColumns: 2,             //最少允许的列数
+        clickToSelect: false,                //是否启用点击选中行
         height: $(window).height() - 110,     //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
         uniqueId: "id",                     //每一行的唯一标识，一般为主键列
         responseHandler: responseHandler,
@@ -106,7 +106,7 @@ function initTable() {
             formatter: operateFormatter//表格中增加按钮
         }]
     });
-};
+}
 
 //刷新页面后返回数据
 function responseHandler(res) {
@@ -142,12 +142,49 @@ function changeDateFormat(cellval) {
 // 修改按钮、删除按钮
 function operateFormatter(value, row, index) {
     return [
-        '<button id="btn_edit" type="button" class="btn btn-info" data-toggle="modal">修改</button>',
+        '<button id="btn_system" type="button" class="btn btn-info" data-toggle="modal">菜单</button>',
+        '<button id="btn_user" type="button" class="btn btn-info" data-toggle="modal" style="margin-left: 10px;">用户</button>',
+        '<button id="btn_edit" type="button" class="btn btn-info" data-toggle="modal" style="margin-left: 10px;">修改</button>',
         '<button id="btn_delete" type="button" class="btn btn-warning" style="margin-left: 10px;">禁用</button>'
     ].join('');
 }
 
 window.operateEvents = {
+    // 点击菜单按钮执行的方法
+    'click #btn_system': function (e, value, row, index) {
+        $.ajax({
+            type: "GET",
+            url: "/blueRole/" + row['id'] + "/system",
+            data: {},
+            dataType: 'JSON',
+            success: function (data) {
+                if (data.status !== 0) {
+                    console.log(data.message);
+                    return;
+                }
+                var roleInfo = data.data;
+
+                // 显示模态框
+                $('#editRole').modal('show');
+            }
+        });
+    },
+    // 点击用户按钮执行的方法
+    'click #btn_user': function (e, value, row, index) {
+        var roleId = row.id;
+
+        $('#user-role-model').modal('show');
+        // 模态框代开初始化用户角色关系表
+        $('#user-role-model').on('shown.bs.modal', function (e) {
+            createUserRoleTable(roleId);
+            $("#user-role-roleId").val(roleId);
+        });
+
+        //模态框关闭销毁table，避免缓存
+        $('#user-role-model').on('hidden.bs.modal', function () {
+            $("#role-user").bootstrapTable("destroy");
+        });
+    },
     // 点击修改按钮执行的方法
     'click #btn_edit': function (e, value, row, index) {
         $.ajax({
@@ -163,7 +200,7 @@ window.operateEvents = {
                 var roleInfo = data.data;
                 document.getElementById("edit_id").value = roleInfo.id;
                 document.getElementById("edit_name").value = roleInfo.name;
-                $("input[name=status][value='"+roleInfo.status+"']").attr("checked", true);
+                $("input[name=status][value='" + roleInfo.status + "']").attr("checked", true);
                 document.getElementById("edit_remark").value = roleInfo.remark;
                 // 显示模态框
                 $('#editRole').modal('show');
@@ -270,3 +307,263 @@ function submitEditForm() {
 // $("#table").bootstrapTable('insertRow', {index: i, row: result.data[i]});
 // 更新某一行数据
 // $("#table").bootstrapTable('updateRow', {index: indexT, row: rowT});
+
+/*
+*角色-用户关联关系js
+*/
+// 初始化角色的所属用户列表
+function createUserRoleTable(roleId) {
+    $("#role-user").bootstrapTable({
+        url: '/blueRole/queryUserRoleInfoByPage',                      //请求后台的URL（*）
+        method: 'GET',                                            //请求方式（*）
+        //toolbar: '#toolbar',              //工具按钮用哪个容器
+        striped: true,                      //是否显示行间隔色
+        cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        pagination: true,                   //是否显示分页（*）
+        sortName: "created_time",
+        sortable: true,                     //是否启用排序
+        sortOrder: "desc",                   //排序方式
+        edit: true,
+        sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+        pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录
+        pageSize: 10,                        //每页的记录行数（*）
+        pageList: [10, 30, 50, 70],        //可供选择的每页的行数（*）
+        search: false,                      //是否显示表格搜索
+        strictSearch: true,
+        showColumns: false,                  //是否显示所有的列（选择显示的列）
+        showRefresh: false,                  //是否显示刷新按钮
+        minimumCountColumns: 2,              //最少允许的列数
+        clickToSelect: true,                 //是否启用点击选中行
+        uniqueId: "id",                      //每一行的唯一标识，一般为主键列
+        showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
+        cardView: false,                     //是否显示详细视图
+        detailView: false,                   //是否显示父子表
+        queryParams: function (params) {
+            return {
+                roleId: roleId,
+                searchContext: $("#user-role-search-context").val(),
+                offset: params.offset,  //页码
+                limit: params.limit,   //页面大小
+                order: params.order, //排序
+                sort: params.sort //排序
+            };
+        },                                  //传递参数（*）
+        columns: [{
+            field: 'id',
+            title: '序号',
+            halign: 'center',
+            align: 'center'
+        }, {
+            field: 'userCode',
+            title: '用户名称',
+            halign: 'center',
+            align: 'center'
+        }, {
+            field: 'roleName',
+            title: '角色名称',
+            halign: 'center',
+            align: 'center'
+        }, {
+            field: 'creator',
+            halign: "center",
+            align: 'center',
+            title: '创建人',
+            sortable: true
+        }, {
+            field: 'createDateTime',
+            halign: "center",
+            align: 'center',
+            title: '创建时间',
+            sortable: true,
+            formatter: function (value, row, index) {
+                return changeDateFormat(value);
+            }
+        }, {
+            field: 'operation',
+            title: '操作',
+            width: 120,
+            align: 'center',
+            valign: 'center',
+            formatter: userRoleActionFormatter
+        }]
+    });
+}
+
+// 所属用户弹窗操作列格式化
+function userRoleActionFormatter(value, row, index) {
+    var id = row.id;
+    var result = "";
+    result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"deleteUserRole('" + id + "')\" title='删除'><span class='glyphicon glyphicon-remove'></span></a>";
+    return result;
+}
+
+// 新建用户角色关系
+function createUserRole() {
+
+    var userCode = $("#create-user-role").val().trim();
+
+    if (!userRoleFormValidater(userCode)) {
+        return;
+    }
+
+    $.ajax({
+        type: "post",
+        url: "/blueRole/saveUserRole",
+        data: {
+            userCode: userCode
+        },
+        dataType: 'JSON',
+        success: function (result) {
+            if (result.status === 0) {
+                $("#create-user-role").val("");
+                $("#role-user").bootstrapTable('refresh', {silent: true});
+            } else {
+                $("#user-role-context").addClass("has-error");
+                $("#user-code-error-message").text(result.message);
+            }
+        },
+        error: function () {
+            console.log("关联关系保存失败，请检查网络！", "error");
+        }
+    });
+}
+
+// 查询用户关系
+function searchUserRole() {
+    $("#role-user").bootstrapTable('refresh', {silent: true});
+}
+
+// 删除用户角色关系记录
+function deleteUserRole(id) {
+    $.ajax({
+        type: "get",
+        url: "/blueRole/deleteUserRoleByRoleId",
+        data: {id: id},
+        dataType: 'JSON',
+        success: function (result) {
+            if (result.status === 0) {
+                $("#role-user").bootstrapTable('refresh', {silent: true});
+            } else {
+                console.log("关联关系删除失败，服务器内部异常！", "error");
+            }
+        },
+        error: function () {
+            console.log("关联关系删除失败，请检查网络！", "error");
+        }
+    });
+}
+
+// 自定义所属用户名输入框校验器
+function userRoleFormValidater(userCode) {
+    if (userCode.length === 0) {
+        $("#user-role-context").addClass("has-error");
+        $("#user-code-error-message").text("用户名不能为空");
+        return false;
+    } else if (userCode.length > 40) {
+        $("#user-role-context").addClass("has-error");
+        $("#user-code-error-message").text("用户名最大长度为40");
+        return false;
+    } else {
+        $("#user-role-context").removeClass("has-error");
+        $("#user-code-error-message").text("");
+        $("#user-role-context").addClass("has-success");
+        return true;
+    }
+}
+
+/*
+ * 此部分为角色权限操作JS
+ */
+// 权限树对象
+var zTreeObject = {}
+// 进行权限操作的角色ID
+var authorityActionRoleId;
+
+// 打开权限操作弹窗
+function authorityAction(roleId) {
+    //1-打开弹窗
+    $("#authority-action-model").modal({
+        backdrop: 'static',
+        keyboard: false,
+        remote: '../templates/role/authorityAction.html'
+    })
+
+    authorityActionRoleId = roleId;
+
+    //模态框关闭销毁table，避免缓存
+    $('#authority-action-model').on('hidden.bs.modal', function () {
+        zTreeObject.destroy();
+        // 模态框关闭,解除事件绑定
+        $(this).off().on('hidden', 'hidden.bs.modal');
+    });
+    //2-初始化权限树
+    createTree(roleId);
+}
+
+// 创建树
+function createTree(roleId) {
+    // zTree配置选项
+    var setting = {
+        check: {
+            enable: true,
+            chkStyle: "checkbox",
+            radioType: "all"
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        }
+    };
+
+    // 获取zTree的节点数据
+    $.ajax({
+        type: "get",
+        dataType: "json",
+        url: 'authority/getZtreeNodesForAuthAction?roleId=' + roleId,
+        success: function (result) {
+            if (result.status === 0) {
+                var zNodes = result.data;
+                zTreeObject = $.fn.zTree.init($("#treeAuthority"), setting, zNodes);
+            } else {
+                console.log("权限数据加载失败，服务器内部异常！", "error");
+            }
+        },
+        error: function () {
+            console.log("操作失败，请检查网络！", "error");
+        }
+    });
+}
+
+// 保存权限操作
+function saveAuthorityAction() {
+    var checkedNodes = zTreeObject.getCheckedNodes(true);
+    var authorityIds = "";
+    if (checkedNodes.length > 0) {
+        for (var i = 0; i < checkedNodes.length; i++) {
+            authorityIds += checkedNodes[i].id + ","
+        }
+        authorityIds = authorityIds.substring(0, authorityIds.length - 1);
+    }
+
+    $.ajax({
+        type: "post",
+        data: {
+            authorityIds: authorityIds,
+            roleId: authorityActionRoleId
+        },
+        url: 'role/saveAuthorityByRoleId',
+        success: function (result) {
+            if (result.status === 0) {
+                $("#authority-action-model").modal('hide');
+                zTreeObject.destroy();
+            } else {
+                console.log("权限保存失败！", "error");
+            }
+        },
+        error: function () {
+            console.log("权限保存失败，请检查网络！", "error");
+        },
+        dataType: "json"
+    });
+}
