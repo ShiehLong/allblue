@@ -86,4 +86,66 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectUserRoleTotalCount" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM blue_user_role
+        WHERE
+        role_id = #{roleId,jdbcType=INTEGER}
+        AND
+        user_name LIKE CONCAT('%',#{searchContext,jdbcType=VARCHAR},'%')
+    </select>
+
+    <select id="queryUserRoleInfoByPage" parameterType="java.util.Map" resultType="com.allblue.model.vo.UserRoleVO">
+        SELECT
+        bur.id,
+        bur.user_name AS userName,
+        bur.role_id AS roleId,
+        br.name AS roleName,
+        bur.creator,
+        bur.created_time AS createdTime
+        FROM
+          blue_user_role AS bur
+          LEFT JOIN blue_role AS br
+          ON bur.role_id = br.id
+        WHERE
+        bur.role_id = #{roleId,jdbcType=INTEGER}
+        AND bur.user_name LIKE CONCAT('%',#{searchContext,jdbcType=VARCHAR},'%')
+        ORDER BY #{sort,jdbcType=VARCHAR} #{order,jdbcType=VARCHAR}
+        LIMIT #{offset,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
+    </select>
+
+    <select id="checkRepeatUserCode" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM blue_user_role
+        WHERE
+          user_name = #{userName}
+        AND
+          role_id = #{roleId}
+    </select>
+
+    <insert id="saveUserRole" useGeneratedKeys="true">
+        insert into blue_user_role (
+        user_Name,
+        role_id,
+        creator,
+        created_time
+        )
+        values (
+        #{userName},
+        #{roleId},
+        #{creator},
+        SYSDATE()
+        )
+    </insert>
+
+    <delete id="deleteUserRoleById" parameterType="java.lang.Integer">
+        DELETE FROM
+        blue_user_role
+        WHERE
+        id = #{id}
+    </delete>
+
 </mapper>

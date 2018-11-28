@@ -138,7 +138,7 @@ CREATE TABLE `blue_role_system` (
 DROP TABLE IF EXISTS blue_user_role;
 CREATE TABLE `blue_user_role` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `user_id` bigint(20) DEFAULT NULL COMMENT '用户id',
+  `user_name` varchar(64) DEFAULT NULL COMMENT '用户名称',
   `role_id` bigint(20) DEFAULT NULL COMMENT '角色id',
   `creator` varchar(255) NOT NULL COMMENT '创建者',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

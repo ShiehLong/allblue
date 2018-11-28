@@ -4,7 +4,9 @@ import com.allblue.model.BlueRole;
 import com.allblue.model.BlueUser;
 import com.allblue.model.dto.ResultInfo;
 import com.allblue.model.dto.SearchDTO;
+import com.allblue.model.vo.UserRoleVO;
 import com.allblue.service.BlueRoleService;
+import com.allblue.service.BlueUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/blueRole")
@@ -23,23 +27,26 @@ public class BlueRoleController {
     @Autowired
     private BlueRoleService blueRoleService;
 
+    @Autowired
+    private BlueUserService blueUserService;
+
     @RequestMapping(value = "/getRoleList", method = RequestMethod.POST)
     @ResponseBody
     public ResultInfo getUserListBySearchDTO(
-            @RequestParam(value = "searchContext", required = false) String opts,
+            @RequestParam(value = "searchContext", required = false) String searchContext,
             @RequestParam(value = "sort", required = false) String sortName,
             @RequestParam(value = "order", required = false) String sortOrder,
             @RequestParam(value = "offset", required = false) Integer pageNumber,
             @RequestParam(value = "limit", required = false) Integer pageSize) {
 
         //获取角色数量
-        int totalCount = blueRoleService.getRoleTotalCount(opts);
+        int totalCount = blueRoleService.getRoleTotalCount(searchContext);
         if (totalCount > 0) {
             //设置参数
             SearchDTO searchDTO = new SearchDTO();
             searchDTO.setOffset(pageNumber);
             searchDTO.setLimit(pageSize);
-            searchDTO.setSearchContext(opts);
+            searchDTO.setSearchContext(searchContext);
             searchDTO.setSortName(sortName);
             searchDTO.setSortOrder(sortOrder);
 
@@ -140,5 +147,65 @@ public class BlueRoleController {
         }
         blueRoleService.delete(id);
         return ResultInfo.success("删除角色【" + id + "】成功！");
+    }
+
+    @RequestMapping(value = "/queryUserRoleInfoByPage", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultInfo queryUserRoleInfoByPage(
+            @RequestParam(value = "roleId", required = false) Integer roleId,
+            @RequestParam(value = "searchContext", required = false) String searchContext,
+            @RequestParam(value = "sort", required = false) String sort,
+            @RequestParam(value = "order", required = false) String order,
+            @RequestParam(value = "offset", required = false) Integer offset,
+            @RequestParam(value = "limit", required = false) Integer limit) {
+
+        int totalCount = blueRoleService.getUserRoleTotalCount(roleId, searchContext);
+        if (totalCount > 0) {
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            paramMap.put("roleId", roleId);
+            paramMap.put("searchContext", searchContext);
+            paramMap.put("limit", limit);
+            paramMap.put("offset", offset);
+            paramMap.put("order", order);
+            paramMap.put("sort", sort);
+
+            List<UserRoleVO> list = blueRoleService.queryUserRoleInfoByPage(paramMap);
+            return ResultInfo.success(Integer.toString(totalCount), list);
+        }
+        return ResultInfo.error("没有关联数据！");
+    }
+
+    @RequestMapping(value = "/saveUserRole", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultInfo saveUserRole(
+            @RequestParam(value = "roleId") Integer roleId,
+            @RequestParam(value = "userName") String userName,
+            HttpSession session) {
+
+
+        BlueUser blueUser = blueUserService.getUserInfo(userName);
+        if (blueUser == null) {
+            return ResultInfo.error("不存在此用户");
+        }
+        Boolean isExit = blueRoleService.checkRepeatUserCode(userName, roleId);
+        if (isExit) {
+            return ResultInfo.error("已关联此用户");
+        }
+        BlueUser blueSessionUser = (BlueUser) session.getAttribute("blueUser");
+        String creator = blueSessionUser.getName();
+
+        blueRoleService.saveUserRole(userName, roleId, creator);
+
+        return ResultInfo.success();
+    }
+
+    @RequestMapping(value = "/{id}/deleteUserRoleById", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultInfo deleteUserRoleById(@PathVariable("id") int id) {
+        if (id == 0) {
+            return ResultInfo.error("ID不正确！");
+        }
+        blueRoleService.deleteUserRoleById(id);
+        return ResultInfo.success();
     }
 }

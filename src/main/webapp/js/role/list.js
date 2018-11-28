@@ -171,17 +171,17 @@ window.operateEvents = {
     },
     // 点击用户按钮执行的方法
     'click #btn_user': function (e, value, row, index) {
-        var roleId = row.id;
+        var roleId = row['id'];
 
         $('#user-role-model').modal('show');
-        // 模态框代开初始化用户角色关系表
-        $('#user-role-model').on('shown.bs.modal', function (e) {
-            createUserRoleTable(roleId);
-            $("#user-role-roleId").val(roleId);
-        });
+        createUserRoleTable(roleId);
+        $("#user-role-roleId").val(roleId);
 
         //模态框关闭销毁table，避免缓存
         $('#user-role-model').on('hidden.bs.modal', function () {
+            $("#create-user-role").val("");
+            $("#user-role-context").removeClass("has-error");
+            $("#user-code-error-message").text("");
             $("#role-user").bootstrapTable("destroy");
         });
     },
@@ -311,11 +311,12 @@ function submitEditForm() {
 /*
 *角色-用户关联关系js
 */
+
 // 初始化角色的所属用户列表
 function createUserRoleTable(roleId) {
     $("#role-user").bootstrapTable({
         url: '/blueRole/queryUserRoleInfoByPage',                      //请求后台的URL（*）
-        method: 'GET',                                            //请求方式（*）
+        method: 'post',                                            //请求方式（*）
         //toolbar: '#toolbar',              //工具按钮用哪个容器
         striped: true,                      //是否显示行间隔色
         cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
@@ -338,6 +339,9 @@ function createUserRoleTable(roleId) {
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
         cardView: false,                     //是否显示详细视图
         detailView: false,                   //是否显示父子表
+        contentType: 'application/x-www-form-urlencoded',
+        queryParamsType: "limit", //参数格式,发送标准的RESTFul类型的参数请求
+        responseHandler: responseHandler,
         queryParams: function (params) {
             return {
                 roleId: roleId,
@@ -347,14 +351,14 @@ function createUserRoleTable(roleId) {
                 order: params.order, //排序
                 sort: params.sort //排序
             };
-        },                                  //传递参数（*）
+        },           //传递参数（*）
         columns: [{
             field: 'id',
             title: '序号',
             halign: 'center',
             align: 'center'
         }, {
-            field: 'userCode',
+            field: 'userName',
             title: '用户名称',
             halign: 'center',
             align: 'center'
@@ -368,13 +372,11 @@ function createUserRoleTable(roleId) {
             halign: "center",
             align: 'center',
             title: '创建人',
-            sortable: true
         }, {
-            field: 'createDateTime',
+            field: 'createdTime',
             halign: "center",
             align: 'center',
             title: '创建时间',
-            sortable: true,
             formatter: function (value, row, index) {
                 return changeDateFormat(value);
             }
@@ -383,7 +385,7 @@ function createUserRoleTable(roleId) {
             title: '操作',
             width: 120,
             align: 'center',
-            valign: 'center',
+            valign: 'middle',
             formatter: userRoleActionFormatter
         }]
     });
@@ -400,9 +402,11 @@ function userRoleActionFormatter(value, row, index) {
 // 新建用户角色关系
 function createUserRole() {
 
-    var userCode = $("#create-user-role").val().trim();
+    var roleId = $("#user-role-roleId").val();
 
-    if (!userRoleFormValidater(userCode)) {
+    var userName = $("#create-user-role").val().trim();
+
+    if (!userRoleFormValidater(userName)) {
         return;
     }
 
@@ -410,7 +414,8 @@ function createUserRole() {
         type: "post",
         url: "/blueRole/saveUserRole",
         data: {
-            userCode: userCode
+            roleId: roleId,
+            userName: userName
         },
         dataType: 'JSON',
         success: function (result) {
@@ -423,7 +428,7 @@ function createUserRole() {
             }
         },
         error: function () {
-            console.log("关联关系保存失败，请检查网络！", "error");
+            console.log("关联关系保存失败，请检查网络！");
         }
     });
 }
@@ -437,29 +442,29 @@ function searchUserRole() {
 function deleteUserRole(id) {
     $.ajax({
         type: "get",
-        url: "/blueRole/deleteUserRoleByRoleId",
-        data: {id: id},
+        url: "/blueRole/" + id + "/deleteUserRoleById",
+        data: {},
         dataType: 'JSON',
         success: function (result) {
             if (result.status === 0) {
                 $("#role-user").bootstrapTable('refresh', {silent: true});
             } else {
-                console.log("关联关系删除失败，服务器内部异常！", "error");
+                console.log("关联关系删除失败，服务器内部异常！");
             }
         },
         error: function () {
-            console.log("关联关系删除失败，请检查网络！", "error");
+            console.log("关联关系删除失败，请检查网络！");
         }
     });
 }
 
 // 自定义所属用户名输入框校验器
-function userRoleFormValidater(userCode) {
-    if (userCode.length === 0) {
+function userRoleFormValidater(userName) {
+    if (userName.length === 0) {
         $("#user-role-context").addClass("has-error");
         $("#user-code-error-message").text("用户名不能为空");
         return false;
-    } else if (userCode.length > 40) {
+    } else if (userName.length > 40) {
         $("#user-role-context").addClass("has-error");
         $("#user-code-error-message").text("用户名最大长度为40");
         return false;

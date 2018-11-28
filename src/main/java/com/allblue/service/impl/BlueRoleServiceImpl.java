@@ -3,11 +3,13 @@ package com.allblue.service.impl;
 import com.allblue.mapper.BlueRoleMapper;
 import com.allblue.model.BlueRole;
 import com.allblue.model.dto.SearchDTO;
+import com.allblue.model.vo.UserRoleVO;
 import com.allblue.service.BlueRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BlueRoleServiceImpl implements BlueRoleService {
@@ -61,5 +63,33 @@ public class BlueRoleServiceImpl implements BlueRoleService {
     public int update(BlueRole blueRole) {
         int count = blueRoleMapper.updateById(blueRole);
         return count;
+    }
+
+    @Override
+    public int getUserRoleTotalCount(Integer roleId, String searchContext) {
+        return blueRoleMapper.selectUserRoleTotalCount(roleId, searchContext);
+    }
+
+    @Override
+    public List<UserRoleVO> queryUserRoleInfoByPage(Map<String, Object> map) {
+        return blueRoleMapper.queryUserRoleInfoByPage(map);
+    }
+
+    @Override
+    public Boolean checkRepeatUserCode(String userName, Integer roleId) {
+        int count = blueRoleMapper.checkRepeatUserCode(userName, roleId);
+        if (count > 0)
+            return true;
+        return false;
+    }
+
+    @Override
+    public int saveUserRole(String userName, Integer roleId, String creator) {
+        return blueRoleMapper.saveUserRole(userName,roleId,creator);
+    }
+
+    @Override
+    public int deleteUserRoleById(int id) {
+        return blueRoleMapper.deleteUserRoleById(id);
     }
 }
