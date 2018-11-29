@@ -96,6 +96,7 @@ DROP TABLE IF EXISTS blue_role;
 CREATE TABLE `blue_role` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(50) DEFAULT NULL COMMENT '角色名称',
+  `code` varchar(50) DEFAULT NULL COMMENT '角色编码',
   `status` tinyint(1) DEFAULT NULL COMMENT '状态',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后修改时间',

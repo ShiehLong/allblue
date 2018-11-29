@@ -61,6 +61,7 @@ public class BlueRoleController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
     public ResultInfo save(@RequestParam(value = "name") String name,
+                           @RequestParam(value = "code") String code,
                            @RequestParam(value = "remark") String remark,
                            HttpSession session) {
         //判断角色名是否已存在
@@ -73,6 +74,7 @@ public class BlueRoleController {
 
             BlueRole blueRole = new BlueRole();
             blueRole.setName(name);
+            blueRole.setCode(code);
             blueRole.setCreator(blueUser.getName());
             blueRole.setModifier(blueUser.getName());
             blueRole.setRemark(remark);
@@ -103,6 +105,7 @@ public class BlueRoleController {
     @ResponseBody
     public ResultInfo update(@PathVariable("id") int id,
                              @RequestParam(value = "name", required = false) String name,
+                             @RequestParam(value = "code", required = false) String code,
                              @RequestParam(value = "status", required = false) Integer status,
                              @RequestParam(value = "remark", required = false) String remark,
                              HttpSession session) {
@@ -111,6 +114,7 @@ public class BlueRoleController {
             return ResultInfo.error("角色ID不正确！");
         }
         if ((name == null || "".equals(name)) &&
+                (code == null || "".equals(code)) &&
                 (remark == null || "".equals(remark)) &&
                 (status == null)) {
             return ResultInfo.error("请填写要修改的信息!!!");
@@ -120,6 +124,9 @@ public class BlueRoleController {
         BlueRole.setId(id);
         if (name != null && !"".equals(name)) {
             BlueRole.setName(name);
+        }
+        if (code != null && !"".equals(code)) {
+            BlueRole.setCode(code);
         }
         if (remark != null && !"".equals(remark)) {
             BlueRole.setRemark(remark);

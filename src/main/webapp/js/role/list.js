@@ -47,7 +47,11 @@ function initTable() {
             align: 'center'
         }, {
             field: 'name',
-            title: '角色名',
+            title: '角色名称',
+            align: 'center'
+        }, {
+            field: 'code',
+            title: '角色编码',
             align: 'center'
         }, {
             field: 'status',
@@ -96,7 +100,7 @@ function initTable() {
 
 //刷新页面后返回数据
 function responseHandler(res) {
-    if (res) {
+    if (res.data !== null) {
         return {
             "rows": res.data,
             "total": res.message
@@ -136,7 +140,7 @@ function operateFormatter(value, row, index) {
 }
 
 window.operateEvents = {
-    // 点击菜单按钮执行的方法
+    // 点击权限管理按钮执行的方法
     'click #btn_system': function (e, value, row, index) {
         var roleId = row['id'];
         //1-打开弹窗
@@ -151,7 +155,7 @@ window.operateEvents = {
         //2-初始化权限树
         createTree(roleId);
     },
-    // 点击用户按钮执行的方法
+    // 点击关联用户按钮执行的方法
     'click #btn_user': function (e, value, row, index) {
         var roleId = row['id'];
 
@@ -167,7 +171,7 @@ window.operateEvents = {
             $("#role-user").bootstrapTable("destroy");
         });
     },
-    // 点击修改按钮执行的方法
+    // 点击修改角色按钮执行的方法
     'click #btn_edit': function (e, value, row, index) {
         $.ajax({
             type: "GET",
@@ -182,6 +186,7 @@ window.operateEvents = {
                 var roleInfo = data.data;
                 document.getElementById("edit_id").value = roleInfo.id;
                 document.getElementById("edit_name").value = roleInfo.name;
+                document.getElementById("edit_code").value = roleInfo.code;
                 $("input[name=status][value='" + roleInfo.status + "']").attr("checked", true);
                 document.getElementById("edit_remark").value = roleInfo.remark;
                 // 显示模态框
@@ -193,13 +198,14 @@ window.operateEvents = {
         $('#editRole').on('hidden.bs.modal', function () {
             $('#edit_id').val("");
             $('#edit_name').val("");
+            $('#edit_code').val("");
             $("input[name=status][value='0']").removeAttr('checked');
             $("input[name=status][value='1']").removeAttr('checked');
             $('#edit_remark').val("");
         });
     },
 
-    // 点击删除按钮执行的方法
+    // 点击禁用角色按钮执行的方法
     'click #btn_delete': function (e, value, row, index) {
         $.ajax({
             type: "GET",
@@ -228,6 +234,7 @@ $(window).resize(function () {
 //新建用户保存操作
 function submitCreateForm() {
     var name = $("#create_name").val();
+    var code = $("#create_code").val();
     var remark = $("#create_remark").val();
     if (name === "" && remark === "") {
         alert("请填写角色信息!");
@@ -241,6 +248,7 @@ function submitCreateForm() {
         url: "/blueRole/save",
         data: {
             name: name,
+            code: code,
             remark: remark
         },
         success: function (result) {
@@ -259,6 +267,7 @@ function submitCreateForm() {
     //关闭模态框后清空数据
     $('#createRole').on('hidden.bs.modal', function () {
         $('#create_name').val("");
+        $('#create_code').val("");
         $('#create_remark').val("");
     });
 }
@@ -267,11 +276,12 @@ function submitCreateForm() {
 function submitEditForm() {
 
     var name = $("#edit_name").val();
+    var code = $("#edit_code").val();
     var status = $("input[name='status']:checked").val();
     var remark = $("#edit_remark").val();
     var id = $("#edit_id").val();
 
-    if (name === "" && remark === "") {
+    if (name === "" && code === "" && remark === "") {
         alert("请填写需要变更信息！");
         return false;
     }
@@ -282,6 +292,7 @@ function submitEditForm() {
         dataType: 'json',
         data: {
             name: name,
+            code: code,
             status: status,
             remark: remark
         },
@@ -499,7 +510,7 @@ function createTree(roleId) {
     $.ajax({
         type: "get",
         dataType: "json",
-        url: "/system/" + roleId + "/getZTreeNodesForAuthAction",
+        url: "/blueSystem/" + roleId + "/getZTreeNodesForAuthAction",
         success: function (result) {
             if (result.status === 0) {
                 var zNodes = result.data;

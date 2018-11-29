@@ -35,7 +35,7 @@ function createTree() {
     $.ajax({
         type: "get",
         dataType: "json",
-        url: '/system/getSystemList',
+        url: '/blueSystem/getSystemList',
         success: function (result) {
             if (result.status === 0) {
                 var zNodes = result.data;
@@ -79,7 +79,7 @@ function onRemove(e, treeId, treeNode) {
     $.ajax({
         type: "get",
         dataType: "json",
-        url: "/system/" + code + "/delete",
+        url: "/blueSystem/" + code + "/delete",
         data: {},
         success: function (result) {
             if (result.status === 0) {
@@ -106,7 +106,7 @@ function openCreateModel() {
         type: "get",
         async: 'false',
         dataType: "json",
-        url: '/system/getAllSystem',
+        url: '/blueSystem/getAllSystem',
         success: function (result) {
             if (result.status === 0) {
                 var html = "";
@@ -150,7 +150,7 @@ function submitCreateForm() {
     $.ajax({
         type: "POST",
         dataType: "json",
-        url: "/system/save",
+        url: "/blueSystem/save",
         data: {
             name: name,
             code: code,
@@ -179,7 +179,7 @@ function openEditModel(code) {
     $.ajax({
         type: "get",
         dataType: "json",
-        url: '/system/' + code + '/detail',
+        url: '/blueSystem/' + code + '/detail',
         success: function (result) {
             if (result.status === 0) {
                 var systemInfo = result.data;
@@ -222,7 +222,7 @@ function submitEditForm() {
     $.ajax({
         type: "POST",
         dataType: "json",
-        url: "/system/" + code + "/update",
+        url: "/blueSystem/" + code + "/update",
         data: {
             name: name,
             parent_code: parent_code,

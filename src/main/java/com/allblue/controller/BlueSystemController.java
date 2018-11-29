@@ -23,7 +23,7 @@ import java.util.Map;
  * @Date 17:37 2018/11/26
  **/
 @Controller
-@RequestMapping("/system")
+@RequestMapping("/blueSystem")
 public class BlueSystemController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());

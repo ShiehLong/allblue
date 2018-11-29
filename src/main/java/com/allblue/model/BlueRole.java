@@ -7,6 +7,8 @@ public class BlueRole {
     private Integer id;
     //角色名称
     private String name;
+    //角色编码
+    private String code;
     //状态
     private Integer status;
     //创建时间
@@ -34,6 +36,14 @@ public class BlueRole {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public Integer getStatus() {

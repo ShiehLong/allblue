@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.allblue.model.BlueRole">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="created_time" property="created_time" jdbcType="TIMESTAMP"/>
         <result column="modified_time" property="modified_time" jdbcType="TIMESTAMP"/>
@@ -13,7 +14,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, name, status, created_time, modified_time, creator, modifier, remark
+        id, name,code, status, created_time, modified_time, creator, modifier, remark
     </sql>
 
     <select id="selectRoleInfo" resultMap="BaseResultMap" parameterType="com.allblue.model.BlueRole">
@@ -33,6 +34,7 @@
     <insert id="insert" parameterType="com.allblue.model.BlueRole" useGeneratedKeys="true" keyProperty="id">
         insert into blue_role (
         name,
+        code,
         status,
         created_time,
         modified_time,
@@ -42,6 +44,7 @@
         )
         values (
         #{name,jdbcType=VARCHAR},
+        #{code,jdbcType=VARCHAR},
         1,
         SYSDATE(),
         SYSDATE(),
@@ -72,6 +75,9 @@
         <set>
             <if test="name != null">
                 name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                name = #{code,jdbcType=VARCHAR},
             </if>
             <if test="status != null">
                 status = #{status,jdbcType=INTEGER},
@@ -173,4 +179,14 @@
         </foreach>
     </insert>
 
+    <select id="getRoleListByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        br.*
+        FROM
+        blue_role AS br
+        LEFT JOIN blue_user_role AS bur
+        ON bur.role_id = br.id
+        WHERE
+        bur.user_name = #{name}
+    </select>
 </mapper>

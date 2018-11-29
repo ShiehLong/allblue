@@ -47,9 +47,15 @@
             <div class="modal-body">
                 <form id="create_role_form" class="form-horizontal">
                     <div class="form-group">
-                        <label for="create_name" class="col-sm-2 control-label">角色名</label>
+                        <label for="create_name" class="col-sm-2 control-label">角色名称</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="create_name" placeholder="请输入角色名">
+                            <input type="text" class="form-control" id="create_name" placeholder="请输入角色名称">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="create_code" class="col-sm-2 control-label">角色编码</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="create_code" placeholder="请输入角色编码">
                         </div>
                     </div>
                     <div class="form-group">
@@ -83,9 +89,15 @@
             <div class="modal-body">
                 <form id="edit_role_form" class="form-horizontal">
                     <div class="form-group">
-                        <label for="edit_name" class="col-sm-2 control-label">角色名</label>
+                        <label for="edit_name" class="col-sm-2 control-label">角色名称</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="edit_name" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_code" class="col-sm-2 control-label">角色编码</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="edit_code" value="">
                         </div>
                     </div>
                     <div class="form-group">

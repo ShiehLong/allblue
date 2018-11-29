@@ -94,4 +94,11 @@ public interface BlueRoleMapper {
      * @Date 22:53 2018/11/28
      **/
     void saveAuthorityByRoleId(Map<String, Object> paramMap);
+
+    /**
+     * @Description: 根据UserName获取角色列表
+     * @Author Xone
+     * @Date 22:53 2018/11/29
+     **/
+    List<BlueRole> getRoleListByUserName(String name);
 }

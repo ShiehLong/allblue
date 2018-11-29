@@ -100,4 +100,9 @@ public class BlueRoleServiceImpl implements BlueRoleService {
             blueRoleMapper.saveAuthorityByRoleId(paramMap);
         }
     }
+
+    @Override
+    public List<BlueRole> getRoleListByUserName(String name) {
+        return blueRoleMapper.getRoleListByUserName(name);
+    }
 }
