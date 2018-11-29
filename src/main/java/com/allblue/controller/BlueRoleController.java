@@ -208,4 +208,23 @@ public class BlueRoleController {
         blueRoleService.deleteUserRoleById(id);
         return ResultInfo.success();
     }
+
+
+    @RequestMapping(value = "/saveAuthorityByRoleId", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultInfo saveAuthorityByRoleId(
+            @RequestParam(value = "roleId") Integer roleId,
+            @RequestParam(value = "authorityIds") String[] authorityIds,
+            HttpSession session) {
+        BlueUser blueSessionUser = (BlueUser) session.getAttribute("blueUser");
+        String creator = blueSessionUser.getName();
+
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("roleId", roleId);
+        paramMap.put("authorityIds", authorityIds);
+        paramMap.put("creator", creator);
+
+        blueRoleService.saveAuthorityByRoleId(paramMap);
+        return ResultInfo.success("角色权限关联信息保存成功");
+    }
 }

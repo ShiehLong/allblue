@@ -1,20 +1,6 @@
 $(function () {
     //初始化表数据
     initTable();
-
-    //关闭模态框后清空数据
-    $('#createRole').on('hidden.bs.modal', function () {
-        $('#create_name').val("");
-        $('#create_remark').val("");
-    });
-    //关闭模态框后清空数据
-    $('#editRole').on('hidden.bs.modal', function () {
-        $('#edit_id').val("");
-        $('#edit_name').val("");
-        $("input[name=status][value='0']").removeAttr('checked');
-        $("input[name=status][value='1']").removeAttr('checked');
-        $('#edit_remark').val("");
-    });
 });
 
 function doQuery() {
@@ -142,32 +128,28 @@ function changeDateFormat(cellval) {
 // 修改按钮、删除按钮
 function operateFormatter(value, row, index) {
     return [
-        '<button id="btn_system" type="button" class="btn btn-info" data-toggle="modal">菜单</button>',
-        '<button id="btn_user" type="button" class="btn btn-info" data-toggle="modal" style="margin-left: 10px;">用户</button>',
-        '<button id="btn_edit" type="button" class="btn btn-info" data-toggle="modal" style="margin-left: 10px;">修改</button>',
-        '<button id="btn_delete" type="button" class="btn btn-warning" style="margin-left: 10px;">禁用</button>'
+        '<button id="btn_system" type="button" class="btn btn-info" data-toggle="modal">权限管理</button>',
+        '<button id="btn_user" type="button" class="btn btn-info" data-toggle="modal" style="margin-left: 10px;">关联用户</button>',
+        '<button id="btn_edit" type="button" class="btn btn-info" data-toggle="modal" style="margin-left: 10px;">修改角色</button>',
+        '<button id="btn_delete" type="button" class="btn btn-warning" style="margin-left: 10px;">禁用角色</button>'
     ].join('');
 }
 
 window.operateEvents = {
     // 点击菜单按钮执行的方法
     'click #btn_system': function (e, value, row, index) {
-        $.ajax({
-            type: "GET",
-            url: "/blueRole/" + row['id'] + "/system",
-            data: {},
-            dataType: 'JSON',
-            success: function (data) {
-                if (data.status !== 0) {
-                    console.log(data.message);
-                    return;
-                }
-                var roleInfo = data.data;
+        var roleId = row['id'];
+        //1-打开弹窗
+        $("#role-system-model").modal("show");
 
-                // 显示模态框
-                $('#editRole').modal('show');
-            }
+        $("#role-system-roleId").val(roleId);
+
+        //模态框关闭销毁table，避免缓存
+        $('#role-system-model').on('hidden.bs.modal', function () {
+            zTreeObject.destroy();
         });
+        //2-初始化权限树
+        createTree(roleId);
     },
     // 点击用户按钮执行的方法
     'click #btn_user': function (e, value, row, index) {
@@ -205,6 +187,15 @@ window.operateEvents = {
                 // 显示模态框
                 $('#editRole').modal('show');
             }
+        });
+
+        //关闭模态框后清空数据
+        $('#editRole').on('hidden.bs.modal', function () {
+            $('#edit_id').val("");
+            $('#edit_name').val("");
+            $("input[name=status][value='0']").removeAttr('checked');
+            $("input[name=status][value='1']").removeAttr('checked');
+            $('#edit_remark').val("");
         });
     },
 
@@ -263,6 +254,12 @@ function submitCreateForm() {
         error: function () {
             console.log("操作失败，请检查网络！");
         }
+    });
+
+    //关闭模态框后清空数据
+    $('#createRole').on('hidden.bs.modal', function () {
+        $('#create_name').val("");
+        $('#create_remark').val("");
     });
 }
 
@@ -449,7 +446,7 @@ function deleteUserRole(id) {
             if (result.status === 0) {
                 $("#role-user").bootstrapTable('refresh', {silent: true});
             } else {
-                console.log("关联关系删除失败，服务器内部异常！");
+                alert("关联关系删除失败，服务器内部异常！");
             }
         },
         error: function () {
@@ -481,29 +478,6 @@ function userRoleFormValidater(userName) {
  */
 // 权限树对象
 var zTreeObject = {}
-// 进行权限操作的角色ID
-var authorityActionRoleId;
-
-// 打开权限操作弹窗
-function authorityAction(roleId) {
-    //1-打开弹窗
-    $("#authority-action-model").modal({
-        backdrop: 'static',
-        keyboard: false,
-        remote: '../templates/role/authorityAction.html'
-    })
-
-    authorityActionRoleId = roleId;
-
-    //模态框关闭销毁table，避免缓存
-    $('#authority-action-model').on('hidden.bs.modal', function () {
-        zTreeObject.destroy();
-        // 模态框关闭,解除事件绑定
-        $(this).off().on('hidden', 'hidden.bs.modal');
-    });
-    //2-初始化权限树
-    createTree(roleId);
-}
 
 // 创建树
 function createTree(roleId) {
@@ -525,23 +499,23 @@ function createTree(roleId) {
     $.ajax({
         type: "get",
         dataType: "json",
-        url: 'authority/getZtreeNodesForAuthAction?roleId=' + roleId,
+        url: "/system/" + roleId + "/getZTreeNodesForAuthAction",
         success: function (result) {
             if (result.status === 0) {
                 var zNodes = result.data;
-                zTreeObject = $.fn.zTree.init($("#treeAuthority"), setting, zNodes);
+                zTreeObject = $.fn.zTree.init($("#role-system-tree"), setting, zNodes);
             } else {
-                console.log("权限数据加载失败，服务器内部异常！", "error");
+                alert("权限数据加载失败，服务器内部异常！");
             }
         },
         error: function () {
-            console.log("操作失败，请检查网络！", "error");
+            console.log("操作失败，请检查网络！");
         }
     });
 }
 
 // 保存权限操作
-function saveAuthorityAction() {
+function saveRoleSystem() {
     var checkedNodes = zTreeObject.getCheckedNodes(true);
     var authorityIds = "";
     if (checkedNodes.length > 0) {
@@ -551,24 +525,26 @@ function saveAuthorityAction() {
         authorityIds = authorityIds.substring(0, authorityIds.length - 1);
     }
 
+    var roleId = $("#role-system-roleId").val();
+
     $.ajax({
+        url: '/blueRole/saveAuthorityByRoleId',
         type: "post",
+        dataType: "json",
         data: {
             authorityIds: authorityIds,
-            roleId: authorityActionRoleId
+            roleId: roleId
         },
-        url: 'role/saveAuthorityByRoleId',
         success: function (result) {
             if (result.status === 0) {
-                $("#authority-action-model").modal('hide');
+                $("#role-system-model").modal('hide');
                 zTreeObject.destroy();
             } else {
-                console.log("权限保存失败！", "error");
+                alert("权限保存失败！");
             }
         },
         error: function () {
-            console.log("权限保存失败，请检查网络！", "error");
-        },
-        dataType: "json"
+            console.log("权限保存失败，请检查网络！");
+        }
     });
 }

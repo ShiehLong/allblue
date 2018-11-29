@@ -54,4 +54,11 @@ public interface BlueSystemMapper {
      * @Date 21:08 2018/11/26
      **/
     List<String> selectListByParentCode(String code);
+
+    /**
+     * @Description: 根据roleId获取role-system菜单树
+     * @Author Xone
+     * @Date 22:53 2018/11/26
+     **/
+    List<ZTreeNode> selectSystemListByRoleId(Integer roleId);
 }

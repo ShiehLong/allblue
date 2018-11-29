@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>角色列表</title>
+    <link rel="stylesheet" type="text/css" href="/css/metroStyle/metroStyle.css">
 </head>
 <body>
 <%@ include file="/jsp/common/header.jsp" %>
@@ -111,7 +112,7 @@
 </div>
 
 <!-- 权限操作弹窗 -->
-<div id="user-system-model" class="modal fade" tabindex="-1" role="dialog">
+<div id="role-system-model" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -121,15 +122,15 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
-                        <input id="authority-action-role-id" type="hidden" name="id" value="">
+                        <input id="role-system-roleId" type="hidden" name="id" value="">
                         <div class=" col-md-12">
-                            <ul id="treeAuthority" class="ztree"></ul>
+                            <ul id="role-system-tree" class="ztree"></ul>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="saveAuthorityAction()">保存</button>
+                <button type="button" class="btn btn-primary" onclick="saveRoleSystem()">保存</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
@@ -183,7 +184,7 @@
     </div>
 </div>
 
-
+<script type="text/javascript" src="/js/jquery.ztree.all.min.js"></script>
 <script src="/js/role/list.js"></script>
 </body>
 </html>

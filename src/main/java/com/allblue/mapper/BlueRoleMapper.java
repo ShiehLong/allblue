@@ -80,4 +80,18 @@ public interface BlueRoleMapper {
      * @Date 22:53 2018/11/28
      **/
     int deleteUserRoleById(int id);
+
+    /**
+     * @Description: 根据roleId删除system-role关联关系
+     * @Author Xone
+     * @Date 22:53 2018/11/28
+     **/
+    void deleteAuthorityByRoleId(Integer roleId);
+
+    /**
+     * @Description: 保存system-role关联关系
+     * @Author Xone
+     * @Date 22:53 2018/11/28
+     **/
+    void saveAuthorityByRoleId(Map<String, Object> paramMap);
 }

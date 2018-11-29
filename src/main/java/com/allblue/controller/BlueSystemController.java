@@ -12,7 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description:
@@ -152,11 +155,18 @@ public class BlueSystemController {
     private void deleteAll(String code) {
         blueSystemService.delete(code);
         List<String> codeList = blueSystemService.getListByParentCode(code);
-        if(codeList != null){
-            for (String subCode:codeList) {
+        if (codeList != null) {
+            for (String subCode : codeList) {
                 deleteAll(subCode);
             }
         }
     }
 
+    @RequestMapping(value = "/{roleId}/getZTreeNodesForAuthAction", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultInfo getZTreeNodesForAuthAction(@PathVariable("roleId") Integer roleId) {
+        List<ZTreeNode> list = blueSystemService.getZTreeNodesForAuthAction(roleId);
+        if (list == null) return ResultInfo.error("系统数据为空");
+        return ResultInfo.success("系统数据获取成功", list);
+    }
 }

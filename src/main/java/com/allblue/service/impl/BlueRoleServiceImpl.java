@@ -92,4 +92,12 @@ public class BlueRoleServiceImpl implements BlueRoleService {
     public int deleteUserRoleById(int id) {
         return blueRoleMapper.deleteUserRoleById(id);
     }
+
+    @Override
+    public void saveAuthorityByRoleId(Map<String, Object> paramMap) {
+        blueRoleMapper.deleteAuthorityByRoleId((Integer) paramMap.get("roleId"));
+        if (((String[]) paramMap.get("authorityIds")).length > 0) {
+            blueRoleMapper.saveAuthorityByRoleId(paramMap);
+        }
+    }
 }

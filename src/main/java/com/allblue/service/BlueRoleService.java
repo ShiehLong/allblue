@@ -59,21 +59,21 @@ public interface BlueRoleService {
     int update(BlueRole blueRole);
 
     /**
-     * @Description: 根据条件模糊查询数量
+     * @Description: 根据条件模糊查询user-role关联关系数量
      * @Author Xone
      * @Date 19:53 2018/11/28
      **/
     int getUserRoleTotalCount(Integer roleId, String searchContext);
 
     /**
-     * @Description: 根据条件模糊查询列表
+     * @Description: 根据条件模糊查询user-role关联关系列表
      * @Author Xone
      * @Date 19:53 2018/11/28
      **/
     List<UserRoleVO> queryUserRoleInfoByPage(Map<String, Object> map);
 
     /**
-     * @Description: 判断数据是否存在
+     * @Description: 判断数据user-role关联关系是否存在
      * @Author Xone
      * @Date 21:53 2018/11/28
      **/
@@ -81,7 +81,7 @@ public interface BlueRoleService {
 
 
     /**
-     * @Description: 插入数据
+     * @Description: 插入user-role关联关系
      * @Author Xone
      * @Date 22:53 2018/11/28
      **/
@@ -93,4 +93,11 @@ public interface BlueRoleService {
      * @Date 22:53 2018/11/28
      **/
     int deleteUserRoleById(int id);
+
+    /**
+     * @Description: 保存system-role关联关系
+     * @Author Xone
+     * @Date 14:53 2018/11/29
+     **/
+    void saveAuthorityByRoleId(Map<String, Object> paramMap);
 }

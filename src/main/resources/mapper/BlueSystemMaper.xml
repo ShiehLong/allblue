@@ -142,4 +142,18 @@
         </set>
         where code = #{code,jdbcType=INTEGER}
     </update>
+
+    <select id="selectSystemListByRoleId" parameterType="java.lang.Integer"
+            resultType="com.allblue.model.dto.ZTreeNode">
+        SELECT
+          bs.`code` as id,
+          bs.`name`,
+          bs.`parent_code` AS pId
+        FROM
+        blue_system bs,blue_role_system brs
+        WHERE
+        bs.`code` = brs.`system_code`
+        AND
+        brs.`role_id`= #{roleId}
+    </select>
 </mapper>

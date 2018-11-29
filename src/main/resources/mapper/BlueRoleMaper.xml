@@ -148,4 +148,29 @@
         id = #{id}
     </delete>
 
+    <delete id="deleteAuthorityByRoleId" parameterType="java.lang.Integer">
+        DELETE FROM
+        blue_role_system
+        WHERE
+        role_id = #{roleId}
+    </delete>
+
+    <insert id="saveAuthorityByRoleId" parameterType="java.util.Map">
+        INSERT INTO blue_role_system (
+        `system_code`,
+        `role_id`,
+        `creator`,
+        `created_time`
+        )
+        VALUES
+        <foreach collection="authorityIds" separator="," item="authorityId">
+            (
+            #{authorityId},
+            #{roleId},
+            #{creator},
+            SYSDATE()
+            )
+        </foreach>
+    </insert>
+
 </mapper>
