@@ -7,23 +7,28 @@
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
+    <!--security="none"时,对应 pattern 的 filter 链为空,不会进入过滤器-->
+    <http security="none" pattern="/jsp/common/*.jsp"/>
+    <http security="none" pattern="/blueUser/login"/>
+
     <http auto-config="true">
         <intercept-url pattern="/blueUser/getUserListBySearchDTO" access="ROLE_USER"/>
         <form-login
-                login-page="/jsp/user/login.jsp"
+                login-page="/jsp/common/login.jsp"
+                login-processing-url="/blueUser/login"
                 default-target-url="/index.jsp"
-                authentication-failure-url="/jsp/common/error.jsp"
-                username-parameter="username"
+                authentication-failure-url="/jsp/common/access.jsp"
+                username-parameter="name"
                 password-parameter="password"/>
-        <logout logout-success-url="/jsp/user/login.jsp"/>
+        <logout logout-success-url="/jsp/common/login.jsp"/>
         <!-- enable csrf protection -->
         <!--<csrf/>-->
     </http>
 
-    <authentication-manager >
+    <authentication-manager>
         <authentication-provider user-service-ref="customUserDetailsService"/>
     </authentication-manager>
 
-    <beans:bean id="customUserDetailsService" class="com.allblue.security.CustomUserDetailsService" />
+    <beans:bean id="customUserDetailsService" class="com.allblue.security.CustomUserDetailsService"/>
 
 </beans:beans>

@@ -55,7 +55,7 @@
             },
             error: function (data) {
                 if (data.responseText === 'loseSession') {
-                    window.location.href = "/jsp/user/login.jsp";
+                    window.location.href = "/jsp/common/login.jsp";
                 }
             }
         });

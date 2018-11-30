@@ -132,7 +132,7 @@ public class BlueUserController {
         nameCookie.setPath("/");
         response.addCookie(nameCookie);
         logger.info("清除数据，退出登录！！！");
-        return "user/login";
+        return "common/login";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
