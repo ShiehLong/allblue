@@ -24,6 +24,6 @@
         <authentication-provider user-service-ref="customUserDetailsService"/>
     </authentication-manager>
 
-    <beans:bean id="customUserDetailsService" class="com.allblue.service.CustomUserDetailsService" />
+    <beans:bean id="customUserDetailsService" class="com.allblue.security.CustomUserDetailsService" />
 
 </beans:beans>

@@ -128,7 +128,7 @@ CREATE TABLE `blue_system` (
 DROP TABLE IF EXISTS blue_role_system;
 CREATE TABLE `blue_role_system` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `system_code` varchar(200) DEFAULT NULL COMMENT '菜单编号，唯一键',
+  `system_code` varchar(200) DEFAULT NULL COMMENT '菜单编号',
   `role_id` bigint(20) DEFAULT NULL COMMENT '角色id',
   `creator` varchar(255) NOT NULL COMMENT '创建者',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

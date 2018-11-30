@@ -1,10 +1,12 @@
-package com.allblue.service;
+package com.allblue.security;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.allblue.model.BlueRole;
 import com.allblue.model.BlueUser;
+import com.allblue.service.BlueRoleService;
+import com.allblue.service.BlueUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,8 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             System.out.println("User not found");
             throw new UsernameNotFoundException("Username not found");
         }
-        return new org.springframework.security.core.userdetails.User(blueUser.getName(), blueUser.getPassword(),
-                blueUser.getStatus() == 1, true, true, true, getGrantedAuthorities(blueUser));
+        return new org.springframework.security.core.userdetails.User(blueUser.getName(), blueUser.getPassword(), getGrantedAuthorities(blueUser));
     }
 
 
