@@ -19,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
@@ -28,6 +29,7 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 public class BlueFilterSecurityInterceptor extends AbstractSecurityInterceptor implements Filter {
 
     //配置文件注入
+    @Autowired
     private FilterInvocationSecurityMetadataSource securityMetadataSource;
 
     //登陆后，每次访问资源都通过这个拦截器拦截
