@@ -3,6 +3,7 @@ package com.allblue.service.impl;
 import com.allblue.mapper.BlueRoleMapper;
 import com.allblue.model.BlueRole;
 import com.allblue.model.dto.SearchDTO;
+import com.allblue.model.vo.SystemRoleVO;
 import com.allblue.model.vo.UserRoleVO;
 import com.allblue.service.BlueRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,5 +105,10 @@ public class BlueRoleServiceImpl implements BlueRoleService {
     @Override
     public List<BlueRole> getRoleListByUserName(String name) {
         return blueRoleMapper.getRoleListByUserName(name);
+    }
+
+    @Override
+    public List<SystemRoleVO> getSystemRoleList() {
+        return blueRoleMapper.getSystemRoleList();
     }
 }

@@ -2,6 +2,7 @@ package com.allblue.mapper;
 
 import com.allblue.model.BlueRole;
 import com.allblue.model.dto.SearchDTO;
+import com.allblue.model.vo.SystemRoleVO;
 import com.allblue.model.vo.UserRoleVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -51,7 +52,7 @@ public interface BlueRoleMapper {
      * @Author Xone
      * @Date 19:53 2018/11/28
      **/
-    int selectUserRoleTotalCount(@Param("roleId")Integer roleId, @Param("searchContext")String searchContext);
+    int selectUserRoleTotalCount(@Param("roleId") Integer roleId, @Param("searchContext") String searchContext);
 
     /**
      * @Description: 根据条件模糊查询列表
@@ -65,14 +66,14 @@ public interface BlueRoleMapper {
      * @Author Xone
      * @Date 21:53 2018/11/28
      **/
-    Integer checkRepeatUserCode(@Param("userName")String userName, @Param("roleId")Integer roleId);
+    Integer checkRepeatUserCode(@Param("userName") String userName, @Param("roleId") Integer roleId);
 
     /**
      * @Description: 插入数据
      * @Author Xone
      * @Date 22:53 2018/11/28
      **/
-    int saveUserRole(@Param("userName")String userName, @Param("roleId")Integer roleId, @Param("creator")String creator);
+    int saveUserRole(@Param("userName") String userName, @Param("roleId") Integer roleId, @Param("creator") String creator);
 
     /**
      * @Description: 删除user-role关联关系
@@ -101,4 +102,11 @@ public interface BlueRoleMapper {
      * @Date 22:53 2018/11/29
      **/
     List<BlueRole> getRoleListByUserName(String name);
+
+    /**
+     * @Description: 获取所有system-role列表
+     * @Author Xone
+     * @Date 22:53 2018/11/29
+     **/
+    List<SystemRoleVO> getSystemRoleList();
 }

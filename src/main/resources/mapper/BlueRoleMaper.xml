@@ -189,4 +189,17 @@
         WHERE
         bur.user_name = #{name}
     </select>
+
+    <select id="getSystemRoleList" resultType="com.allblue.model.vo.SystemRoleVO">
+        SELECT
+        brs.`id`,
+        brs.`system_code` AS systemCode,
+        bs.`url`,
+        brs.`role_id` AS roleId,
+        br.`code` AS roleCode
+        FROM
+        blue_role_system AS brs
+        LEFT JOIN blue_role AS br ON brs.role_id = br.id
+        LEFT JOIN blue_system AS bs ON brs.system_code = bs.code
+    </select>
 </mapper>

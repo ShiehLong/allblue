@@ -2,6 +2,7 @@ package com.allblue.service;
 
 import com.allblue.model.BlueRole;
 import com.allblue.model.dto.SearchDTO;
+import com.allblue.model.vo.SystemRoleVO;
 import com.allblue.model.vo.UserRoleVO;
 
 import java.util.List;
@@ -107,4 +108,11 @@ public interface BlueRoleService {
      * @Date 22:53 2018/11/29
      **/
     List<BlueRole> getRoleListByUserName(String name);
+
+    /**
+     * @Description: 获取所有system-role列表
+     * @Author Xone
+     * @Date 22:53 2018/11/29
+     **/
+    List<SystemRoleVO> getSystemRoleList();
 }

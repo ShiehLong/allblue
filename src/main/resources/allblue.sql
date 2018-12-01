@@ -145,3 +145,11 @@ CREATE TABLE `blue_user_role` (
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8 COMMENT='用户角色关系表';
+
+DROP TABLE IF EXISTS persistent_logins;
+CREATE TABLE `persistent_logins` (
+  `username` varchar(64) not null,
+  `series` varchar(64) primary key,
+  `token` varchar(64) not null,
+  `last_used` timestamp not null
+  )ENGINE=InnoDB CHARSET=utf8 COMMENT='用户Token表';
