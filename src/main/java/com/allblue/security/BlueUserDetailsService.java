@@ -28,9 +28,7 @@ public class BlueUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String name)
             throws UsernameNotFoundException {
         BlueUser blueUser = blueUserService.getUserInfo(name);
-        System.out.println("BlueUser : " + blueUser);
         if (blueUser == null) {
-            System.out.println("User not found");
             throw new UsernameNotFoundException("Username not found");
         }
         return new org.springframework.security.core.userdetails.User(blueUser.getName(), blueUser.getPassword(), getGrantedAuthorities(blueUser));
@@ -43,10 +41,9 @@ public class BlueUserDetailsService implements UserDetailsService {
         List<BlueRole> list = blueRoleService.getRoleListByUserName(blueUser.getName());
 
         for (BlueRole blueRole : list) {
-            System.out.println("blueRole : " + blueRole);
             authorities.add(new SimpleGrantedAuthority("ROLE_" + blueRole.getCode()));
         }
-        System.out.print("authorities :" + authorities);
+        System.out.println("用户【" + blueUser.getName() + "】拥有角色权限 :" + authorities);
         return authorities;
     }
 

@@ -8,10 +8,19 @@
 	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
     <!--security="none"时,对应 pattern 的 filter 链为空,不会进入过滤器-->
-    <http security="none" pattern="/jsp/common/*.jsp"/>
+    <http security="none" pattern="/fonts/**"/>
+    <http security="none" pattern="/jsp/**"/>
+    <http security="none" pattern="/css/**"/>
+    <http security="none" pattern="/img/**"/>
+    <http security="none" pattern="/js/**"/>
+    <http security="none" pattern="/index.jsp"/>
+    <http security="none" pattern="/login"/>
 
-    <http access-denied-page="/jsp/common/access.jsp">
-        <form-login login-page="/jsp/common/login.jsp"/>
+    <http use-expressions='true' entry-point-ref="myAuthenticationEntryPoint">
+        <!--<form-login login-page="/jsp/common/login.jsp"-->
+        <!--login-processing-url="/login"-->
+        <!--authentication-failure-url="/jsp/common/access.jsp"-->
+        <!--default-target-url="/index.jsp"/>-->
         <!--访问/admin.jsp资源的用户必须具有ROLE_ADMIN的权限 -->
         <!-- <intercept-url pattern="/admin.jsp" access="ROLE_ADMIN" /> -->
         <!--访问/**资源的用户必须具有ROLE_USER的权限 -->
@@ -20,9 +29,40 @@
             <concurrency-control max-sessions="1"
                                  error-if-maximum-exceeded="false"/>
         </session-management>
+        <access-denied-handler ref="accessDeniedHandler"/>
+        <!-- 认证和授权 --><!-- 重写登陆认证的过滤器，使我们可以拿到任何参数  -->
+        <custom-filter ref="myAuthenticationFilter" position="FORM_LOGIN_FILTER"/>
         <!--增加一个filter，这点与 Acegi是不一样的，不能修改默认的filter了， 这个filter位于FILTER_SECURITY_INTERCEPTOR之前 -->
         <custom-filter ref="myFilter" before="FILTER_SECURITY_INTERCEPTOR"/>
     </http>
+
+    <!-- 未登录的切入点 --><!-- 需要有个切入点 -->
+    <beans:bean id="myAuthenticationEntryPoint"
+                class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <beans:property name="loginFormUrl" value="/jsp/common/login.jsp"/>
+    </beans:bean>
+
+    <beans:bean id="accessDeniedHandler"
+                class="com.allblue.security.DefaultAccessDeniedHandler">
+    </beans:bean>
+
+    <!-- 登录验证器：用户有没有登录的资格 --><!-- 这个就是重写的认证过滤器 -->
+    <beans:bean id="myAuthenticationFilter" class="com.allblue.security.BlueAuthenticationFilter">
+        <beans:property name="authenticationManager" ref="authenticationManager"/>
+        <beans:property name="filterProcessesUrl" value="/j_spring_security_check"/>
+        <beans:property name="authenticationSuccessHandler">
+            <beans:bean
+                    class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+                <beans:property name="defaultTargetUrl" value="/index.jsp"/>
+            </beans:bean>
+        </beans:property>
+        <beans:property name="authenticationFailureHandler">
+            <beans:bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+                <beans:property name="defaultFailureUrl" value="/jsp/common/access.jsp"/>
+            </beans:bean>
+        </beans:property>
+    </beans:bean>
+
     <!--一个自定义的filter，必须包含 authenticationManager,accessDecisionManager,securityMetadataSource三个属性，
         我们的所有控制将在这三个类中实现，解释详见具体配置 -->
     <beans:bean id="myFilter"

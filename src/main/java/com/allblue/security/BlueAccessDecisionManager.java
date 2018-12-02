@@ -32,10 +32,12 @@ public class BlueAccessDecisionManager implements AccessDecisionManager {
             String needRole = ca.getAttribute();
             for (GrantedAuthority ga : authentication.getAuthorities()) {
                 if (needRole.equals(ga.getAuthority())) {
+                    System.out.println("匹配权限通过！");
                     return;
                 }
             }
         }
+        System.out.println("匹配权限失败！");
         //注意：执行这里，后台是会抛异常的，但是界面会跳转到所配的access-denied-page页面
         throw new AccessDeniedException("no right");
     }

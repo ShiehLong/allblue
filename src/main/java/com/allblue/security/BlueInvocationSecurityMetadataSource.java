@@ -24,7 +24,7 @@ public class BlueInvocationSecurityMetadataSource implements FilterInvocationSec
     private UrlMatcher urlMatcher = new AntUrlPathMatcher();
 
     //将所有的角色和url的对应关系缓存起来
-    private static List<SystemRoleVO> rus = null;
+    private List<SystemRoleVO> rus = null;
 
     @Autowired
     private BlueRoleService blueRoleService;
@@ -47,9 +47,10 @@ public class BlueInvocationSecurityMetadataSource implements FilterInvocationSec
         }
         Collection<ConfigAttribute> cas = new ArrayList<ConfigAttribute>();
         for (String role : roles) {
-            ConfigAttribute ca = new SecurityConfig(role);
+            ConfigAttribute ca = new SecurityConfig("ROLE_" + role);
             cas.add(ca);
         }
+        System.out.println("url："+ url + " 权限:" + cas);
         return cas;
     }
 
