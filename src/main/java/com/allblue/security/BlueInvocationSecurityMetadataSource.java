@@ -23,9 +23,6 @@ import com.allblue.utils.UrlMatcher;
 public class BlueInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
     private UrlMatcher urlMatcher = new AntUrlPathMatcher();
 
-    //将所有的角色和url的对应关系缓存起来
-    private List<SystemRoleVO> rus = null;
-
     @Autowired
     private BlueRoleService blueRoleService;
 
@@ -34,9 +31,7 @@ public class BlueInvocationSecurityMetadataSource implements FilterInvocationSec
         // 将参数转为url
         String url = ((FilterInvocation) object).getRequestUrl();
         //查询所有的url和角色的对应关系
-        if (rus == null) {
-            rus = blueRoleService.getSystemRoleList();
-        }
+        List<SystemRoleVO> rus = blueRoleService.getSystemRoleList();
 
         //匹配所有的url，并对角色去重
         Set<String> roles = new HashSet<String>();
@@ -50,7 +45,7 @@ public class BlueInvocationSecurityMetadataSource implements FilterInvocationSec
             ConfigAttribute ca = new SecurityConfig("ROLE_" + role);
             cas.add(ca);
         }
-        System.out.println("url："+ url + " 权限:" + cas);
+        System.out.println("url：" + url + " 权限:" + cas);
         return cas;
     }
 

@@ -32,7 +32,7 @@
     <div class="login-box-body">
         <p class="login-box-msg">扬&nbsp;&nbsp;帆&nbsp;&nbsp;起&nbsp;&nbsp;航</p>
 
-        <form action="j_spring_security_check" method="POST">
+        <form action="/j_spring_security_check" method="POST">
             <div class="form-group has-feedback">
                 <input type="text" class="form-control" name='username' id="username" placeholder="用户名">
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>

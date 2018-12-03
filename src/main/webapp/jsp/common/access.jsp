@@ -12,9 +12,6 @@
 <div class="error404">
     <div class="info">
         <h2>抱歉，您没有访问页面的权限！ (｡•ˇ‸ˇ•｡)</h2>
-
-        <a href="/index.jsp" class="btn">返回首页</a>
-        <a href="#" class="btn btn-brown">返回上一步</a>
     </div>
     <div class="pic">
         <img src="../../img/404.gif" alt=" "/>

@@ -39,7 +39,6 @@ public class BlueAuthenticationFilter extends UsernamePasswordAuthenticationFilt
                 throw new BadCredentialsException("用户名或密码不匹配");
             }
         } catch (Exception e) {
-            System.out.println("没有此用户");
             throw new BadCredentialsException("没有此用户");
         }
 

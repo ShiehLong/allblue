@@ -9,12 +9,11 @@
 
     <!--security="none"时,对应 pattern 的 filter 链为空,不会进入过滤器-->
     <http security="none" pattern="/fonts/**"/>
-    <http security="none" pattern="/jsp/**"/>
+    <http security="none" pattern="/jsp/common/**"/>
     <http security="none" pattern="/css/**"/>
     <http security="none" pattern="/img/**"/>
     <http security="none" pattern="/js/**"/>
     <http security="none" pattern="/index.jsp"/>
-    <http security="none" pattern="/login"/>
 
     <http use-expressions='true' entry-point-ref="myAuthenticationEntryPoint">
         <!--<form-login login-page="/jsp/common/login.jsp"-->
@@ -58,7 +57,7 @@
         </beans:property>
         <beans:property name="authenticationFailureHandler">
             <beans:bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
-                <beans:property name="defaultFailureUrl" value="/jsp/common/access.jsp"/>
+                <beans:property name="defaultFailureUrl" value="/jsp/common/login.jsp"/>
             </beans:bean>
         </beans:property>
     </beans:bean>
