@@ -56,7 +56,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="/jsp/user/detail.jsp">详情</a></li>
                         <li class="divider"></li>
-                        <li><a href="/blueUser/logout"> 退出</a></li>
+                        <li><a href="/j_spring_security_logout"> 退出</a></li>
                     </ul>
                 </li>
             </ul>

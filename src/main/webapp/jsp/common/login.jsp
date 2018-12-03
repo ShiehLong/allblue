@@ -45,7 +45,7 @@
                 <div class="col-xs-8">
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox"> &nbsp;记住用户名
+                            <input name="_spring_security_remember_me" type="checkbox"> &nbsp;记住用户名
                         </label>
                     </div>
                 </div>

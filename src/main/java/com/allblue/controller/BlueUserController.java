@@ -8,9 +8,11 @@ import com.allblue.model.dto.SearchDTO;
 import com.allblue.service.BlueUserService;
 import com.allblue.utils.PropUtil;
 import com.allblue.utils.UploadUtil;
+import com.allblue.utils.WebUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,6 +45,7 @@ public class BlueUserController {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+
         //返回数据
         JSONObject re = new JSONObject();
         //入参判断
@@ -60,6 +63,10 @@ public class BlueUserController {
             re.put("msg", "用户名已存在，换一个试试~");
             return JSON.toJSONString(re);
         } else {
+            //加密密码
+            BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
+            password = bcryptPasswordEncoder.encode(password);
+
             BlueUser blueUser = new BlueUser();
             blueUser.setName(name);
             blueUser.setEmail(email);
@@ -126,6 +133,7 @@ public class BlueUserController {
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request, HttpServletResponse response) {
 
+        logger.info("session: " + request.getSession().getAttributeNames());
         request.getSession().invalidate();
         Cookie nameCookie = new Cookie("name", "");
         nameCookie.setMaxAge(0);
